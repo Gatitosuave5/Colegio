@@ -17,7 +17,7 @@ const db = await mysql.createConnection({
     database: process.env.DB_NAME,
   });
 
-// Ruta para login de profesor
+
 app.post("/api/login", async (req, res) => {
   const { usuario, contraseña } = req.body;
 
@@ -52,10 +52,10 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.listen(3001, () => {
-  console.log("✅ Servidor backend corriendo en http://localhost:3001");
+  console.log("Servidor backend corriendo en http://localhost:3001");
 });
 
-// Ruta para registrar profesores automáticamente con contraseña encriptada
+
 app.post("/api/profesores", async (req, res) => {
     const { nombre, usuario, contraseña } = req.body;
   
