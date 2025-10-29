@@ -2,18 +2,17 @@
 import { useRouter } from "next/navigation";
 import { useCursos } from "../../context/CursosContext";
 
-export default function PrimeroGrado() {
+export default function SegundoGrado() {
   const { cursos } = useCursos();
-  const lista = cursos["1° Grado"];
+  const lista = cursos["2° Grado"];
   const router = useRouter();
 
   const handleSalir = () => {
-    router.push("/"); // 👈 vuelve a la página principal
+    router.push("/");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-purple-100 p-8 relative">
-      {/* ✅ Botón de salir */}
       <button
         onClick={handleSalir}
         className="absolute top-6 right-6 bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition"
@@ -22,7 +21,7 @@ export default function PrimeroGrado() {
       </button>
 
       <h1 className="text-3xl font-bold text-blue-800 mb-8">
-        Mis Cursos - 1° Grado
+        Mis Cursos - 2° Grado
       </h1>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -36,10 +35,7 @@ export default function PrimeroGrado() {
               <h2 className="text-xl font-bold">{curso.nombre}</h2>
               <p className="mt-2 text-sm">📚 {curso.modulos} módulos</p>
             </div>
-            <button
-              onClick={() => router.push(`/cursos/${curso.id}`)}
-              className="bg-blue-500 mt-4 px-4 py-2 rounded-lg hover:bg-blue-600 w-full"
-            >
+            <button className="bg-blue-500 mt-4 px-4 py-2 rounded-lg hover:bg-blue-600 w-full">
               Entrar al Curso
             </button>
           </div>
