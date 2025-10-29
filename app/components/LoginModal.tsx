@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface LoginModalProps {
   onClose: () => void;
@@ -8,6 +9,7 @@ interface LoginModalProps {
 export default function LoginModal({ onClose }: LoginModalProps) {
   const [usuario, setUsuario] = useState("");
   const [contraseña, setContraseña] = useState("");
+  const [mostrarContraseña, setMostrarContraseña] = useState(false);
   const [cargando, setCargando] = useState(false);
 
   const manejarLogin = async (e: React.FormEvent) => {
@@ -40,48 +42,59 @@ export default function LoginModal({ onClose }: LoginModalProps) {
   };
 
   return (
-    // 🔹 Fondo con blur y opacidad, sin poner negro sólido
-    <div className="fixed inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-50">
 
-      {/* Modal con animación desde arriba */}
-      <div className="bg-white p-6 rounded-xl shadow-2xl w-80 text-center animate-slideDown">
+      <div className="relative bg-white p-8 rounded-2xl shadow-2xl w-96 md:w-[500px] text-center animate-slideDown">
 
-        <h2 className="text-lg font-bold text-blue-700 mb-4">
+        {/* Botón X en esquina superior derecha */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-lg"
+          aria-label="Cerrar"
+        >
+          ✕
+        </button>
+
+        <h2 className="text-2xl font-bold text-blue-700 mb-6">
           Inicio de sesión para profesores
         </h2>
 
-        <form onSubmit={manejarLogin} className="flex flex-col gap-3">
+        <form onSubmit={manejarLogin} className="flex flex-col gap-4">
+
           <input
             type="text"
             placeholder="Usuario"
             value={usuario}
             onChange={(e) => setUsuario(e.target.value)}
-            className="border rounded px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:border-blue-500 focus:outline-none"
+            className="border rounded px-4 py-3 text-base text-gray-800 placeholder-gray-500 focus:border-blue-500 focus:outline-none"
           />
 
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={contraseña}
-            onChange={(e) => setContraseña(e.target.value)}
-            className="border rounded px-3 py-2 text-sm text-gray-800 placeholder-gray-500 focus:border-blue-500 focus:outline-none"
-          />
+          <div className="relative">
+            <input
+              type={mostrarContraseña ? "text" : "password"}
+              placeholder="Contraseña"
+              value={contraseña}
+              onChange={(e) => setContraseña(e.target.value)}
+              className="border rounded px-4 py-3 text-base text-gray-800 placeholder-gray-500 focus:border-blue-500 focus:outline-none w-full pr-12"
+            />
+            <button
+              type="button"
+              onClick={() => setMostrarContraseña(!mostrarContraseña)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 text-lg"
+              aria-label={mostrarContraseña ? "Ocultar contraseña" : "Mostrar contraseña"}
+            >
+              {mostrarContraseña ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
 
           <button
             type="submit"
-            className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-sm"
+            className="bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 text-base"
             disabled={cargando}
           >
             {cargando ? "Ingresando..." : "Iniciar sesión"}
           </button>
 
-          <button
-            type="button"
-            className="text-gray-500 text-xs mt-2"
-            onClick={onClose}
-          >
-            Cancelar
-          </button>
         </form>
       </div>
     </div>
