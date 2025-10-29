@@ -1,46 +1,213 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useCursos } from "../../context/CursosContext";
 
-export default function SegundoGrado() {
-  const { cursos } = useCursos();
-  const lista = cursos["2° Grado"];
-  const router = useRouter();
+import { useState } from "react";
+import { useRouter } from "next/navigation"; // ✅ Agregado
+import { ChevronRight, BookOpen } from "lucide-react";
+import { Card } from "@/app/components/ui/card";
+import { Progress } from "@/app/components/ui/progress";
+import LiteratureModule from "@/app/components/literature-module";
+
+export default function Home() {
+  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+  const router = useRouter(); 
 
   const handleSalir = () => {
-    router.push("/");
+    router.push("/"); 
   };
+  const subjects = [
+    {
+      id: "math",
+      title: "Matemática",
+      description: "¡Aprende números y operaciones!",
+      icon: "📐",
+      color: "bg-blue-500",
+      textColor: "text-white",
+    },
+    {
+      id: "language",
+      title: "Literatura",
+      description: "¡Lee y escribe historias!",
+      icon: "📚",
+      color: "bg-pink-500",
+      textColor: "text-white",
+    },
+    {
+      id: "art",
+      title: "Arte",
+      description: "¡Crea y dibuja!",
+      icon: "🎨",
+      color: "bg-purple-500",
+      textColor: "text-white",
+    },
+    {
+      id: "music",
+      title: "Música",
+      description: "¡Descubre nuevos sonidos!",
+      icon: "🎵",
+      color: "bg-yellow-500",
+      textColor: "text-white",
+    },
+    {
+      id: "science",
+      title: "Ciencias",
+      description: "¡Explora el mundo!",
+      icon: "🔬",
+      color: "bg-green-500",
+      textColor: "text-white",
+    },
+    {
+      id: "games",
+      title: "Juegos",
+      description: "¡Diviértete aprendiendo!",
+      icon: "🎮",
+      color: "bg-red-500",
+      textColor: "text-white",
+    },
+  ]
+
+  if (selectedSubject === "language") {
+    return <LiteratureModule onBack={() => setSelectedSubject(null)} />
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-purple-100 p-8 relative">
+    <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      {/* Header */}
       <button
         onClick={handleSalir}
         className="absolute top-6 right-6 bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition"
       >
         Salir
       </button>
-
-      <h1 className="text-3xl font-bold text-blue-800 mb-8">
-        Mis Cursos - 2° Grado
-      </h1>
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {lista.map((curso: any) => (
-          <div
-            key={curso.id}
-            className="bg-[#1E293B] text-white p-6 rounded-xl shadow-xl flex flex-col justify-between"
-          >
-            <div className="flex flex-col items-center">
-              <img src={curso.icono} alt={curso.nombre} className="w-16 mb-4" />
-              <h2 className="text-xl font-bold">{curso.nombre}</h2>
-              <p className="mt-2 text-sm">📚 {curso.modulos} módulos</p>
+      {/* Progress Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Card className="bg-white border-0 shadow-sm p-6">
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-blue-600 mb-2">Nivel 1</h2>
+              <p className="text-gray-600">0 / 100 puntos para el siguiente nivel</p>
             </div>
-            <button className="bg-blue-500 mt-4 px-4 py-2 rounded-lg hover:bg-blue-600 w-full">
-              Entrar al Curso
-            </button>
+            <div className="text-4xl">🌟</div>
           </div>
-        ))}
-      </div>
-    </div>
-  );
+          <Progress value={0} className="h-3 mb-6" />
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((num) => (
+              <button
+                key={num}
+                className={`w-12 h-12 rounded-full font-bold text-lg transition-all ${
+                  num === 1
+                    ? "bg-blue-600 text-white shadow-lg scale-110"
+                    : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                }`}
+              >
+                {num}
+              </button>
+            ))}
+          </div>
+        </Card>
+      </section>
+
+      {/* Main Content */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 mb-3">¿Qué quieres aprender hoy?</h2>
+          <p className="text-xl text-gray-600">Elige una materia y comienza tu aventura educativa</p>
+        </div>
+
+        {/* Subjects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {subjects.map((subject) => (
+            <button
+              key={subject.id}
+              onClick={() => setSelectedSubject(subject.id)}
+              className="group text-left transition-all duration-300 hover:scale-105"
+            >
+              <Card
+                className={`${subject.color} ${subject.textColor} border-0 shadow-lg hover:shadow-2xl transition-all h-full p-8 rounded-3xl cursor-pointer`}
+              >
+                <div className="flex items-start justify-between mb-6">
+                  <div className="text-5xl">{subject.icon}</div>
+                  <ChevronRight className="w-6 h-6 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <h3 className="text-3xl font-bold mb-2">{subject.title}</h3>
+                <p className="text-sm opacity-90 mb-6">{subject.description}</p>
+                <div className="flex items-center gap-2 text-sm font-semibold">
+                  Explorar <ChevronRight className="w-4 h-4" />
+                </div>
+              </Card>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <h4 className="font-bold mb-4">Sobre Nosotros</h4>
+              <p className="text-gray-400 text-sm">Plataforma educativa para estudiantes del colegio estatal.</p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Materias</h4>
+              <ul className="text-gray-400 text-sm space-y-2">
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Matemática
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Lenguaje
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Ciencias
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Recursos</h4>
+              <ul className="text-gray-400 text-sm space-y-2">
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Ayuda
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Contacto
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    FAQ
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Legal</h4>
+              <ul className="text-gray-400 text-sm space-y-2">
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Privacidad
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="hover:text-white">
+                    Términos
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
+            <p>&copy; 2025 Colegio Estatal. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+  )
 }
