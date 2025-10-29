@@ -120,12 +120,12 @@ export default function TeacherPanel() {
         categorias.map(cat => (
           <div key={cat} className="bg-white shadow-md rounded-lg mb-5 overflow-hidden">
 
-            {/* ✅ Texto oscuro aquí */}
+            {/*Texto oscuro aquí */}
             <button
               onClick={() => setCategoriaAbierta(categoriaAbierta === cat ? null : cat)}
               className="w-full text-left p-5 font-semibold text-lg flex justify-between items-center bg-blue-100 hover:bg-blue-200 text-gray-800"
             >
-              📌 {cat}
+             {cat}
               <span>{categoriaAbierta === cat ? "▲" : "▼"}</span>
             </button>
 
@@ -141,7 +141,7 @@ export default function TeacherPanel() {
                       }`}
                       onClick={() => toggleContenido(item.id)}
                     >
-                      {/* ✅ Texto oscuro aquí también */}
+                     
                       <span className="text-gray-800 font-medium">{item.titulo}</span>
                       <input
                         type="checkbox"
