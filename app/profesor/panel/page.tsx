@@ -98,7 +98,7 @@ export default function TeacherPanel() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
-      <h1 className="text-3xl font-bold text-blue-700 mb-6">HOLA Panel del Profesor</h1>
+      <h1 className="text-3xl font-bold text-blue-700 mb-6">Panel del Profesor</h1>
 
       <div className="flex gap-3 mb-6 flex-wrap">
         {[1, 2, 3, 4, 5, 6].map(grado => (
