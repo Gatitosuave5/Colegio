@@ -6,7 +6,7 @@ import LoginModal from "./components/LoginModal";
 export default function PaginaInicio() {
   const [mostrarLogin, setMostrarLogin] = useState(false);
   const [nombre, setNombre] = useState("");
-  const [grado, setGrado] = useState("1° Grado");
+  const [codigo, setCodigo] = useState("");
   const router = useRouter();
 
   const handleEntrar = () => {
@@ -14,15 +14,17 @@ export default function PaginaInicio() {
       alert("Por favor, escribe tu nombre.");
       return;
     }
-    const rutas = {
-      "1° Grado": "/grados/primero",
-      "2° Grado": "/grados/segundo",
-      "3° Grado": "/grados/tercero",
-      "4° Grado": "/grados/cuarto",
-      "5° Grado": "/grados/quinto",
-      "6° Grado": "/grados/sexto",
-    };
-    router.push((rutas as any)[grado] || "/grados");
+    if (!codigo.trim()) {
+      alert("Por favor, ingresa el código del salón.");
+      return;
+    }
+
+    // ✅ Guardamos datos temporalmente en localStorage
+    localStorage.setItem("nombreAlumno", nombre);
+    localStorage.setItem("codigoSalon", codigo);
+
+    // ✅ Enviamos al alumno a la pantalla del salón
+    router.push(`/salon/${codigo}`);
   };
 
   return (
@@ -38,7 +40,7 @@ export default function PaginaInicio() {
         <div className="fish fish2"></div>
       </div>
 
-      {/* Botón de Profesores */}
+      {/* Botón Profesores */}
       <button
         onClick={() => setMostrarLogin(true)}
         className="absolute top-6 right-8 bg-white text-blue-600 px-4 py-1 rounded-full text-sm font-semibold shadow hover:bg-gray-100"
@@ -46,7 +48,7 @@ export default function PaginaInicio() {
         Profesores
       </button>
 
-      {/* Contenedor central */}
+      {/* Contenedor principal */}
       <div className="z-10 flex flex-col items-center justify-center space-y-6 bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl max-w-md w-11/12">
         <img
           src="https://cdn-icons-png.flaticon.com/512/201/201818.png"
@@ -57,13 +59,12 @@ export default function PaginaInicio() {
           Mi Escuela Primaria
         </h1>
         <p className="text-gray-700 text-sm">
-          Bienvenido a tu plataforma de aprendizaje
+          Ingresa tu nombre y el código del salón
         </p>
 
         {/* Formulario */}
         <div className="w-full text-left space-y-4">
-          <div>
-            <label className="block text-gray-800 mb-1 text-sm">
+        <label className="block text-[#2D2D2D] mb-1 text-lg font-semibold">
               ¿Cómo te llamas?
             </label>
             <input
@@ -71,34 +72,27 @@ export default function PaginaInicio() {
               placeholder="Escribe tu nombre"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-gray-100 text-gray-900 outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-3 rounded-lg bg-gray-100 text-[#1A1A1A] placeholder-gray-500 text-lg outline-none border-2 border-transparent focus:border-blue-400"
             />
-          </div>
 
-          <div>
-            <label className="block text-gray-800 mb-1 text-sm">
-              ¿En qué grado estás?
+            <label className="block text-[#2D2D2D] mb-1 text-lg font-semibold mt-4">
+              Código del salón
             </label>
-            <select
-              value={grado}
-              onChange={(e) => setGrado(e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-gray-100 text-gray-900 outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option>1° Grado</option>
-              <option>2° Grado</option>
-              <option>3° Grado</option>
-              <option>4° Grado</option>
-              <option>5° Grado</option>
-              <option>6° Grado</option>
-            </select>
-          </div>
+            <input
+              type="text"
+              placeholder="Ejemplo: AB45X"
+              value={codigo}
+              onChange={(e) => setCodigo(e.target.value)}
+              className="w-full px-4 py-3 rounded-lg bg-gray-100 text-[#1A1A1A] placeholder-gray-500 text-lg outline-none border-2 border-transparent focus:border-blue-400 uppercase"
+              maxLength={6}
+            />
 
-          <button
-            onClick={handleEntrar}
-            className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition"
-          >
-            Entrar
-          </button>
+            <button
+              onClick={handleEntrar}
+              className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg text-lg hover:bg-blue-700 transition">
+              Entrar
+            </button>
+
         </div>
       </div>
 

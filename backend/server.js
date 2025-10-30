@@ -73,4 +73,76 @@ app.post("/api/profesores", async (req, res) => {
       res.status(500).json({ error: "Error al registrar el profesor" });
     }
   });
+  app.get("/api/salones", async (req, res) => {
+    try {
+      const [rows] = await db.execute("SELECT * FROM salones ORDER BY id DESC");
+      res.json({ success: true, salones: rows });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al obtener salones" });
+    }
+  });
   
+  // ✅ POST - Crear salón y generar código
+  app.post("/api/salones", async (req, res) => {
+    try {
+      const { grado } = req.body;
+      if (!grado) return res.status(400).json({ error: "Grado requerido" });
+  
+      // generar código aleatorio de 5 caracteres
+      const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let codigo = "";
+      for (let i = 0; i < 5; i++) {
+        codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+      }
+  
+      const aula = `Aula ${Math.floor(Math.random() * 50) + 1}`;
+  
+      await db.execute(
+        "INSERT INTO salones (codigo, grado, aula) VALUES (?, ?, ?)",
+        [codigo, grado, aula]
+      );
+  
+      res.json({
+        success: true,
+        codigo,
+        grado,
+        aula,
+        mensaje: `Salón creado para ${grado}° grado`,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al crear salón" });
+    }
+  });
+  
+  // ✅ PUT - Editar salón
+  app.put("/api/salones", async (req, res) => {
+    try {
+      const { id, aula } = req.body;
+      if (!id || !aula)
+        return res.status(400).json({ error: "Datos incompletos" });
+  
+      await db.execute("UPDATE salones SET aula = ? WHERE id = ?", [aula, id]);
+  
+      res.json({ success: true, mensaje: "Salón actualizado correctamente" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al editar salón" });
+    }
+  });
+  
+  // ✅ DELETE - Eliminar salón
+  app.delete("/api/salones", async (req, res) => {
+    try {
+      const { id } = req.body;
+      if (!id) return res.status(400).json({ error: "ID requerido" });
+  
+      await db.execute("DELETE FROM salones WHERE id = ?", [id]);
+  
+      res.json({ success: true, mensaje: "Salón eliminado correctamente" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error al eliminar salón" });
+    }
+  });

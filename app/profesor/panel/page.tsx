@@ -1,6 +1,14 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react"
+
+interface Salon {
+  id: string
+  codigo: string
+  grado: number
+  aula: string
+  createdAt: string
+}
 
 export default function TeacherPanel() {
   const contenidosPorGrado: Record<number, any[]> = {
@@ -76,39 +84,289 @@ export default function TeacherPanel() {
       { id: 59, categoria: "Matemática", titulo: "Gráficos circulares" },
       { id: 60, categoria: "Matemática", titulo: "Problemas combinados" },
     ],
-  };
+  }
 
-  const [gradoActivo, setGradoActivo] = useState<number | null>(null);
-  const [contenidos, setContenidos] = useState<any[]>([]);
-  const [categoriaAbierta, setCategoriaAbierta] = useState<string | null>(null);
+  const [gradoActivo, setGradoActivo] = useState<number | null>(null)
+  const [contenidos, setContenidos] = useState<any[]>([])
+  const [categoriaAbierta, setCategoriaAbierta] = useState<string | null>(null)
+  const [mostrarModal, setMostrarModal] = useState(false)
+  const [codigoSalon, setCodigoSalon] = useState<string | null>(null)
+  const [cargando, setCargando] = useState(false)
+
+  const [salones, setSalones] = useState<Salon[]>([])
+  const [mostrarModalEditar, setMostrarModalEditar] = useState(false)
+  const [salonEditando, setSalonEditando] = useState<Salon | null>(null)
+  const [aulaInput, setAulaInput] = useState("")
+  const [cargandoSalones, setCargandoSalones] = useState(false)
+
+  useEffect(() => {
+    obtenerSalones()
+  }, [])
+
+  const obtenerSalones = async () => {
+    setCargandoSalones(true)
+    try {
+      const response = await fetch("/api/salones")
+      if (response.ok) {
+        const data = await response.json()
+        setSalones(data.salones || [])
+      }
+    } catch (error) {
+      console.error("Error al obtener salones:", error)
+    } finally {
+      setCargandoSalones(false)
+    }
+  }
 
   const cambiarGrado = (grado: number) => {
-    setGradoActivo(grado);
-    setContenidos(contenidosPorGrado[grado]);
-    setCategoriaAbierta(null);
-  };
+    setGradoActivo(grado)
+    setContenidos(contenidosPorGrado[grado])
+    setCategoriaAbierta(null)
+  }
 
   const toggleContenido = (id: number) => {
-    setContenidos(prev =>
-      prev.map(c => (c.id === id ? { ...c, activo: !c.activo } : c))
-    );
-  };
+    setContenidos((prev) => prev.map((c) => (c.id === id ? { ...c, activo: !c.activo } : c)))
+  }
 
-  const categorias = Array.from(new Set(contenidos.map(c => c.categoria)));
+  const crearSalon = async () => {
+    if (!gradoActivo) return
+
+    setCargando(true)
+    try {
+      const response = await fetch("/api/salones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ grado: gradoActivo }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setCodigoSalon(data.codigo)
+        setMostrarModal(true)
+        obtenerSalones()
+      }
+    } catch (error) {
+      console.error("Error al crear salón:", error)
+    } finally {
+      setCargando(false)
+    }
+  }
+
+  const copiarCodigo = () => {
+    if (codigoSalon) {
+      navigator.clipboard.writeText(codigoSalon)
+      alert("¡Código copiado al portapapeles!")
+    }
+  }
+
+  const abrirEditar = (salon: Salon) => {
+    setSalonEditando(salon)
+    setAulaInput(salon.aula)
+    setMostrarModalEditar(true)
+  }
+
+  const guardarEdicion = async () => {
+    if (!salonEditando) return
+
+    try {
+      const response = await fetch("/api/salones", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: salonEditando.id,
+          aula: aulaInput,
+        }),
+      })
+
+      if (response.ok) {
+        setMostrarModalEditar(false)
+        setSalonEditando(null)
+        setAulaInput("")
+        obtenerSalones()
+        alert("Salón actualizado correctamente")
+      }
+    } catch (error) {
+      console.error("Error al editar salón:", error)
+    }
+  }
+
+  const eliminarSalon = async (id: string) => {
+    if (!confirm("¿Estás seguro de que deseas eliminar este salón?")) return
+
+    try {
+      const response = await fetch("/api/salones", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      })
+
+      if (response.ok) {
+        obtenerSalones()
+        alert("Salón eliminado correctamente")
+      }
+    } catch (error) {
+      console.error("Error al eliminar salón:", error)
+    }
+  }
+
+  const categorias = Array.from(new Set(contenidos.map((c) => c.categoria)))
 
   return (
-    <div className="min-h-screen bg-gray-100 p-10">
-      <h1 className="text-3xl font-bold text-blue-700 mb-6">Panel del Profesor</h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 p-10">
+      <h1 className="text-4xl font-bold text-blue-700 mb-8">Panel del Profesor</h1>
+
+      <div className="mb-8 flex gap-4 items-center">
+        <button
+          onClick={crearSalon}
+          disabled={!gradoActivo || cargando}
+          className={`px-6 py-3 rounded-lg font-semibold transition flex items-center gap-2 ${
+            gradoActivo && !cargando
+              ? "bg-gradient-to-r from-teal-500 to-green-500 text-white hover:shadow-lg hover:scale-105"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          <span>✨</span>
+          {cargando ? "Creando..." : "Crear Salón"}
+        </button>
+        {gradoActivo && <span className="text-sm text-gray-600">para {gradoActivo}° grado</span>}
+      </div>
+
+      {mostrarModal && codigoSalon && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 animate-in">
+            <div className="text-center">
+              <div className="text-5xl mb-4">🎉</div>
+              <h2 className="text-2xl font-bold text-green-600 mb-4">¡Salón Creado!</h2>
+              <p className="text-gray-700 mb-6">
+                Se ha creado un nuevo salón para <span className="font-semibold">{gradoActivo}° grado</span>
+              </p>
+
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+                <p className="text-sm text-gray-600 mb-2">Código del Salón:</p>
+                <p className="text-3xl font-bold text-teal-600 font-mono">{codigoSalon}</p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={copiarCodigo}
+                  className="flex-1 bg-gradient-to-r from-teal-500 to-green-500 text-white py-2 rounded-lg font-semibold hover:shadow-lg transition"
+                >
+                  📋 Copiar Código
+                </button>
+                <button
+                  onClick={() => setMostrarModal(false)}
+                  className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-300 transition"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="mb-10 bg-white rounded-lg shadow-md p-6 border-l-4 border-teal-500">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+          <span>🏫</span> Mis Salones
+        </h2>
+
+        {cargandoSalones ? (
+          <p className="text-gray-600">Cargando salones...</p>
+        ) : salones.length === 0 ? (
+          <p className="text-gray-600">No hay salones creados aún. ¡Crea uno para comenzar!</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {salones.map((salon) => (
+              <div
+                key={salon.id}
+                className="bg-gradient-to-br from-blue-50 to-green-50 border-2 border-blue-200 rounded-lg p-5 hover:shadow-lg transition"
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <div>
+                    <p className="text-sm text-gray-600">Grado</p>
+                    <p className="text-2xl font-bold text-blue-600">{salon.grado}°</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-gray-600">Código</p>
+                    <p className="text-xl font-mono font-bold text-teal-600">{salon.codigo}</p>
+                  </div>
+                </div>
+
+                <div className="mb-4 bg-white rounded p-3 border border-gray-200">
+                  <p className="text-xs text-gray-600 mb-1">Aula</p>
+                  <p className="text-lg font-semibold text-gray-800">{salon.aula || "Sin asignar"}</p>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => abrirEditar(salon)}
+                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-semibold transition text-sm"
+                  >
+                    ✏️ Editar
+                  </button>
+                  <button
+                    onClick={() => eliminarSalon(salon.id)}
+                    className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded font-semibold transition text-sm"
+                  >
+                    🗑️ Eliminar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {mostrarModalEditar && salonEditando && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Editar Salón</h2>
+
+            <div className="mb-4">
+              <p className="text-sm text-gray-600 mb-2">Grado: {salonEditando.grado}°</p>
+              <p className="text-sm text-gray-600 mb-4">Código: {salonEditando.codigo}</p>
+
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Nombre del Aula</label>
+              <input
+                type="text"
+                value={aulaInput}
+                onChange={(e) => setAulaInput(e.target.value)}
+                placeholder="Ej: Aula 101, Salón A, etc."
+                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={guardarEdicion}
+                className="flex-1 bg-gradient-to-r from-teal-500 to-green-500 text-white py-2 rounded-lg font-semibold hover:shadow-lg transition"
+              >
+                Guardar
+              </button>
+              <button
+                onClick={() => {
+                  setMostrarModalEditar(false)
+                  setSalonEditando(null)
+                  setAulaInput("")
+                }}
+                className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-300 transition"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex gap-3 mb-6 flex-wrap">
-        {[1, 2, 3, 4, 5, 6].map(grado => (
+        {[1, 2, 3, 4, 5, 6].map((grado) => (
           <button
             key={grado}
             onClick={() => cambiarGrado(grado)}
             className={`px-6 py-2 rounded-lg font-semibold border transition ${
               gradoActivo === grado
-                ? "bg-blue-600 text-white"
-                : "bg-white border-blue-600 text-blue-600 hover:bg-blue-50"
+                ? "bg-blue-600 text-white shadow-md"
+                : "bg-white border-blue-300 text-blue-600 hover:bg-blue-50"
             }`}
           >
             {grado}° Grado
@@ -117,37 +375,30 @@ export default function TeacherPanel() {
       </div>
 
       {gradoActivo ? (
-        categorias.map(cat => (
+        categorias.map((cat) => (
           <div key={cat} className="bg-white shadow-md rounded-lg mb-5 overflow-hidden">
-
-            {/*Texto oscuro aquí */}
             <button
               onClick={() => setCategoriaAbierta(categoriaAbierta === cat ? null : cat)}
-              className="w-full text-left p-5 font-semibold text-lg flex justify-between items-center bg-blue-100 hover:bg-blue-200 text-gray-800"
+              className="w-full text-left p-5 font-semibold text-lg flex justify-between items-center bg-blue-100 hover:bg-blue-200 text-gray-800 transition"
             >
-             {cat}
+              {cat}
               <span>{categoriaAbierta === cat ? "▲" : "▼"}</span>
             </button>
 
             {categoriaAbierta === cat && (
               <div className="p-4 max-h-64 overflow-y-auto border-t">
                 {contenidos
-                  .filter(c => c.categoria === cat)
-                  .map(item => (
+                  .filter((c) => c.categoria === cat)
+                  .map((item) => (
                     <div
                       key={item.id}
-                      className={`flex justify-between items-center p-3 mb-2 rounded border cursor-pointer ${
+                      className={`flex justify-between items-center p-3 mb-2 rounded border cursor-pointer transition ${
                         item.activo ? "bg-green-100 border-green-400" : "bg-gray-100"
                       }`}
                       onClick={() => toggleContenido(item.id)}
                     >
-                     
                       <span className="text-gray-800 font-medium">{item.titulo}</span>
-                      <input
-                        type="checkbox"
-                        checked={item.activo || false}
-                        onChange={() => toggleContenido(item.id)}
-                      />
+                      <input type="checkbox" checked={item.activo || false} onChange={() => toggleContenido(item.id)} />
                     </div>
                   ))}
               </div>
@@ -158,5 +409,5 @@ export default function TeacherPanel() {
         <p className="text-gray-600 text-lg">Selecciona un grado para iniciar ✅</p>
       )}
     </div>
-  );
+  )
 }
