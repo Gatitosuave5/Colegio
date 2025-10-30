@@ -1,19 +1,34 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = "http://localhost:3001"; // cambiar si usas dominio o IP
+const BACKEND_URL = "http://localhost:3001";
 
-// ✅ GET - Obtener lista de salones
-export async function GET() {
+/* ✅ GET: listar salones o buscar por código */
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+
+    // ✅ Buscar por código
+    if (searchParams.get("codigo")) {
+      const codigo = searchParams.get("codigo");
+      const req = await fetch(`${BACKEND_URL}/api/salones?codigo=${codigo}`);
+      const data = await req.json();
+      return NextResponse.json(data);
+    }
+
+    // ✅ Listar todos
     const req = await fetch(`${BACKEND_URL}/api/salones`);
     const data = await req.json();
     return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ error: "No se pudo conectar al servidor" }, { status: 500 });
+
+  } catch (err) {
+    return NextResponse.json(
+      { error: "Error obteniendo salones" },
+      { status: 500 }
+    );
   }
 }
 
-// ✅ POST - Crear salón
+/* ✅ POST: crear salón */
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -25,12 +40,16 @@ export async function POST(request: Request) {
 
     const data = await req.json();
     return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ error: "Error creando salón" }, { status: 500 });
+
+  } catch {
+    return NextResponse.json(
+      { error: "Error creando salón" },
+      { status: 500 }
+    );
   }
 }
 
-// ✅ PUT - Editar salón
+/* ✅ PUT: editar */
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
@@ -42,12 +61,16 @@ export async function PUT(request: Request) {
 
     const data = await req.json();
     return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ error: "Error editando salón" }, { status: 500 });
+
+  } catch {
+    return NextResponse.json(
+      { error: "Error editando salón" },
+      { status: 500 }
+    );
   }
 }
 
-// ✅ DELETE - Eliminar salón
+/* ✅ DELETE */
 export async function DELETE(request: Request) {
   try {
     const body = await request.json();
@@ -59,7 +82,11 @@ export async function DELETE(request: Request) {
 
     const data = await req.json();
     return NextResponse.json(data);
-  } catch (error) {
-    return NextResponse.json({ error: "Error eliminando salón" }, { status: 500 });
+
+  } catch {
+    return NextResponse.json(
+      { error: "Error eliminando salón" },
+      { status: 500 }
+    );
   }
 }
