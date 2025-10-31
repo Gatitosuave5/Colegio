@@ -15,6 +15,12 @@ const initialData: Record<string, any[]> = {
       icono: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
       modulos: 1,
     },
+    {
+      id: "comunicación",
+      nombre: "Comunicación",
+      icono: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      modulos: 3, 
+    }
   ],
   "2° Grado": [
     {
