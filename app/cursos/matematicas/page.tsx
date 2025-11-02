@@ -28,6 +28,42 @@ export default function MatematicasPage() {
           },
         ],
       },
+      {
+        id: "mod3",
+        titulo: "Restas básicas", 
+        descripcion: "Aprende a restar con juegos y actividades",
+        recursos: [
+          {
+            id: "pdf1restas",
+            titulo: "Ejercicios de restas sin llevada", 
+            tipo: "PDF",   
+            descripcion: "Material de apoyo para practicar restas.",
+            enlace: "https://www.orientacionandujar.es/wp-content/uploads/2024/09/Cuadernillo-restas-1-cifra-sin-llevada.pdf",
+          },
+          {
+            id: "pdf2restas",
+            titulo: "Ejercicios de restas con llevada",
+            tipo: "PDF",
+            descripcion: "Material de apoyo para practicar restas..",
+            enlace: "https://drive.google.com/file/d/15yNkJbbJqyH3qB7I63qNkriqATdX2czx/view?usp=sharing",
+          },
+        ],
+      },
+      {
+        id: "mod4",
+        titulo: "Comparación Numérica",
+        descripcion: "Aprende a comparar números",
+        recursos: [
+          { 
+            id: "pdf1comparacion",  
+            titulo: "Ejercicios de comparación numérica",
+            tipo: "PDF",
+            descripcion: "Material de apoyo para practicar comparación numérica.",
+            enlace: "https://drive.google.com/file/d/1Q0tOij9W0XgRWRwA4wrQV_tVDWO7zZLr/view",
+          },       
+         ]
+          
+      }
     ],
   };
 
