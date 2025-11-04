@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { io, Socket } from "socket.io-client"
 
 interface Salon {
   id: string
@@ -10,7 +11,17 @@ interface Salon {
   createdAt: string
 }
 
+interface Estudiante {
+  id: number
+  nombre: string
+  ultima_actividad: string
+  salon_codigo: string
+}
+
 export default function TeacherPanel() {
+
+ 
+
   const contenidosPorGrado: Record<number, any[]> = {
     1: [
       { id: 1, categoria: "Matemática", titulo: "Sumas del 1 al 10" },
@@ -99,6 +110,31 @@ export default function TeacherPanel() {
   const [aulaInput, setAulaInput] = useState("")
   const [cargandoSalones, setCargandoSalones] = useState(false)
 
+  //  PARTICIPANTES
+  const [mostrarModalIntegrantes, setMostrarModalIntegrantes] = useState(false)
+const [salonSeleccionado, setSalonSeleccionado] = useState<Salon | null>(null)
+const [integrantes, setIntegrantes] = useState<Estudiante[]>([])
+const [editandoEstudiante, setEditandoEstudiante] = useState<number | null>(null)
+const [nuevoNombre, setNuevoNombre] = useState("")
+
+//  FALTABA ESTO
+const [socket, setSocket] = useState<Socket | null>(null)
+
+//  SOCKET EFECTO REAL
+useEffect(() => {
+  const s = io("http://localhost:3001")
+  setSocket(s)
+
+  if (salonSeleccionado?.codigo) {
+    s.on(`alumnos-${salonSeleccionado.codigo}`, (lista) => {
+      console.log(" ACTUALIZACIÓN EN VIVO:", lista)
+      setIntegrantes(lista)
+    })
+  }
+
+  return () => s.disconnect()
+}, [salonSeleccionado])
+
   useEffect(() => {
     obtenerSalones()
   }, [])
@@ -116,6 +152,55 @@ export default function TeacherPanel() {
     } finally {
       setCargandoSalones(false)
     }
+  }
+
+  const abrirIntegrantes = async (salon: Salon) => {
+    setSalonSeleccionado(salon)
+    setMostrarModalIntegrantes(true)
+  
+    try {
+      const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${encodeURIComponent(salon.codigo.trim())}`)
+  
+      const texto = await res.text()
+      console.log("Respuesta del backend:", texto)
+  
+      const data = JSON.parse(texto)   // Convertimos manualmente
+  
+      setIntegrantes(data.alumnos || [])
+    } catch (error) {
+      console.error("Error cargando alumnos:", error)
+      setIntegrantes([])
+    }
+  }
+  
+
+  const cerrarIntegrantes = () => {
+    setMostrarModalIntegrantes(false)
+    setSalonSeleccionado(null)
+    setIntegrantes([])
+  }
+
+  const eliminarEstudiante = async (id: number, codigo: string) => {
+    await fetch("/api/alumnos_temporales", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    })
+    socket?.emit("solicitar-alumnos", codigo)
+  }
+
+  const guardarNombreEstudiante = async (id: number, codigo: string) => {
+    if (!nuevoNombre.trim()) return
+
+    await fetch("/api/alumnos_temporales", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, nombre: nuevoNombre }),
+    })
+
+    setEditandoEstudiante(null)
+    setNuevoNombre("")
+    socket?.emit("solicitar-alumnos", codigo)
   }
 
   const cambiarGrado = (grado: number) => {
@@ -209,6 +294,8 @@ export default function TeacherPanel() {
     }
   }
 
+
+
   const categorias = Array.from(new Set(contenidos.map((c) => c.categoria)))
 
   return (
@@ -232,7 +319,7 @@ export default function TeacherPanel() {
       </div>
 
       {mostrarModal && codigoSalon && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 animate-in">
             <div className="text-center">
               <div className="text-5xl mb-4">🎉</div>
@@ -304,60 +391,131 @@ export default function TeacherPanel() {
                   >
                     ✏️ Editar
                   </button>
+
                   <button
                     onClick={() => eliminarSalon(salon.id)}
                     className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded font-semibold transition text-sm"
                   >
                     🗑️ Eliminar
                   </button>
+
+                  {/* ✅ Ver participantes */}
+                  <button
+                    onClick={() => abrirIntegrantes(salon)}
+                    className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded font-semibold text-sm"
+                  >
+                    👥 Participantes
+                  </button>
                 </div>
+
               </div>
             ))}
           </div>
         )}
       </div>
 
-      {mostrarModalEditar && salonEditando && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Editar Salón</h2>
-
-            <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">Grado: {salonEditando.grado}°</p>
-              <p className="text-sm text-gray-600 mb-4">Código: {salonEditando.codigo}</p>
-
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Nombre del Aula</label>
-              <input
-                type="text"
-                value={aulaInput}
-                onChange={(e) => setAulaInput(e.target.value)}
-                placeholder="Ej: Aula 101, Salón A, etc."
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-              />
+      {/* MODAL PARTICIPANTES */}
+      {mostrarModalIntegrantes && salonSeleccionado && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden flex flex-col">
+            <div className="bg-purple-600 text-white p-6 flex justify-between items-center">
+              <h2 className="text-2xl font-bold">Participantes – {salonSeleccionado.codigo}</h2>
+              <button
+                onClick={cerrarIntegrantes}
+                className="text-white hover:bg-white/20 rounded-full p-2 transition"
+              >
+                ✕
+              </button>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex-1 overflow-y-auto p-6">
+              {integrantes.length === 0 ? (
+                <p className="text-gray-600 text-center py-6">No hay participantes conectados</p>
+              ) : (
+                <table className="w-full text-left border">
+                  <thead className="bg-purple-50 text-purple-700">
+                    <tr>
+                      <th className="px-4 py-2">Nombre</th>
+                      <th className="px-4 py-2">Última Actividad</th>
+                      <th className="px-4 py-2 text-center">Acciones</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {integrantes.map((est) => (
+                      <tr key={est.id} className="border-b">
+                        <td className="px-4 py-2">
+                          {editandoEstudiante === est.id ? (
+                            <input
+                              className="border p-1 rounded w-full"
+                              value={nuevoNombre}
+                              onChange={(e) => setNuevoNombre(e.target.value)}
+                            />
+                          ) : (
+                            est.nombre
+                          )}
+                        </td>
+
+                        <td className="px-4 py-2 text-gray-600">{est.ultima_actividad}</td>
+
+                        <td className="px-4 py-2 text-center">
+                          {editandoEstudiante === est.id ? (
+                            <>
+                              <button
+                                onClick={() => guardarNombreEstudiante(est.id, salonSeleccionado.codigo)}
+                                className="bg-green-500 text-white px-2 py-1 rounded"
+                              >
+                                Guardar
+                              </button>
+
+                              <button
+                                onClick={() => setEditandoEstudiante(null)}
+                                className="ml-2 bg-gray-400 text-white px-2 py-1 rounded"
+                              >
+                                Cancelar
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <button
+                                onClick={() => {
+                                  setEditandoEstudiante(est.id)
+                                  setNuevoNombre(est.nombre)
+                                }}
+                                className="bg-blue-500 text-white px-2 py-1 rounded"
+                              >
+                                Editar
+                              </button>
+
+                              <button
+                                onClick={() => eliminarEstudiante(est.id, salonSeleccionado.codigo)}
+                                className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+                              >
+                                Eliminar
+                              </button>
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            <div className="p-4 bg-gray-50 text-right">
               <button
-                onClick={guardarEdicion}
-                className="flex-1 bg-gradient-to-r from-teal-500 to-green-500 text-white py-2 rounded-lg font-semibold hover:shadow-lg transition"
+                onClick={cerrarIntegrantes}
+                className="px-6 py-2 bg-purple-600 text-white rounded-lg font-semibold"
               >
-                Guardar
-              </button>
-              <button
-                onClick={() => {
-                  setMostrarModalEditar(false)
-                  setSalonEditando(null)
-                  setAulaInput("")
-                }}
-                className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-300 transition"
-              >
-                Cancelar
+                Cerrar
               </button>
             </div>
           </div>
         </div>
       )}
 
+      {/*  BOTONES DE GRADO */}
       <div className="flex gap-3 mb-6 flex-wrap">
         {[1, 2, 3, 4, 5, 6].map((grado) => (
           <button

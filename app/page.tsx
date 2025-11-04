@@ -9,7 +9,7 @@ export default function PaginaInicio() {
   const [codigo, setCodigo] = useState("");
   const router = useRouter();
 
-  const handleEntrar = () => {
+  const handleEntrar = async () => {
     if (!nombre.trim()) {
       alert("Por favor, escribe tu nombre.");
       return;
@@ -18,14 +18,25 @@ export default function PaginaInicio() {
       alert("Por favor, ingresa el código del salón.");
       return;
     }
-
-    // ✅ Guardamos datos temporalmente en localStorage
+  
+    
     localStorage.setItem("nombreAlumno", nombre);
     localStorage.setItem("codigoSalon", codigo);
-
-    // ✅ Enviamos al alumno a la pantalla del salón
+  
+   
+    await fetch("http://localhost:3001/api/alumnos_temporales", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nombre: nombre,
+        salon_codigo: codigo,
+      }),
+    });
+  
+    
     router.push(`/salon/${codigo}`);
   };
+  
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen text-center">

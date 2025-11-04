@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 
 const BACKEND_URL = "http://localhost:3001";
 
-/* ✅ GET: listar salones o buscar por código */
+/* GET: listar salones o buscar por código */
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
 
-    // ✅ Buscar por código
+    // Buscar por código
     if (searchParams.get("codigo")) {
       const codigo = searchParams.get("codigo");
       const req = await fetch(`${BACKEND_URL}/api/salones?codigo=${codigo}`);
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
       return NextResponse.json(data);
     }
 
-    // ✅ Listar todos
+    // Listar todos
     const req = await fetch(`${BACKEND_URL}/api/salones`);
     const data = await req.json();
     return NextResponse.json(data);
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
   }
 }
 
-/* ✅ POST: crear salón */
+/* POST: crear salón */
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
   }
 }
 
-/* ✅ PUT: editar */
+/* PUT: editar */
 export async function PUT(request: Request) {
   try {
     const body = await request.json();
@@ -70,7 +70,7 @@ export async function PUT(request: Request) {
   }
 }
 
-/* ✅ DELETE */
+/* DELETE */
 export async function DELETE(request: Request) {
   try {
     const body = await request.json();
@@ -89,4 +89,6 @@ export async function DELETE(request: Request) {
       { status: 500 }
     );
   }
+
+  
 }
