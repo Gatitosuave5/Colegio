@@ -18,59 +18,72 @@ export default function SalonPage() {
   const { codigo } = useParams();
   const router = useRouter();
 
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [salon, setSalon] = useState<Salon | null>(null);
   const [cargando, setCargando] = useState(true);
   const [alumnos, setAlumnos] = useState<Alumno[]>([]);
+
+  // ✅ Conectar socket una sola vez
+  useEffect(() => {
+    const s = io("http://localhost:3001");
+    setSocket(s);
+
+    return () => s.disconnect();
+  }, []);
 
   // Obtener datos del salón
   useEffect(() => {
     const obtenerSalon = async () => {
       const res = await fetch(`/api/salones?codigo=${codigo}`);
       const data = await res.json();
+
       setSalon(data.salon || null);
       setCargando(false);
     };
+
     obtenerSalon();
   }, [codigo]);
 
-  // Conectar a SOCKET.IO y escuchar alumnos
+  // Registrar alumno solo si el salón existe
   useEffect(() => {
-    const socket: Socket = io("http://localhost:3001");
+    if (!socket) return;
+    if (!salon) return; // ✅ si no existe NO registra
 
-    // Unirse al salón
-    socket.emit("unirse-salon", codigo);
+    const nombre = localStorage.getItem("nombreAlumno") || "Alumno";
 
-    // Recibir la lista actualizada
+    socket.emit("alumno-entra", { nombre, salon: codigo });
+
+  }, [socket, salon, codigo]);
+
+  // Recibir lista en tiempo real
+  useEffect(() => {
+    if (!socket) return;
     socket.on(`alumnos-${codigo}`, (lista: Alumno[]) => {
       setAlumnos(lista);
     });
 
-    //  limpiar conexión al desmontar
-    return () => {
-      socket.disconnect();
-    };
-  }, [codigo]);
+    return () => socket.off(`alumnos-${codigo}`);
+  }, [socket, codigo]);
 
-  // eliminar alumno al cerrar página
+  //  Eliminar al cerrar pestaña
   useEffect(() => {
     const nombre = localStorage.getItem("nombreAlumno");
-    const codigoSalon = localStorage.getItem("codigoSalon");
-  
+    const salon_codigo = localStorage.getItem("codigoSalon");
+
     const enviarBeacon = () => {
-      const payload = JSON.stringify({ nombre, salon_codigo: codigoSalon });
-  
+      const payload = JSON.stringify({ nombre, salon_codigo });
+
       navigator.sendBeacon(
         "/api/alumnos_temporales/eliminar",
         new Blob([payload], { type: "application/json" })
       );
     };
-  
+
     window.addEventListener("beforeunload", enviarBeacon);
-  
     return () => window.removeEventListener("beforeunload", enviarBeacon);
   }, []);
 
-  // Pantallas de carga o error
+  // ✅ Pantallas
   if (cargando)
     return (
       <div className="text-center mt-20 text-xl text-gray-600">
@@ -91,12 +104,10 @@ export default function SalonPage() {
       </div>
     );
 
-  const nombreAlumno =
-    localStorage.getItem("nombreAlumno") || "Alumno";
+  const nombreAlumno = localStorage.getItem("nombreAlumno") || "Alumno";
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Header */}
       <div className="flex justify-between p-6">
         <h1 className="text-2xl font-bold text-blue-600">
           🎒 Bienvenido {nombreAlumno}
@@ -109,7 +120,6 @@ export default function SalonPage() {
         </button>
       </div>
 
-      {/* Info del salón */}
       <section className="text-center mt-4">
         <h2 className="text-xl font-bold text-gray-800">
           Salón: <span className="text-blue-600">{codigo}</span>
@@ -119,14 +129,13 @@ export default function SalonPage() {
         </p>
       </section>
 
-      {/* Panel de alumnos en tiempo real */}
       <section className="mt-10 text-center">
         <h2 className="text-2xl font-bold text-green-600">👥 Alumnos Conectados</h2>
         <ul className="mt-4 space-y-2 text-lg">
           {alumnos.length > 0 ? (
             alumnos.map((al, i) => (
               <li key={i} className="text-gray-800">
-                ✅ {al.nombre}
+                 {al.nombre}
               </li>
             ))
           ) : (
@@ -135,9 +144,8 @@ export default function SalonPage() {
         </ul>
       </section>
 
-      {/* Footer */}
       <footer className="text-center text-gray-500 text-sm mt-16 p-4">
-        © 2025 Proyecto Escolar — Aprender es divertido 🚀
+        © 2025 Proyecto Escolar — Aprender es divertido 
       </footer>
     </main>
   );

@@ -40,19 +40,30 @@ io.on("connection", async (socket) => {
 
   // Alumno entra al salón
   socket.on("alumno-entra", async ({ nombre, salon }) => {
+    // Verificar si existe el salón
+    const [salonExiste] = await db.execute(
+      "SELECT codigo FROM salones WHERE codigo = ? LIMIT 1",
+      [salon]
+    );
+  
+    if (salonExiste.length === 0) {
+      console.log(` Intento fallido: salón ${salon} no existe`);
+      
+      return; // NO REGISTRA EN BD
+    }
+  
     console.log(`📌 ${nombre} entró al salón ${salon}`);
-
+  
     await db.execute(
       "INSERT IGNORE INTO alumnos_temporales (nombre, salon_codigo) VALUES (?, ?)",
       [nombre, salon]
     );
-
-    // Enviar lista actualizada a todos
+  
     const [alumnos] = await db.execute(
       "SELECT nombre FROM alumnos_temporales WHERE salon_codigo = ?",
       [salon]
     );
-
+  
     io.emit(`alumnos-${salon}`, alumnos);
   });
 
@@ -60,7 +71,7 @@ io.on("connection", async (socket) => {
 });
 
 /* =====================================================
- ✅ API REST NORMAL
+  API REST NORMAL
 =====================================================*/
 
 /* LOGIN PROFESOR */
@@ -195,26 +206,40 @@ app.delete("/api/salones", async (req, res) => {
 });
 
 /* REGISTRAR ALUMNO */
+
 app.post("/api/alumnos_temporales", async (req, res) => {
+  const { nombre, salon_codigo } = req.body;
+
+  if (!nombre || !salon_codigo) {
+    return res.status(400).json({ error: "Datos incompletos" });
+  }
+
   try {
-    const { nombre, salon_codigo } = req.body;
-
-    if (!nombre || !salon_codigo) {
-      return res.status(400).json({ error: "Datos incompletos" });
-    }
-
-    await db.execute(
-      "INSERT IGNORE INTO alumnos_temporales (nombre, salon_codigo) VALUES (?, ?)",
-      [nombre, salon_codigo]
+    // ✅ 1. Verificar si el salón existe
+    const [salon] = await db.execute(
+      "SELECT * FROM salones WHERE codigo = ? LIMIT 1",
+      [salon_codigo.trim()]
     );
 
-    res.json({ success: true, mensaje: "Alumno registrado" });
+    if (salon.length === 0) {
+      console.log(`❌ Salon no existe: ${salon_codigo}`);
+      return res.status(404).json({ error: "El salón no existe" });
+    }
+
+    // ✅ 2. Insertar alumno porque el salón existe
+    await db.execute(
+      "INSERT INTO alumnos_temporales (nombre, salon_codigo, ultima_actividad) VALUES (?, ?, NOW())",
+      [nombre, salon_codigo.trim()]
+    );
+
+    res.json({ success: true });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al registrar alumno" });
+    console.error("Error guardando alumno temporal:", error);
+    res.status(500).json({ error: "Error del servidor" });
   }
 });
+
 
 /* ELIMINAR alumno — compatible con sendBeacon */
 app.post("/api/alumnos_temporales/eliminar", async (req, res) => {
