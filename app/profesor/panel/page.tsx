@@ -20,7 +20,7 @@ interface Estudiante {
 
 export default function TeacherPanel() {
 
- 
+ const API = "http://localhost:3001"
 
   const contenidosPorGrado: Record<number, any[]> = {
     1: [
@@ -142,7 +142,7 @@ useEffect(() => {
   const obtenerSalones = async () => {
     setCargandoSalones(true)
     try {
-      const response = await fetch("/api/salones")
+      const response = await fetch(`${API}/api/salones`)
       if (response.ok) {
         const data = await response.json()
         setSalones(data.salones || [])
@@ -181,27 +181,29 @@ useEffect(() => {
   }
 
   const eliminarEstudiante = async (id: number, codigo: string) => {
-    await fetch("/api/alumnos_temporales", {
+    await fetch(`${API}/api/alumnos_temporales`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id, codigo }),
     })
+  
     socket?.emit("solicitar-alumnos", codigo)
   }
 
   const guardarNombreEstudiante = async (id: number, codigo: string) => {
     if (!nuevoNombre.trim()) return
-
-    await fetch("/api/alumnos_temporales", {
+  
+    await fetch(`${API}/api/alumnos_temporales`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, nombre: nuevoNombre }),
+      body: JSON.stringify({ id, nombre: nuevoNombre, codigo }),
     })
-
+  
     setEditandoEstudiante(null)
     setNuevoNombre("")
     socket?.emit("solicitar-alumnos", codigo)
   }
+  
 
   const cambiarGrado = (grado: number) => {
     setGradoActivo(grado)
@@ -218,7 +220,7 @@ useEffect(() => {
 
     setCargando(true)
     try {
-      const response = await fetch("/api/salones", {
+      const response = await fetch(`${API}/api/salones`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ grado: gradoActivo }),
@@ -250,11 +252,22 @@ useEffect(() => {
     setMostrarModalEditar(true)
   }
 
+  const resetearPuntaje = async (id: number, codigo: string) => {
+    await fetch(`${API}/api/alumnos_temporales/reset`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, codigo }),
+    });
+  
+    socket?.emit("solicitar-alumnos", codigo);
+  };
+  
+
   const guardarEdicion = async () => {
     if (!salonEditando) return
 
     try {
-      const response = await fetch("/api/salones", {
+      const response = await fetch(`${API}/api/salones`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -279,7 +292,7 @@ useEffect(() => {
     if (!confirm("¿Estás seguro de que deseas eliminar este salón?")) return
 
     try {
-      const response = await fetch("/api/salones", {
+      const response = await fetch(`${API}/api/salones`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
@@ -414,99 +427,151 @@ useEffect(() => {
         )}
       </div>
 
-      {/* MODAL PARTICIPANTES */}
+      
+      {/* MODAL PARTICIPANTES - VERSION RANKING */}
       {mostrarModalIntegrantes && salonSeleccionado && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] overflow-hidden flex flex-col">
-            <div className="bg-purple-600 text-white p-6 flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Participantes – {salonSeleccionado.codigo}</h2>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-300">
+
+            {/* HEADER */}
+            <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-purple-500 text-white p-6 flex justify-between items-center">
+              <div>
+                <h2 className="text-3xl font-bold flex items-center gap-2">🏆 Ranking</h2>
+                <p className="text-purple-100 text-sm mt-1">
+                  {salonSeleccionado.aula || `Salón ${salonSeleccionado.codigo}`} • {salonSeleccionado.grado}° Grado • {integrantes.length} estudiantes
+                </p>
+              </div>
               <button
                 onClick={cerrarIntegrantes}
-                className="text-white hover:bg-white/20 rounded-full p-2 transition"
+                className="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition hover:scale-110"
               >
                 ✕
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6">
+            {/* LISTA */}
+            <div className="flex-1 overflow-y-auto p-6 bg-gradient-to-b from-purple-50 to-white">
               {integrantes.length === 0 ? (
-                <p className="text-gray-600 text-center py-6">No hay participantes conectados</p>
+                <div className="text-center py-12">
+                  <p className="text-gray-500 text-lg">No hay participantes registrados aún</p>
+                </div>
               ) : (
-                <table className="w-full text-left border">
-                  <thead className="bg-purple-50 text-purple-700">
-                    <tr>
-                      <th className="px-4 py-2">Nombre</th>
-                      <th className="px-4 py-2">Última Actividad</th>
-                      <th className="px-4 py-2 text-center">Acciones</th>
-                    </tr>
-                  </thead>
+                <div className="space-y-3">
+                  {integrantes
+                    .sort((a, b) => (b.puntaje || 0) - (a.puntaje || 0))
+                    .map((estudiante, index) => {
+                      const getMedal = () => {
+                        if (index === 0) return "🥇"
+                        if (index === 1) return "🥈"
+                        if (index === 2) return "🥉"
+                        return "⭐"
+                      }
 
-                  <tbody>
-                    {integrantes.map((est) => (
-                      <tr key={est.id} className="border-b">
-                        <td className="px-4 py-2">
-                          {editandoEstudiante === est.id ? (
-                            <input
-                              className="border p-1 rounded w-full"
-                              value={nuevoNombre}
-                              onChange={(e) => setNuevoNombre(e.target.value)}
-                            />
-                          ) : (
-                            est.nombre
-                          )}
-                        </td>
+                      const getRankingColor = () => {
+                        if (index === 0) return "bg-yellow-50 border-yellow-200"
+                        if (index === 1) return "bg-slate-50 border-slate-200"
+                        if (index === 2) return "bg-orange-50 border-orange-200"
+                        return "bg-white border-gray-200"
+                      }
 
-                        <td className="px-4 py-2 text-gray-600">{est.ultima_actividad}</td>
+                      return (
+                        <div
+                          key={estudiante.id}
+                          className={`border-2 rounded-xl p-4 transition hover:shadow-lg ${getRankingColor()}`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4 flex-1">
 
-                        <td className="px-4 py-2 text-center">
-                          {editandoEstudiante === est.id ? (
-                            <>
+                              <div className="flex items-center gap-3 min-w-fit">
+                                <div className="text-4xl">{getMedal()}</div>
+                                <div>
+                                  <p className="text-xs text-gray-600 font-semibold">PUESTO</p>
+                                  <p className="text-2xl font-bold text-gray-800">#{index + 1}</p>
+                                </div>
+                              </div>
+
+                              <div className="flex-1 min-w-0">
+                                {editandoEstudiante === estudiante.id ? (
+                                  <input
+                                    type="text"
+                                    value={nuevoNombre}
+                                    onChange={(e) => setNuevoNombre(e.target.value)}
+                                    className="flex-1 px-2 py-1 border-2 border-purple-400 rounded focus:outline-none w-full"
+                                    autoFocus
+                                  />
+                                ) : (
+                                  <p className="font-bold text-gray-800 text-lg truncate">{estudiante.nombre}</p>
+                                )}
+
+                                <p className="text-xs text-gray-600 mt-1">
+                                  Activo: {estudiante.ultima_actividad}
+                                </p>
+                              </div>
+
+                              <div className="text-right min-w-fit">
+                                <p className="text-xs text-gray-600 font-semibold">PUNTAJE</p>
+                                <p className="text-3xl font-black text-purple-600">{(estudiante.puntaje || 0).toLocaleString()}</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {editandoEstudiante === estudiante.id ? (
+                            <div className="flex gap-2 justify-end mt-3 pt-3 border-t">
                               <button
-                                onClick={() => guardarNombreEstudiante(est.id, salonSeleccionado.codigo)}
-                                className="bg-green-500 text-white px-2 py-1 rounded"
+                                onClick={() => guardarNombreEstudiante(estudiante.id, salonSeleccionado.codigo)}
+                                className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold transition hover:scale-105"
                               >
-                                Guardar
+                                ✓ Guardar
                               </button>
-
-                              <button
-                                onClick={() => setEditandoEstudiante(null)}
-                                className="ml-2 bg-gray-400 text-white px-2 py-1 rounded"
-                              >
-                                Cancelar
-                              </button>
-                            </>
-                          ) : (
-                            <>
                               <button
                                 onClick={() => {
-                                  setEditandoEstudiante(est.id)
-                                  setNuevoNombre(est.nombre)
+                                  setEditandoEstudiante(null)
+                                  setNuevoNombre("")
                                 }}
-                                className="bg-blue-500 text-white px-2 py-1 rounded"
+                                className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm font-semibold transition hover:scale-105"
                               >
-                                Editar
+                                ✕ Cancelar
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="flex gap-2 justify-end mt-3 pt-3 border-t">
+                              <button
+                                onClick={() => {
+                                  setEditandoEstudiante(estudiante.id)
+                                  setNuevoNombre(estudiante.nombre)
+                                }}
+                                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm font-semibold transition hover:scale-105"
+                              >
+                                ✏️ Editar
                               </button>
 
                               <button
-                                onClick={() => eliminarEstudiante(est.id, salonSeleccionado.codigo)}
-                                className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+                                onClick={() => eliminarEstudiante(estudiante.id, salonSeleccionado.codigo)}
+                                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm font-semibold transition hover:scale-105"
                               >
-                                Eliminar
+                                🗑️ Eliminar
                               </button>
-                            </>
+                              <button
+                                onClick={() => resetearPuntaje(estudiante.id, salonSeleccionado.codigo)}
+                                className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm font-semibold transition hover:scale-105"
+                              >
+                                🔄 Reset
+                              </button>
+
+                              
+                            </div>
                           )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </div>
+                      )
+                    })}
+                </div>
               )}
             </div>
 
-            <div className="p-4 bg-gray-50 text-right">
+            <div className="bg-gray-50 border-t p-4 flex justify-end">
               <button
                 onClick={cerrarIntegrantes}
-                className="px-6 py-2 bg-purple-600 text-white rounded-lg font-semibold"
+                className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition"
               >
                 Cerrar
               </button>
@@ -514,6 +579,7 @@ useEffect(() => {
           </div>
         </div>
       )}
+
 
       {/*  BOTONES DE GRADO */}
       <div className="flex gap-3 mb-6 flex-wrap">

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import io, { Socket } from "socket.io-client";
+import { ChevronRight, Search, Trophy, X } from "lucide-react";
+import { Card } from "@/app/components/ui/card";
 
 interface Salon {
   grado: number;
@@ -12,6 +14,7 @@ interface Salon {
 interface Alumno {
   nombre: string;
   salon_codigo: string;
+  puntaje?: number;
 }
 
 export default function SalonPage() {
@@ -22,73 +25,105 @@ export default function SalonPage() {
   const [salon, setSalon] = useState<Salon | null>(null);
   const [cargando, setCargando] = useState(true);
   const [alumnos, setAlumnos] = useState<Alumno[]>([]);
+  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
 
-  // ✅ Conectar socket una sola vez
+  const nombreAlumno = localStorage.getItem("nombreAlumno") || "Alumno";
+  const salon_codigo = codigo;
+
+  const API = "http://localhost:3001";
+
+  // ✅ Conectar socket
   useEffect(() => {
-    const s = io("http://localhost:3001");
+    const s = io(API);
     setSocket(s);
-
     return () => s.disconnect();
   }, []);
 
-  // Obtener datos del salón
+  // ✅ Obtener salón
   useEffect(() => {
     const obtenerSalon = async () => {
-      const res = await fetch(`/api/salones?codigo=${codigo}`);
+      const res = await fetch(`${API}/api/salones?codigo=${codigo}`);
       const data = await res.json();
-
       setSalon(data.salon || null);
       setCargando(false);
     };
-
     obtenerSalon();
   }, [codigo]);
 
-  // Registrar alumno solo si el salón existe
+  // ✅ Registrar alumno
+  useEffect(() => {
+    if (!socket || !salon) return;
+    socket.emit("alumno-entra", { nombre: nombreAlumno, salon: codigo });
+  }, [socket, salon, codigo, nombreAlumno]);
+
+  // ✅ Recibir lista
   useEffect(() => {
     if (!socket) return;
-    if (!salon) return; // ✅ si no existe NO registra
-
-    const nombre = localStorage.getItem("nombreAlumno") || "Alumno";
-
-    socket.emit("alumno-entra", { nombre, salon: codigo });
-
-  }, [socket, salon, codigo]);
-
-  // Recibir lista en tiempo real
-  useEffect(() => {
-    if (!socket) return;
-    socket.on(`alumnos-${codigo}`, (lista: Alumno[]) => {
-      setAlumnos(lista);
-    });
-
+    socket.on(`alumnos-${codigo}`, (lista: Alumno[]) => setAlumnos(lista));
     return () => socket.off(`alumnos-${codigo}`);
   }, [socket, codigo]);
 
-  //  Eliminar al cerrar pestaña
+  // ✅ sendBeacon para borrar al cerrar
   useEffect(() => {
-    const nombre = localStorage.getItem("nombreAlumno");
-    const salon_codigo = localStorage.getItem("codigoSalon");
-
-    const enviarBeacon = () => {
-      const payload = JSON.stringify({ nombre, salon_codigo });
-
-      navigator.sendBeacon(
-        "/api/alumnos_temporales/eliminar",
-        new Blob([payload], { type: "application/json" })
-      );
+    const enviarCierre = () => {
+      fetch(`${API}/api/alumnos_temporales/eliminar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: nombreAlumno,
+          salon_codigo
+        }),
+        keepalive: true, //  permite que la petición se complete incluso si la página cierra
+      });
     };
+  
+    window.addEventListener("beforeunload", enviarCierre);
+    return () => window.removeEventListener("beforeunload", enviarCierre);
+  }, [nombreAlumno, salon_codigo]);
+  
+  useEffect(() => {
+    localStorage.setItem("codigoSalon", codigo as string);
+  }, [codigo]);
 
-    window.addEventListener("beforeunload", enviarBeacon);
-    return () => window.removeEventListener("beforeunload", enviarBeacon);
-  }, []);
+  const navCategories = [
+    { id: 1, label: "Lenguaje", color: "bg-blue-500" },
+    { id: 2, label: "Cálculo", color: "bg-green-500" },
+    { id: 3, label: "Lectura", color: "bg-red-500" },
+    { id: 4, label: "Estadístico", color: "bg-purple-500" },
+    { id: 5, label: "Otros", color: "bg-orange-500" },
+    { id: 6, label: "Recursos", color: "bg-pink-500" },
+    { id: 7, label: "Aventurero", color: "bg-indigo-500" },
+  ];
 
-  // ✅ Pantallas
+  const subjects = [
+    {
+      id: "math",
+      title: "Matemática",
+      description: "¡Aprende números y operaciones!",
+      icon: "📐",
+      image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Ij0fEwE08Kfk6UTtgMPAZWTLUXcGkc.png",
+    },
+    {
+      id: "reading",
+      title: "Lectura",
+      description: "¡Lee y descubre historias increíbles!",
+      icon: "📚",
+      image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kxJ59lX9gd7Eo94Ti2mfB35MKkStu0.png",
+    },
+  ];
+
+  const resources = [
+    { id: 1, title: "Cuentos", emoji: "📖" },
+    { id: 2, title: "Cuentos de Miedo", emoji: "👻" },
+    { id: 3, title: "Cuentos de Magia", emoji: "✨" },
+    { id: 4, title: "Cuentos Clásicos", emoji: "🎭" },
+  ];
+
   if (cargando)
     return (
-      <div className="text-center mt-20 text-xl text-gray-600">
-        Cargando salón...
-      </div>
+      <div className="text-center mt-20 text-xl text-gray-600">Cargando salón...</div>
     );
 
   if (!salon)
@@ -104,48 +139,297 @@ export default function SalonPage() {
       </div>
     );
 
-  const nombreAlumno = localStorage.getItem("nombreAlumno") || "Alumno";
+  // ✅ Pantalla de cada módulo
+  if (selectedSubject === "math") {
+    return (
+      <main className="min-h-screen bg-gray-50">
+        <button
+          onClick={() => setSelectedSubject(null)}
+          className="absolute top-6 right-6 bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition"
+        >
+          ← Volver
+        </button>
+        <div className="text-center mt-20 text-3xl font-bold text-blue-600">
+          📐 Módulo de Matemática
+        </div>
+        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
+      </main>
+    );
+  }
+
+  if (selectedSubject === "reading") {
+    return (
+      <main className="min-h-screen bg-gray-50">
+        <button
+          onClick={() => setSelectedSubject(null)}
+          className="absolute top-6 right-6 bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition"
+        >
+          ← Volver
+        </button>
+        <div className="text-center mt-20 text-3xl font-bold text-red-600">
+          📚 Módulo de Lectura
+        </div>
+        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
+      </main>
+    );
+  }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <div className="flex justify-between p-6">
-        <h1 className="text-2xl font-bold text-blue-600">
-          🎒 Bienvenido {nombreAlumno}
-        </h1>
-        <button
-          onClick={() => router.push("/")}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-        >
-          Salir
-        </button>
+    <main className="min-h-screen bg-white">
+
+      {/* ✅ NAV CON CATEGORÍAS */}
+      <nav className="sticky top-0 z-30 bg-gradient-to-r from-blue-400 via-green-400 to-orange-400 py-3 px-4 shadow-lg">
+        <div className="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto pb-2">
+          {navCategories.map((cat) => (
+            <button
+              key={cat.id}
+              className={`${cat.color} text-white px-4 py-2 rounded-lg font-semibold whitespace-nowrap hover:opacity-90 transition text-sm`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      {/* ✅ NAV CON USUARIO + TABLA */}
+      <div className="sticky top-16 z-20 bg-teal-700 text-white px-6 py-4 shadow-md">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="text-3xl">🌍</div>
+            <div>
+              <h1 className="text-2xl font-bold">mundo primaria</h1>
+              <p className="text-xs text-teal-100">Aprende y diviértete</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <div className="bg-teal-600 px-4 py-2 rounded-lg">
+              <p className="text-sm font-semibold text-white">👤 {nombreAlumno}</p>
+              <p className="text-lg font-bold text-yellow-300">
+                {(alumnos.find(a => a.nombre === nombreAlumno)?.puntaje || 0).toLocaleString()} pts
+              </p>
+            </div>
+
+            <button
+              onClick={() => setShowLeaderboard(true)}
+              className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2"
+            >
+              <Trophy className="w-5 h-5" />
+              Tabla
+            </button>
+
+            <button
+              onClick={() => router.push("/")}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition"
+            >
+              Salir
+            </button>
+          </div>
+        </div>
       </div>
 
-      <section className="text-center mt-4">
-        <h2 className="text-xl font-bold text-gray-800">
-          Salón: <span className="text-blue-600">{codigo}</span>
-        </h2>
-        <p className="text-gray-700">
-          Grado: <b>{salon.grado}°</b> — Aula: <b>{salon.aula}</b>
-        </p>
+      {/* ✅ PANEL DE PUNTAJES */}
+      {showLeaderboard && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setShowLeaderboard(false)}></div>
+          <div className="fixed top-24 right-0 h-[calc(100vh-96px)] w-96 bg-white shadow-2xl z-50 flex flex-col">
+            <div className="bg-gradient-to-r from-yellow-400 to-orange-400 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <Trophy className="w-6 h-6" /> Tabla de Puntajes
+              </h2>
+              <button
+                onClick={() => setShowLeaderboard(false)}
+                className="text-gray-900 hover:bg-yellow-300 p-2 rounded-lg transition"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="overflow-y-auto flex-1">
+              <table className="w-full">
+                <thead className="bg-gray-100 sticky top-0">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-bold text-gray-900 text-sm">Pos</th>
+                    <th className="px-4 py-3 text-left font-bold text-gray-900 text-sm">Estudiante</th>
+                    <th className="px-4 py-3 text-right font-bold text-gray-900 text-sm">Puntos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {alumnos
+                    .sort((a, b) => (b.puntaje || 0) - (a.puntaje || 0))
+                    .map((student, index) => (
+                      <tr
+                        key={index}
+                        className={`border-b transition ${
+                          student.nombre === nombreAlumno ? "bg-yellow-100 font-semibold" : "hover:bg-gray-50"
+                        }`}
+                      >
+                        <td className="px-4 py-3 text-gray-900 text-center">
+                          {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `${index + 1}`}
+                        </td>
+                        <td className="px-4 py-3 text-gray-900 text-sm">{student.nombre}</td>
+                        <td className="px-4 py-3 text-right text-gray-900 font-bold">
+                          {(student.puntaje || 0).toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ✅ CONTENIDO PRINCIPAL */}
+      <section className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
+        <div className="max-w-5xl mx-auto px-8 py-12">
+
+          {/* ✅ SECCIÓN BIENVENIDA */}
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Recursos Didácticos Gratuitos</h2>
+            <p className="text-gray-600 mb-4">
+              Aquí encontrarás materiales educativos diseñados para aprender de forma divertida e interactiva.
+            </p>
+            <div className="bg-gradient-to-r from-green-300 to-teal-300 rounded-lg p-4 mb-6">
+              <p className="text-gray-800 font-semibold">¡Comienza tu aventura educativa hoy!</p>
+            </div>
+
+            {/* ✅ BOTONES RÁPIDOS */}
+            <div className="flex gap-2 flex-wrap mb-6">
+              <button className="bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-500 text-sm">✏️ Sumatorios</button>
+              <button className="bg-lime-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-lime-500 text-sm">📝 Fichas Letras</button>
+              <button className="bg-blue-400 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-500 text-sm">📖 Fichas Lectura</button>
+              <button className="bg-purple-400 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-500 text-sm">🎥 Videos Cuento</button>
+            </div>
+          </div>
+
+          {/* ✅ MATERIAS */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">¿Qué quieres aprender hoy?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {subjects.map((subject) => (
+                <button
+                  key={subject.id}
+                  onClick={() => setSelectedSubject(subject.id)}
+                  className="group text-left transition-all duration-300 hover:scale-105 relative overflow-hidden rounded-3xl"
+                >
+                  <Card
+                    className="border-0 shadow-lg hover:shadow-2xl h-full p-8 rounded-3xl cursor-pointer relative overflow-hidden"
+                    style={{
+                      backgroundImage: `url(${subject.image})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-black opacity-40 rounded-3xl"></div>
+
+                    <div className="relative z-10 flex flex-col h-full">
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="text-5xl">{subject.icon}</div>
+                        <ChevronRight className="w-6 h-6 opacity-0 group-hover:opacity-100 transition text-white" />
+                      </div>
+                      <h3 className="text-3xl font-bold mb-2 text-white">{subject.title}</h3>
+                      <p className="text-sm opacity-90 mb-6 text-white">{subject.description}</p>
+                      <div className="flex items-center gap-2 text-sm font-semibold text-white">
+                        Explorar <ChevronRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </Card>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* ✅ CUENTOS */}
+          <div className="mb-12">
+            <div className="bg-teal-500 text-white px-6 py-3 rounded-lg font-bold mb-6 text-lg">
+              📚 CUENTOS
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {resources.map((resource) => (
+                <Card
+                  key={resource.id}
+                  className="bg-teal-400 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition cursor-pointer hover:scale-105"
+                >
+                  <div className="text-5xl mb-4 text-center">{resource.emoji}</div>
+                  <h3 className="font-bold text-center text-lg">{resource.title}</h3>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* ✅ BUSCAR RECURSOS */}
+          <div className="bg-gray-100 rounded-lg p-6 mb-12">
+            <h3 className="text-lg font-bold text-gray-800 mb-4">Buscar Recursos</h3>
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  placeholder="Busca por tema..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                />
+                <Search className="absolute right-3 top-2.5 w-5 h-5 text-gray-400" />
+              </div>
+              <button className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition">
+                Buscar
+              </button>
+            </div>
+          </div>
+
+          {/* ✅ DESTACADO DEL MES */}
+          <div>
+            <Card className="p-6 bg-gradient-to-br from-green-50 to-lime-50 border border-green-200">
+              <h3 className="text-lg font-bold text-green-700 mb-4">✨ Destacado del Mes</h3>
+              <p className="text-gray-700 mb-4">
+                Descubre historias fascinantes y ejercicios matemáticos interactivos diseñados especialmente para tu nivel.
+              </p>
+              <button className="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition">
+                Explorar
+              </button>
+            </Card>
+          </div>
+
+        </div>
       </section>
 
-      <section className="mt-10 text-center">
-        <h2 className="text-2xl font-bold text-green-600">👥 Alumnos Conectados</h2>
-        <ul className="mt-4 space-y-2 text-lg">
-          {alumnos.length > 0 ? (
-            alumnos.map((al, i) => (
-              <li key={i} className="text-gray-800">
-                 {al.nombre}
-              </li>
-            ))
-          ) : (
-            <p className="text-gray-500">No hay alumnos conectados</p>
-          )}
-        </ul>
-      </section>
+      {/* ✅ FOOTER COMPLETO */}
+      <footer className="bg-gray-900 text-white mt-20">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <h4 className="font-bold mb-4">Sobre Nosotros</h4>
+              <p className="text-gray-400 text-sm">Plataforma educativa interactiva para estudiantes de primaria.</p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Materias</h4>
+              <ul className="text-gray-400 text-sm space-y-2">
+                <li><a href="#" className="hover:text-white transition">Matemática</a></li>
+                <li><a href="#" className="hover:text-white transition">Lectura</a></li>
+                <li><a href="#" className="hover:text-white transition">Escritura</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Recursos</h4>
+              <ul className="text-gray-400 text-sm space-y-2">
+                <li><a href="#" className="hover:text-white transition">Ayuda</a></li>
+                <li><a href="#" className="hover:text-white transition">Contacto</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4">Legal</h4>
+              <ul className="text-gray-400 text-sm space-y-2">
+                <li><a href="#" className="hover:text-white transition">Privacidad</a></li>
+                <li><a href="#" className="hover:text-white transition">Términos</a></li>
+              </ul>
+            </div>
+          </div>
 
-      <footer className="text-center text-gray-500 text-sm mt-16 p-4">
-        © 2025 Proyecto Escolar — Aprender es divertido 
+          <div className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
+            <p>&copy; 2025 Mundo Primaria. Todos los derechos reservados.</p>
+          </div>
+        </div>
       </footer>
     </main>
   );

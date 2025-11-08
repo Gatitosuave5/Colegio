@@ -4,13 +4,18 @@ import React from "react";
 export function Card({
   children,
   className = "",
+  style = {},
+  ...props
 }: {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <div
-      className={`rounded-2xl shadow-md p-4 transition-colors duration-300 ${className}`}
+      className={`rounded-2xl shadow-md p-6 transition-colors duration-300 ${className}`}
+      style={style}    
+      {...props}
     >
       {children}
     </div>
@@ -46,3 +51,5 @@ export function CardContent({
 }) {
   return <div className={`${className}`}>{children}</div>;
 }
+
+

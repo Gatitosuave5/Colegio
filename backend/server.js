@@ -38,6 +38,14 @@ const db = await mysql.createConnection({
 io.on("connection", async (socket) => {
   console.log("Usuario conectado:", socket.id);
 
+  socket.on("solicitar-alumnos", async (codigo) => {
+    const [alumnos] = await db.execute(
+      "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
+      [codigo]
+    );
+    io.emit(`alumnos-${codigo}`, alumnos);
+  });
+
   // Alumno entra al salón
   socket.on("alumno-entra", async ({ nombre, salon }) => {
     // Verificar si existe el salón
@@ -52,7 +60,7 @@ io.on("connection", async (socket) => {
       return; // NO REGISTRA EN BD
     }
   
-    console.log(`📌 ${nombre} entró al salón ${salon}`);
+    console.log(` ${nombre} entró al salón ${salon}`);
   
     await db.execute(
       "INSERT IGNORE INTO alumnos_temporales (nombre, salon_codigo) VALUES (?, ?)",
@@ -190,6 +198,26 @@ app.put("/api/salones", async (req, res) => {
   }
 });
 
+/* ACTUALIZAR PUNTAJE */
+app.post("/api/alumnos_temporales/puntaje", async (req, res) => {
+  try {
+    const { id, puntaje } = req.body;
+
+    if (!id) return res.status(400).json({ error: "ID requerido" });
+
+    await db.execute(
+      "UPDATE alumnos_temporales SET puntaje = puntaje + ?, ultima_actividad = NOW() WHERE id = ?",
+      [puntaje, id]
+    );
+
+    res.json({ success: true });
+
+  } catch (error) {
+    console.error("Error actualizando puntaje:", error);
+    res.status(500).json({ error: "No se pudo actualizar puntaje" });
+  }
+});
+
 /* DELETE - ELIMINAR SALÓN */
 app.delete("/api/salones", async (req, res) => {
   try {
@@ -222,11 +250,11 @@ app.post("/api/alumnos_temporales", async (req, res) => {
     );
 
     if (salon.length === 0) {
-      console.log(`❌ Salon no existe: ${salon_codigo}`);
+      console.log(` Salon no existe: ${salon_codigo}`);
       return res.status(404).json({ error: "El salón no existe" });
     }
 
-    // ✅ 2. Insertar alumno porque el salón existe
+    //  2. Insertar alumno porque el salón existe
     await db.execute(
       "INSERT INTO alumnos_temporales (nombre, salon_codigo, ultima_actividad) VALUES (?, ?, NOW())",
       [nombre, salon_codigo.trim()]
@@ -242,6 +270,7 @@ app.post("/api/alumnos_temporales", async (req, res) => {
 
 
 /* ELIMINAR alumno — compatible con sendBeacon */
+
 app.post("/api/alumnos_temporales/eliminar", async (req, res) => {
   try {
     const { nombre, salon_codigo } = req.body;
@@ -251,12 +280,94 @@ app.post("/api/alumnos_temporales/eliminar", async (req, res) => {
       [nombre, salon_codigo]
     );
 
+    // Notificar en tiempo real
+    const [alumnos] = await db.execute(
+      "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
+      [salon_codigo]
+    );
+
+    io.emit(`alumnos-${salon_codigo}`, alumnos);
+
     res.json({ success: true });
   } catch (error) {
     console.error(error);
     res.json({ error: "Error al Eliminar alumno" });
   }
 });
+
+
+/* EDITAR NOMBRE DEL ALUMNO */
+app.put("/api/alumnos_temporales", async (req, res) => {
+  try {
+    const { id, nombre } = req.body;
+
+    if (!id || !nombre) {
+      return res.status(400).json({ error: "ID y nuevo nombre son requeridos" });
+    }
+
+    await db.execute(
+      "UPDATE alumnos_temporales SET nombre = ?, ultima_actividad = NOW() WHERE id = ?",
+      [nombre.trim(), id]
+    );
+
+    res.json({ success: true, mensaje: "Nombre actualizado correctamente" });
+
+  } catch (error) {
+    console.error("Error al editar alumno:", error);
+    res.status(500).json({ error: "Error al editar alumno" });
+  }
+});
+
+/* ELIMINAR ALUMNO POR ID */
+app.delete("/api/alumnos_temporales", async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).json({ error: "ID requerido" });
+    }
+
+    await db.execute(
+      "DELETE FROM alumnos_temporales WHERE id = ?",
+      [id]
+    );
+
+    res.json({ success: true, mensaje: "Alumno eliminado correctamente" });
+
+  } catch (error) {
+    console.error("Error al eliminar alumno:", error);
+    res.status(500).json({ error: "Error al eliminar alumno" });
+  }
+});
+
+/* RESETEAR PUNTAJE DE UN ALUMNO */
+app.post("/api/alumnos_temporales/reset", async (req, res) => {
+  try {
+    const { id, codigo } = req.body;
+
+    if (!id) return res.status(400).json({ error: "ID requerido" });
+
+    await db.execute(
+      "UPDATE alumnos_temporales SET puntaje = 0, ultima_actividad = NOW() WHERE id = ?",
+      [id]
+    );
+
+    if (codigo) {
+      const [alumnos] = await db.execute(
+        "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
+        [codigo]
+      );
+      io.emit(`alumnos-${codigo}`, alumnos);
+    }
+
+    res.json({ success: true });
+
+  } catch (error) {
+    console.error("Error al resetear puntaje:", error);
+    res.status(500).json({ error: "No se pudo resetear el puntaje" });
+  }
+});
+
 
 /* GET - LISTAR ALUMNOS POR SALÓN */
 app.get("/api/alumnos_temporales", async (req, res) => {
@@ -269,7 +380,7 @@ app.get("/api/alumnos_temporales", async (req, res) => {
 
     const [rows] = await db.execute(
       "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
-      [codigo.trim()] // 👈 AGREGA ESTO
+      [codigo.trim()] // AGREGA ESTO
     );
 
     res.json({ alumnos: rows });
