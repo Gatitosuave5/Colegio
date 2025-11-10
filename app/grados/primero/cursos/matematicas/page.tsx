@@ -1,5 +1,5 @@
 "use client";
-import CursoPage from "@/app/components/CursoPage";
+import CursoPage from "@/app/grados/primero/cursos/Lectura/CursoPage";
 
 export default function MatematicasPage() {
   const curso = {

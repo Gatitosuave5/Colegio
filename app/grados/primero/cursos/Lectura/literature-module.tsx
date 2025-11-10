@@ -2,10 +2,10 @@
 
 import { useState } from "react"
 import { ArrowLeft } from "lucide-react"
-import StoryList from "./story-list"
-import StoryReader from "./story-reader"
-import QuizComponent from "./quiz-component"
-import GamesComponent from "./games-component"
+import StoryList from "@/app/grados/primero/cursos/Lectura/story-list"
+import StoryReader from "@/app/grados/primero/cursos/Lectura/story-reader"
+import QuizComponent from "@/app/grados/primero/cursos/Lectura/quiz-component"
+import GamesComponent from "@/app/grados/primero/cursos/Lectura/games-component"
 
 type View = "list" | "reading" | "quiz" | "games"
 
@@ -24,7 +24,7 @@ export default function LiteratureModule({ onBack }: { onBack: () => void }) {
 
   const stories: Story[] = [
     {
-      id: "caperucita",
+      id: "caperucita-roja",
       title: "Caperucita Roja",
       author: "Cuento Tradicional",
       cover: "🔴",
@@ -41,7 +41,7 @@ export default function LiteratureModule({ onBack }: { onBack: () => void }) {
       ],
     },
     {
-      id: "patito",
+      id: "el-patito-feo",
       title: "El Patito Feo",
       author: "Hans Christian Andersen",
       cover: "🦆",

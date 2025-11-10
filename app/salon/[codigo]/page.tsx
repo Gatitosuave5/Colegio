@@ -5,6 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import io, { Socket } from "socket.io-client";
 import { ChevronRight, Search, Trophy, X } from "lucide-react";
 import { Card } from "@/app/components/ui/card";
+import StoryList from "@/app/grados/primero/cursos/Lectura/story-list";
+import LiteratureModule from "@/app/grados/primero/cursos/Lectura/literature-module";
 
 interface Salon {
   grado: number;
@@ -29,19 +31,53 @@ export default function SalonPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showLeaderboard, setShowLeaderboard] = useState(false);
 
-  const nombreAlumno = localStorage.getItem("nombreAlumno") || "Alumno";
+  const [nombreAlumno, setNombreAlumno] = useState("Alumno");
+
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const nombre = localStorage.getItem("nombreAlumno");
+    if (nombre) setNombreAlumno(nombre);
+  }
+}, []);
+
   const salon_codigo = codigo;
+  const [selectedStory, setSelectedStory] = useState<Story | null>(null);
+
+const stories: Story[] = [
+  {
+    id: "caperucita-roja",
+    title: "Caperucita Roja",
+    author: "Hermanos Grimm",
+    cover: "📕",
+    difficulty: "fácil",
+  },
+  {
+    id: "el-patito-feo",
+    title: "El Patito Feo",
+    author: "Hans Christian Andersen",
+    cover: "🦢",
+    difficulty: "fácil",
+  },
+  {
+    id: "cenicienta",
+    title: "Cenicienta",
+    author: "Hermanos Grimm",
+    cover: "👠",
+    difficulty: "medio",
+  },
+];
+
 
   const API = "http://localhost:3001";
 
-  // ✅ Conectar socket
+  //  Conectar socket
   useEffect(() => {
     const s = io(API);
     setSocket(s);
     return () => s.disconnect();
   }, []);
 
-  // ✅ Obtener salón
+  //  Obtener salón
   useEffect(() => {
     const obtenerSalon = async () => {
       const res = await fetch(`${API}/api/salones?codigo=${codigo}`);
@@ -52,20 +88,20 @@ export default function SalonPage() {
     obtenerSalon();
   }, [codigo]);
 
-  // ✅ Registrar alumno
+  //  Registrar alumno
   useEffect(() => {
     if (!socket || !salon) return;
     socket.emit("alumno-entra", { nombre: nombreAlumno, salon: codigo });
   }, [socket, salon, codigo, nombreAlumno]);
 
-  // ✅ Recibir lista
+  //  Recibir lista
   useEffect(() => {
     if (!socket) return;
     socket.on(`alumnos-${codigo}`, (lista: Alumno[]) => setAlumnos(lista));
     return () => socket.off(`alumnos-${codigo}`);
   }, [socket, codigo]);
 
-  // ✅ sendBeacon para borrar al cerrar
+  //  sendBeacon para borrar al cerrar
   useEffect(() => {
     const enviarCierre = () => {
       fetch(`${API}/api/alumnos_temporales/eliminar`, {
@@ -139,7 +175,7 @@ export default function SalonPage() {
       </div>
     );
 
-  // ✅ Pantalla de cada módulo
+  //  Pantalla de cada módulo
   if (selectedSubject === "math") {
     return (
       <main className="min-h-screen bg-gray-50">
@@ -159,25 +195,14 @@ export default function SalonPage() {
 
   if (selectedSubject === "reading") {
     return (
-      <main className="min-h-screen bg-gray-50">
-        <button
-          onClick={() => setSelectedSubject(null)}
-          className="absolute top-6 right-6 bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition"
-        >
-          ← Volver
-        </button>
-        <div className="text-center mt-20 text-3xl font-bold text-red-600">
-          📚 Módulo de Lectura
-        </div>
-        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
-      </main>
+      <LiteratureModule onBack={() => setSelectedSubject(null)} />
     );
   }
 
   return (
     <main className="min-h-screen bg-white">
 
-      {/* ✅ NAV CON CATEGORÍAS */}
+      {/*  NAV CON CATEGORÍAS */}
       <nav className="sticky top-0 z-30 bg-gradient-to-r from-blue-400 via-green-400 to-orange-400 py-3 px-4 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto pb-2">
           {navCategories.map((cat) => (
@@ -191,7 +216,7 @@ export default function SalonPage() {
         </div>
       </nav>
 
-      {/* ✅ NAV CON USUARIO + TABLA */}
+      {/*  NAV CON USUARIO + TABLA */}
       <div className="sticky top-16 z-20 bg-teal-700 text-white px-6 py-4 shadow-md">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -228,7 +253,7 @@ export default function SalonPage() {
         </div>
       </div>
 
-      {/* ✅ PANEL DE PUNTAJES */}
+      {/*  PANEL DE PUNTAJES */}
       {showLeaderboard && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setShowLeaderboard(false)}></div>
@@ -280,11 +305,11 @@ export default function SalonPage() {
         </>
       )}
 
-      {/* ✅ CONTENIDO PRINCIPAL */}
+      {/*  CONTENIDO PRINCIPAL */}
       <section className="bg-gradient-to-b from-blue-50 to-white min-h-screen">
         <div className="max-w-5xl mx-auto px-8 py-12">
 
-          {/* ✅ SECCIÓN BIENVENIDA */}
+          {/*  SECCIÓN BIENVENIDA */}
           <div className="mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">Recursos Didácticos Gratuitos</h2>
             <p className="text-gray-600 mb-4">
@@ -294,7 +319,7 @@ export default function SalonPage() {
               <p className="text-gray-800 font-semibold">¡Comienza tu aventura educativa hoy!</p>
             </div>
 
-            {/* ✅ BOTONES RÁPIDOS */}
+            {/*  BOTONES RÁPIDOS */}
             <div className="flex gap-2 flex-wrap mb-6">
               <button className="bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-500 text-sm">✏️ Sumatorios</button>
               <button className="bg-lime-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-lime-500 text-sm">📝 Fichas Letras</button>
@@ -303,7 +328,7 @@ export default function SalonPage() {
             </div>
           </div>
 
-          {/* ✅ MATERIAS */}
+          {/*  MATERIAS */}
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">¿Qué quieres aprender hoy?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -340,7 +365,7 @@ export default function SalonPage() {
             </div>
           </div>
 
-          {/* ✅ CUENTOS */}
+          {/*  CUENTOS */}
           <div className="mb-12">
             <div className="bg-teal-500 text-white px-6 py-3 rounded-lg font-bold mb-6 text-lg">
               📚 CUENTOS
@@ -358,7 +383,7 @@ export default function SalonPage() {
             </div>
           </div>
 
-          {/* ✅ BUSCAR RECURSOS */}
+          {/*  BUSCAR RECURSOS */}
           <div className="bg-gray-100 rounded-lg p-6 mb-12">
             <h3 className="text-lg font-bold text-gray-800 mb-4">Buscar Recursos</h3>
             <div className="flex gap-2">
@@ -378,7 +403,7 @@ export default function SalonPage() {
             </div>
           </div>
 
-          {/* ✅ DESTACADO DEL MES */}
+          {/*  DESTACADO DEL MES */}
           <div>
             <Card className="p-6 bg-gradient-to-br from-green-50 to-lime-50 border border-green-200">
               <h3 className="text-lg font-bold text-green-700 mb-4">✨ Destacado del Mes</h3>
@@ -394,7 +419,7 @@ export default function SalonPage() {
         </div>
       </section>
 
-      {/* ✅ FOOTER COMPLETO */}
+      {/*  FOOTER COMPLETO */}
       <footer className="bg-gray-900 text-white mt-20">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">

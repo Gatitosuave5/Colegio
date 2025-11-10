@@ -3,9 +3,9 @@
 import { useState } from "react"
 import { Card } from "@/app/components/ui/card"
 import { ArrowLeft } from "lucide-react"
-import MemoryGame from "./games/memory-game"
-import OrderStoryGame from "./games/order-story-game"
-import HiddenWordsGame from "./games/hidden-words-game"
+import MemoryGame from "../../../../components/games/memory-game"
+import OrderStoryGame from "../../../../components/games/order-story-game"
+import HiddenWordsGame from "../../../../components/games/hidden-words-game"
 
 interface Story {
   id: string
