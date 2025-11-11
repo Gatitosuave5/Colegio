@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"; // ✅ Agregado
 import { ChevronRight, BookOpen } from "lucide-react";
 import { Card } from "@/app/components/ui/card";
 import { Progress } from "@/app/components/ui/progress";
-import LiteratureModule from "@/app/components/literature-module";
+import LiteratureModule from "@/app/grados/primero/cursos/Lectura/literature-module";
 
 export default function Home() {
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
