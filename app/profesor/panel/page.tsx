@@ -34,6 +34,10 @@ export default function TeacherPanel() {
       { id: 8, categoria: "Matemática", titulo: "Conteo de objetos" },
       { id: 9, categoria: "Matemática", titulo: "Series numéricas simples" },
       { id: 10, categoria: "Matemática", titulo: "Ordenar números" },
+
+      { id: 101, categoria: "Lectura", titulo: "Caperucita Roja", storyId: "caperucita-roja" },
+      { id: 102, categoria: "Lectura", titulo: "El Patito Feo", storyId: "el-patito-feo" },
+      { id: 103, categoria: "Lectura", titulo: "Cenicienta", storyId: "cenicienta" },
     ],
     2: [
       { id: 11, categoria: "Matemática", titulo: "Sumas con llevadas" },
@@ -217,15 +221,27 @@ useEffect(() => {
 
   const crearSalon = async () => {
     if (!gradoActivo) return
-
+  
+    const contenidosSeleccionados = contenidos
+      .filter(c => c.activo)
+      .map(c => ({
+        id_contenido: c.id,
+        categoria: c.categoria,
+        titulo: c.titulo,
+        storyId: c.storyId || null
+      }))
+  
     setCargando(true)
     try {
       const response = await fetch(`${API}/api/salones`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ grado: gradoActivo }),
+        body: JSON.stringify({
+          grado: gradoActivo,
+          contenidos: contenidosSeleccionados   // ✅ AHORA SÍ SE ENVÍAN
+        }),
       })
-
+  
       if (response.ok) {
         const data = await response.json()
         setCodigoSalon(data.codigo)
@@ -233,18 +249,19 @@ useEffect(() => {
         obtenerSalones()
       }
     } catch (error) {
-      console.error("Error al crear salón:", error)
+      console.error("❌ Error al crear salón:", error)
     } finally {
       setCargando(false)
     }
   }
+  
 
-  const copiarCodigo = () => {
+    const copiarCodigo = () => {
     if (codigoSalon) {
       navigator.clipboard.writeText(codigoSalon)
       alert("¡Código copiado al portapapeles!")
     }
-  }
+    }
 
   const abrirEditar = (salon: Salon) => {
     setSalonEditando(salon)

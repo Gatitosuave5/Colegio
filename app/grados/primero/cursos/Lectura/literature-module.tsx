@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ArrowLeft } from "lucide-react"
 import StoryList from "@/app/grados/primero/cursos/Lectura/story-list"
 import StoryReader from "@/app/grados/primero/cursos/Lectura/story-reader"
@@ -21,7 +21,7 @@ interface Story {
 export default function LiteratureModule({ onBack }: { onBack: () => void }) {
   const [currentView, setCurrentView] = useState<View>("list")
   const [selectedStory, setSelectedStory] = useState<Story | null>(null)
-
+  const [contenidosActivos, setContenidosActivos] = useState<string[]>([])
   const stories: Story[] = [
     {
       id: "caperucita-roja",
@@ -86,6 +86,19 @@ export default function LiteratureModule({ onBack }: { onBack: () => void }) {
     setCurrentView("games")
   }
 
+  useEffect(() => {
+    const cargarContenidos = async () => {
+      const codigo = localStorage.getItem("codigoSalon")
+      if (!codigo) return
+      
+      const res = await fetch(`http://localhost:3001/api/contenidos?codigo=${codigo}`)
+      const data = await res.json()
+      setContenidosActivos(data.contenidos)  // ← guardar solo storyId
+    }
+    cargarContenidos()
+  }, [])
+  
+
   const handleBack = () => {
     if (currentView === "reading") {
       setCurrentView("list")
@@ -111,18 +124,30 @@ export default function LiteratureModule({ onBack }: { onBack: () => void }) {
 
       {/* Content */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {currentView === "list" && <StoryList stories={stories} onSelectStory={handleStorySelect} />}
-        {currentView === "reading" && selectedStory && (
-          <StoryReader
-            story={selectedStory}
-            onQuizStart={handleQuizStart}
-            onGamesStart={handleGamesStart}
-            onBack={handleBack}
-          />
-        )}
-        {currentView === "quiz" && selectedStory && <QuizComponent story={selectedStory} onBack={handleBack} />}
-        {currentView === "games" && selectedStory && <GamesComponent story={selectedStory} onBack={handleBack} />}
-      </section>
+          {currentView === "list" && (
+            <StoryList
+              stories={stories.filter(s => contenidosActivos.includes(s.id))}
+              onSelectStory={handleStorySelect}
+            />
+          )}
+
+          {currentView === "reading" && selectedStory && (
+            <StoryReader
+              story={selectedStory}
+              onQuizStart={handleQuizStart}
+              onGamesStart={handleGamesStart}
+              onBack={handleBack}
+            />
+          )}
+
+          {currentView === "quiz" && selectedStory && (
+            <QuizComponent story={selectedStory} onBack={handleBack} />
+          )}
+
+          {currentView === "games" && selectedStory && (
+            <GamesComponent story={selectedStory} onBack={handleBack} />
+          )}
+        </section>
     </main>
   )
 }

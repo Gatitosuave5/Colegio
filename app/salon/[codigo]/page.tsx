@@ -43,6 +43,9 @@ useEffect(() => {
   const salon_codigo = codigo;
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
 
+  // ✅ Estados que faltaban
+const [contenidosActivos, setContenidosActivos] = useState<any[]>([]);
+
 const stories: Story[] = [
   {
     id: "caperucita-roja",
@@ -66,6 +69,31 @@ const stories: Story[] = [
     difficulty: "medio",
   },
 ];
+
+// ✅ CARGAR CONTENIDOS SELECCIONADOS DEL SALÓN
+
+// ✅ Cargar contenidos guardados en el salón
+useEffect(() => {
+  const cargarContenidos = async () => {
+    try {
+      const res = await fetch(`http://localhost:3001/api/contenidos?codigo=${codigo}`);
+      const data = await res.json();
+
+      console.log("✅ Contenidos del salón:", data);
+      setContenidosActivos(data.contenidos || []);
+    } catch (error) {
+      console.log("❌ Error al obtener contenidos:", error);
+    }
+  };
+
+  cargarContenidos();
+}, [codigo]);
+
+// // data = {
+//   matematicas: ["mcm", "fracciones"],
+//   lectura: ["caperucita-roja"],
+//   comunicacion: []
+// // }
 
 
   const API = "http://localhost:3001";
