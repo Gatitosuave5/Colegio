@@ -19,6 +19,13 @@ interface Game {
   icon: string
 }
 
+const storyIdMap: Record<string, string> = {
+  "caperucita-roja": "caperucita",
+  "el-patito-feo": "patito",
+  "cenicienta": "cenicienta"
+}
+
+
 const games: Record<string, Game[]> = {
   caperucita: [
     {
@@ -89,7 +96,7 @@ export default function GamesComponent({
   story: Story
   onBack: () => void
 }) {
-  const storyGames = games[story.id] || []
+  const storyGames = games[storyIdMap[story.id]] || []
   const [selectedGame, setSelectedGame] = useState<string | null>(null)
 
   if (selectedGame === "memory") {

@@ -16,6 +16,11 @@ interface Question {
   correctAnswer: number
   explanation: string
 }
+const storyIdMap: Record<string, string> = {
+  "caperucita-roja": "caperucita",
+  "el-patito-feo": "patito",
+  "cenicienta": "cenicienta"
+}
 
 const quizzes: Record<string, Question[]> = {
   caperucita: [
@@ -158,7 +163,8 @@ export default function QuizComponent({
   story: Story
   onBack: () => void
 }) {
-  const questions = quizzes[story.id] || []
+  const mappedId = storyIdMap[story.id]
+  const questions = quizzes[mappedId] || []
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [showExplanation, setShowExplanation] = useState(false)
