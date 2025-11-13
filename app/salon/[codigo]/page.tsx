@@ -223,7 +223,10 @@ useEffect(() => {
 
   if (selectedSubject === "reading") {
     return (
-      <LiteratureModule onBack={() => setSelectedSubject(null)} />
+      <LiteratureModule 
+        onBack={() => setSelectedSubject(null)}
+        contenidosActivos={contenidosActivos}   // ← PASAMOS LOS ACTIVOS
+      />
     );
   }
 

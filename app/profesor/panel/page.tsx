@@ -24,80 +24,80 @@ export default function TeacherPanel() {
 
   const contenidosPorGrado: Record<number, any[]> = {
     1: [
-      { id: 1, categoria: "Matemática", titulo: "Sumas del 1 al 10" },
-      { id: 2, categoria: "Matemática", titulo: "Restas del 1 al 10" },
-      { id: 3, categoria: "Matemática", titulo: "Números del 1 al 100" },
-      { id: 4, categoria: "Matemática", titulo: "Figuras geométricas básicas" },
-      { id: 5, categoria: "Matemática", titulo: "Clasificación de objetos" },
-      { id: 6, categoria: "Matemática", titulo: "Problemas simples de suma" },
-      { id: 7, categoria: "Matemática", titulo: "Mayor / Menor" },
-      { id: 8, categoria: "Matemática", titulo: "Conteo de objetos" },
-      { id: 9, categoria: "Matemática", titulo: "Series numéricas simples" },
-      { id: 10, categoria: "Matemática", titulo: "Ordenar números" },
+      { id_contenido: 1, categoria: "Matemática", titulo: "Sumas del 1 al 10" },
+      { id_contenido: 2, categoria: "Matemática", titulo: "Restas del 1 al 10" },
+      { id_contenido: 3, categoria: "Matemática", titulo: "Números del 1 al 100" },
+      { id_contenido: 4, categoria: "Matemática", titulo: "Figuras geométricas básicas" },
+      { id_contenido: 5, categoria: "Matemática", titulo: "Clasificación de objetos" },
+      { id_contenido: 6, categoria: "Matemática", titulo: "Problemas simples de suma" },
+      { id_contenido: 7, categoria: "Matemática", titulo: "Mayor / Menor" },
+      { id_contenido: 8, categoria: "Matemática", titulo: "Conteo de objetos" },
+      { id_contenido: 9, categoria: "Matemática", titulo: "Series numéricas simples" },
+      { id_contenido: 10, categoria: "Matemática", titulo: "Ordenar números" },
 
-      { id: 101, categoria: "Lectura", titulo: "Caperucita Roja", storyId: "caperucita-roja" },
-      { id: 102, categoria: "Lectura", titulo: "El Patito Feo", storyId: "el-patito-feo" },
-      { id: 103, categoria: "Lectura", titulo: "Cenicienta", storyId: "cenicienta" },
+      { id_contenido: 61, categoria: "Lectura", titulo: "Caperucita Roja", storyId: "caperucita-roja", activo: false },
+      { id_contenido: 62, categoria: "Lectura", titulo: "El Patito Feo", storyId: "el-patito-feo", activo: false },
+      { id_contenido: 63, categoria: "Lectura", titulo: "Cenicienta", storyId: "cenicienta", activo: false },
     ],
     2: [
-      { id: 11, categoria: "Matemática", titulo: "Sumas con llevadas" },
-      { id: 12, categoria: "Matemática", titulo: "Restas con llevadas" },
-      { id: 13, categoria: "Matemática", titulo: "Figuras y lados" },
-      { id: 14, categoria: "Matemática", titulo: "Medidas básicas" },
-      { id: 15, categoria: "Matemática", titulo: "Mitad y doble" },
-      { id: 16, categoria: "Matemática", titulo: "Problemas con dinero" },
-      { id: 17, categoria: "Matemática", titulo: "Series avanzadas" },
-      { id: 18, categoria: "Matemática", titulo: "Horas y minutos" },
-      { id: 19, categoria: "Matemática", titulo: "Tablas del 1 al 5" },
-      { id: 20, categoria: "Matemática", titulo: "Pares e impares" },
+      { id_contenido: 11, categoria: "Matemática", titulo: "Sumas con llevadas" },
+      { id_contenido: 12, categoria: "Matemática", titulo: "Restas con llevadas" },
+      { id_contenido: 13, categoria: "Matemática", titulo: "Figuras y lados" },
+      { id_contenido: 14, categoria: "Matemática", titulo: "Medidas básicas" },
+      { id_contenido: 15, categoria: "Matemática", titulo: "Mitad y doble" },
+      { id_contenido: 16, categoria: "Matemática", titulo: "Problemas con dinero" },
+      { id_contenido: 17, categoria: "Matemática", titulo: "Series avanzadas" },
+      { id_contenido: 18, categoria: "Matemática", titulo: "Horas y minutos" },
+      { id_contenido: 19, categoria: "Matemática", titulo: "Tablas del 1 al 5" },
+      { id_contenido: 20, categoria: "Matemática", titulo: "Pares e impares" },
     ],
     3: [
-      { id: 21, categoria: "Matemática", titulo: "Multiplicación (1–10)" },
-      { id: 22, categoria: "Matemática", titulo: "División básica" },
-      { id: 23, categoria: "Matemática", titulo: "Perímetro de figuras" },
-      { id: 24, categoria: "Matemática", titulo: "Ángulos básicos" },
-      { id: 25, categoria: "Matemática", titulo: "Gráficos de barras" },
-      { id: 26, categoria: "Matemática", titulo: "Fracciones simples" },
-      { id: 27, categoria: "Matemática", titulo: "Romanos hasta 100" },
-      { id: 28, categoria: "Matemática", titulo: "Múltiplos y divisores" },
-      { id: 29, categoria: "Matemática", titulo: "Problemas con dinero" },
-      { id: 30, categoria: "Matemática", titulo: "Orden hasta 1000" },
+      { id_contenido: 21, categoria: "Matemática", titulo: "Multiplicación (1–10)" },
+      { id_contenido: 22, categoria: "Matemática", titulo: "División básica" },
+      { id_contenido: 23, categoria: "Matemática", titulo: "Perímetro de figuras" },
+      { id_contenido: 24, categoria: "Matemática", titulo: "Ángulos básicos" },
+      { id_contenido: 25, categoria: "Matemática", titulo: "Gráficos de barras" },
+      { id_contenido: 26, categoria: "Matemática", titulo: "Fracciones simples" },
+      { id_contenido: 27, categoria: "Matemática", titulo: "Romanos hasta 100" },
+      { id_contenido: 28, categoria: "Matemática", titulo: "Múltiplos y divisores" },
+      { id_contenido: 29, categoria: "Matemática", titulo: "Problemas con dinero" },
+      { id_contenido: 30, categoria: "Matemática", titulo: "Orden hasta 1000" },
     ],
     4: [
-      { id: 31, categoria: "Matemática", titulo: "Mínimo común múltiplo" },
-      { id: 32, categoria: "Matemática", titulo: "Máximo común divisor" },
-      { id: 33, categoria: "Matemática", titulo: "Fracciones avanzadas" },
-      { id: 34, categoria: "Matemática", titulo: "Decimales básicos" },
-      { id: 35, categoria: "Matemática", titulo: "Área cuadrado/rectángulo" },
-      { id: 36, categoria: "Matemática", titulo: "Romanos hasta 1000+" },
-      { id: 37, categoria: "Matemática", titulo: "Perímetro y área" },
-      { id: 38, categoria: "Matemática", titulo: "Gráficos y tablas" },
-      { id: 39, categoria: "Matemática", titulo: "Dinero y cambio" },
-      { id: 40, categoria: "Matemática", titulo: "Problemas complejos" },
+      { id_contenido: 31, categoria: "Matemática", titulo: "Mínimo común múltiplo" },
+      { id_contenido: 32, categoria: "Matemática", titulo: "Máximo común divisor" },
+      { id_contenido: 33, categoria: "Matemática", titulo: "Fracciones avanzadas" },
+      { id_contenido: 34, categoria: "Matemática", titulo: "Decimales básicos" },
+      { id_contenido: 35, categoria: "Matemática", titulo: "Área cuadrado/rectángulo" },
+      { id_contenido: 36, categoria: "Matemática", titulo: "Romanos hasta 1000+" },
+      { id_contenido: 37, categoria: "Matemática", titulo: "Perímetro y área" },
+      { id_contenido: 38, categoria: "Matemática", titulo: "Gráficos y tablas" },
+      { id_contenido: 39, categoria: "Matemática", titulo: "Dinero y cambio" },
+      { id_contenido: 40, categoria: "Matemática", titulo: "Problemas complejos" },
     ],
     5: [
-      { id: 41, categoria: "Matemática", titulo: "Operaciones con decimales" },
-      { id: 42, categoria: "Matemática", titulo: "Fracciones avanzadas" },
-      { id: 43, categoria: "Matemática", titulo: "Razones y proporciones" },
-      { id: 44, categoria: "Matemática", titulo: "Área del triángulo" },
-      { id: 45, categoria: "Matemática", titulo: "Volumen de prismas" },
-      { id: 46, categoria: "Matemática", titulo: "Potencias" },
-      { id: 47, categoria: "Matemática", titulo: "Raíz cuadrada básica" },
-      { id: 48, categoria: "Matemática", titulo: "Ecuaciones simples" },
-      { id: 49, categoria: "Matemática", titulo: "Probabilidad" },
-      { id: 50, categoria: "Matemática", titulo: "Porcentajes" },
+      { id_contenido: 41, categoria: "Matemática", titulo: "Operaciones con decimales" },
+      { id_contenido: 42, categoria: "Matemática", titulo: "Fracciones avanzadas" },
+      { id_contenido: 43, categoria: "Matemática", titulo: "Razones y proporciones" },
+      { id_contenido: 44, categoria: "Matemática", titulo: "Área del triángulo" },
+      { id_contenido: 45, categoria: "Matemática", titulo: "Volumen de prismas" },
+      { id_contenido: 46, categoria: "Matemática", titulo: "Potencias" },
+      { id_contenido: 47, categoria: "Matemática", titulo: "Raíz cuadrada básica" },
+      { id_contenido: 48, categoria: "Matemática", titulo: "Ecuaciones simples" },
+      { id_contenido: 49, categoria: "Matemática", titulo: "Probabilidad" },
+      { id_contenido: 50, categoria: "Matemática", titulo: "Porcentajes" },
     ],
     6: [
-      { id: 51, categoria: "Matemática", titulo: "Coordenadas" },
-      { id: 52, categoria: "Matemática", titulo: "Ecuaciones con incógnita" },
-      { id: 53, categoria: "Matemática", titulo: "Polígonos y ángulos" },
-      { id: 54, categoria: "Matemática", titulo: "Área avanzada" },
-      { id: 55, categoria: "Matemática", titulo: "Volumen 3D" },
-      { id: 56, categoria: "Matemática", titulo: "Porcentajes reales" },
-      { id: 57, categoria: "Matemática", titulo: "Unidades de medida" },
-      { id: 58, categoria: "Matemática", titulo: "Media, moda y mediana" },
-      { id: 59, categoria: "Matemática", titulo: "Gráficos circulares" },
-      { id: 60, categoria: "Matemática", titulo: "Problemas combinados" },
+      { id_contenido: 51, categoria: "Matemática", titulo: "Coordenadas" },
+      { id_contenido: 52, categoria: "Matemática", titulo: "Ecuaciones con incógnita" },
+      { id_contenido: 53, categoria: "Matemática", titulo: "Polígonos y ángulos" },
+      { id_contenido: 54, categoria: "Matemática", titulo: "Área avanzada" },
+      { id_contenido: 55, categoria: "Matemática", titulo: "Volumen 3D" },
+      { id_contenido: 56, categoria: "Matemática", titulo: "Porcentajes reales" },
+      { id_contenido: 57, categoria: "Matemática", titulo: "Unidades de medida" },
+      { id_contenido: 58, categoria: "Matemática", titulo: "Media, moda y mediana" },
+      { id_contenido: 59, categoria: "Matemática", titulo: "Gráficos circulares" },
+      { id_contenido: 60, categoria: "Matemática", titulo: "Problemas combinados" },
     ],
   }
 
@@ -211,13 +211,21 @@ useEffect(() => {
 
   const cambiarGrado = (grado: number) => {
     setGradoActivo(grado)
-    setContenidos(contenidosPorGrado[grado])
+    setContenidos(
+      contenidosPorGrado[grado].map(c => ({ ...c, activo: false }))
+    )
     setCategoriaAbierta(null)
   }
 
   const toggleContenido = (id: number) => {
-    setContenidos((prev) => prev.map((c) => (c.id === id ? { ...c, activo: !c.activo } : c)))
-  }
+    setContenidos(prev =>
+      prev.map(c =>
+        (c.id === id || c.id_contenido === id)
+          ? { ...c, activo: !c.activo }
+          : c
+      )
+    );
+  };
 
   const crearSalon = async () => {
     if (!gradoActivo) return
@@ -225,11 +233,12 @@ useEffect(() => {
     const contenidosSeleccionados = contenidos
       .filter(c => c.activo)
       .map(c => ({
-        id_contenido: c.id,
+        id_contenido: c.id_contenido ?? c.id,  // ← DEBE EXISTIR
         categoria: c.categoria,
         titulo: c.titulo,
-        storyId: c.storyId || null
-      }))
+        storyId: c.storyId ?? null      // ← NUNCA undefined
+      }));
+      
   
     setCargando(true)
     try {
@@ -249,7 +258,7 @@ useEffect(() => {
         obtenerSalones()
       }
     } catch (error) {
-      console.error("❌ Error al crear salón:", error)
+      console.error(" Error al crear salón:", error)
     } finally {
       setCargando(false)
     }
@@ -636,10 +645,14 @@ useEffect(() => {
                       className={`flex justify-between items-center p-3 mb-2 rounded border cursor-pointer transition ${
                         item.activo ? "bg-green-100 border-green-400" : "bg-gray-100"
                       }`}
-                      onClick={() => toggleContenido(item.id)}
+                      onClick={() => toggleContenido(item.id ?? item.id_contenido)}
                     >
                       <span className="text-gray-800 font-medium">{item.titulo}</span>
-                      <input type="checkbox" checked={item.activo || false} onChange={() => toggleContenido(item.id)} />
+                      <input
+                            type="checkbox"
+                            checked={item.activo || false}
+                            onChange={() => toggleContenido(item.id ?? item.id_contenido)}
+                          />
                     </div>
                   ))}
               </div>
