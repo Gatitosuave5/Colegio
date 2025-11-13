@@ -319,30 +319,36 @@ app.delete("/api/alumnos_temporales", async (req, res) => {
 
 app.post("/api/salones", async (req, res) => {
   try {
-    const { grado, contenidosSeleccionados } = req.body;
+    const { grado, contenidos } = req.body;
 
     if (!grado) return res.status(400).json({ error: "Grado requerido" });
 
     const codigo = Math.random().toString(36).substring(2, 7).toUpperCase();
     const aula = `Aula ${Math.floor(Math.random() * 50) + 1}`;
 
-    // ✅ Insertar salón
+    // Insertar salón
     await db.execute(
       "INSERT INTO salones (codigo, grado, aula) VALUES (?, ?, ?)",
       [codigo, grado, aula]
     );
 
-    // ✅ Guardar contenidos seleccionados
-    if (Array.isArray(contenidosSeleccionados) && contenidosSeleccionados.length > 0) {
-      for (const c of contenidosSeleccionados) {
+    // Guardar contenidos seleccionados
+    if (Array.isArray(contenidos) && contenidos.length > 0) {
+      for (const c of contenidos) {
         await db.execute(
-          "INSERT INTO salon_contenidos (salon_codigo, categoria, titulo, storyId) VALUES (?, ?, ?, ?)",
-          [codigo, c.categoria, c.titulo, c.storyId]
+          "INSERT INTO salon_contenidos (salon_codigo, categoria, titulo, storyId, id_contenido) VALUES (?, ?, ?, ?, ?)",
+          [
+            codigo,
+            c.categoria,
+            c.titulo,
+            c.storyId ?? null,
+            c.id_contenido  // ← ESTE ES EL BUENO
+          ]
         );
       }
     }
 
-    return res.json({ ok: true, codigo, aula });
+    return res.json({ ok: true, codigo });
   } catch (err) {
     console.log("Error al crear salón:", err);
     return res.status(500).json({ error: "Error al crear salón" });
@@ -353,45 +359,8 @@ app.post("/api/salones", async (req, res) => {
 
 
 
-
-
-app.get("/api/contenidos", async (req, res) => {
-  const { codigo } = req.query;
-
-  const [rows] = await db.execute(
-    "SELECT categoria, contenido_id FROM salon_contenidos WHERE salon_codigo = ?",
-    [codigo]
-  );
-
-  const result = {};
-
-  rows.forEach(r => {
-    if (!result[r.categoria]) result[r.categoria] = [];
-    result[r.categoria].push(r.contenido_id);
-  });
-
-  res.json(result);
-});
-
-
-
-app.get("/api/contenidos", async (req, res) => {
-  const { codigo } = req.query;
-  try {
-    const [rows] = await pool.query(
-      "SELECT categoria, contenido_id FROM salon_contenidos WHERE salon_codigo = ?",
-      [codigo]
-    );
-
-    res.json({ ok: true, contenidos: rows });
-  } catch (error) {
-    console.error("Error al obtener contenidos:", error);
-    res.status(500).json({ error: "Error al obtener contenidos" });
-  }
-});
-
-// ✅ Obtener contenidos de un salón por su código
-app.get("/api/contenidos", async (req, res) => {
+// Obtener contenidos de un salón por su código  ---- PETICION PROTOTIPO
+app.get("/api/contenidos", async (req, res) => {    
   const { codigo } = req.query;
 
   if (!codigo) {
@@ -400,7 +369,14 @@ app.get("/api/contenidos", async (req, res) => {
 
   try {
     const [rows] = await db.execute(
-      "SELECT categoria, contenido_id FROM salon_contenidos WHERE salon_codigo = ?",
+      `SELECT 
+         sc.categoria,
+         sc.id_contenido,
+         c.titulo,
+         c.storyId
+       FROM salon_contenidos sc
+       LEFT JOIN contenidos c ON sc.id_contenido = c.id_contenido
+       WHERE sc.salon_codigo = ?`,
       [codigo.trim()]
     );
 
