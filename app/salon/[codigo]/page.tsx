@@ -176,6 +176,31 @@ useEffect(() => {
       icon: "📚",
       image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kxJ59lX9gd7Eo94Ti2mfB35MKkStu0.png",
     },
+
+    {
+      id: "computo",
+      title: "Área de Cómputo",
+      description: "¡Aprende tecnología e informática!",
+      icon: "💻",
+      image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NV0n45YulMMpocVaVCmLrrOTcW2nM1.png",
+    },
+
+    {
+      id: "science",
+      title: "Ciencia y Medio Ambiente",
+      description: "¡Explora la naturaleza y los secretos científicos!",
+      icon: "🌿",
+      image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-q1wtJrp9Fszx3L9k8E9NrjbzxUBu4p.png",
+    },
+
+    {
+      id: "games",
+      title: "Juegos Educativos",
+      description: "¡Diviértete mientras aprendes!",
+      icon: "🎮",
+      image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-UeBIfZqCPx3vOmmP8m3xkVhPmsWkoN.png",
+    },
+
   ];
 
   const resources = [
@@ -229,6 +254,44 @@ useEffect(() => {
       />
     );
   }
+
+  if (selectedSubject === "computo") {
+    return (
+      <main className="min-h-screen bg-gray-50">
+        <button onClick={() => setSelectedSubject(null)} className="absolute top-6 right-6 bg-red-500 text-white px-4 py-2 rounded-lg">
+          ← Volver
+        </button>
+        <div className="text-center mt-20 text-3xl font-bold text-blue-600">💻 Área de Cómputo</div>
+        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
+      </main>
+    );
+  }
+  
+  if (selectedSubject === "science") {
+    return (
+      <main className="min-h-screen bg-gray-50">
+        <button onClick={() => setSelectedSubject(null)} className="absolute top-6 right-6 bg-red-500 text-white px-4 py-2 rounded-lg">
+          ← Volver
+        </button>
+        <div className="text-center mt-20 text-3xl font-bold text-green-600">🌿 Ciencia y Medio Ambiente</div>
+        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
+      </main>
+    );
+  }
+  
+  if (selectedSubject === "games") {
+    return (
+      <main className="min-h-screen bg-gray-50">
+        <button onClick={() => setSelectedSubject(null)} className="absolute top-6 right-6 bg-red-500 text-white px-4 py-2 rounded-lg">
+          ← Volver
+        </button>
+        <div className="text-center mt-20 text-3xl font-bold text-green-600">🎮 Juegos Educativos</div>
+        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
+      </main>
+    );
+  }
+  
+
 
   return (
     <main className="min-h-screen bg-white">
@@ -361,40 +424,45 @@ useEffect(() => {
 
           {/*  MATERIAS */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">¿Qué quieres aprender hoy?</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {subjects.map((subject) => (
-                <button
-                  key={subject.id}
-                  onClick={() => setSelectedSubject(subject.id)}
-                  className="group text-left transition-all duration-300 hover:scale-105 relative overflow-hidden rounded-3xl"
-                >
-                  <Card
-                    className="border-0 shadow-lg hover:shadow-2xl h-full p-8 rounded-3xl cursor-pointer relative overflow-hidden"
-                    style={{
-                      backgroundImage: `url(${subject.image})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  >
-                    <div className="absolute inset-0 bg-black opacity-40 rounded-3xl"></div>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">¿Qué quieres aprender hoy?</h2>
 
-                    <div className="relative z-10 flex flex-col h-full">
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="text-5xl">{subject.icon}</div>
-                        <ChevronRight className="w-6 h-6 opacity-0 group-hover:opacity-100 transition text-white" />
-                      </div>
-                      <h3 className="text-3xl font-bold mb-2 text-white">{subject.title}</h3>
-                      <p className="text-sm opacity-90 mb-6 text-white">{subject.description}</p>
-                      <div className="flex items-center gap-2 text-sm font-semibold text-white">
-                        Explorar <ChevronRight className="w-4 h-4" />
-                      </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {subjects.map((subject) => (
+            <button
+              key={subject.id}
+              onClick={() => setSelectedSubject(subject.id)}
+              className={`
+                group text-left transition-all duration-300 hover:scale-105 relative overflow-hidden rounded-3xl
+                ${subject.id === "games" ? "md:col-span-2" : ""}
+              `}
+            >
+              <Card
+                className="border-0 shadow-lg hover:shadow-2xl h-full p-8 rounded-3xl cursor-pointer relative overflow-hidden"
+                style={{
+                  backgroundImage: `url(${subject.image})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              >
+          <div className="absolute inset-0 bg-black opacity-40 rounded-3xl"></div>
+
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="text-5xl">{subject.icon}</div>
+                      <ChevronRight className="w-6 h-6 opacity-0 group-hover:opacity-100 transition text-white" />
                     </div>
-                  </Card>
-                </button>
-              ))}
-            </div>
+                    <h3 className="text-3xl font-bold mb-2 text-white">{subject.title}</h3>
+                    <p className="text-sm opacity-90 mb-6 text-white">{subject.description}</p>
+                    <div className="flex items-center gap-2 text-sm font-semibold text-white">
+                      Explorar <ChevronRight className="w-4 h-4" />
+                    </div>
+                  </div>
+                </Card>
+              </button>
+            ))}
           </div>
+        </div>
+
 
           {/*  CUENTOS */}
           <div className="mb-12">
