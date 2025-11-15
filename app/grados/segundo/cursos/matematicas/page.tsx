@@ -1,78 +1,108 @@
 "use client";
-import React from "react";
-import { Plus, Minus, X, Ruler, Triangle } from "lucide-react";
-import { useRouter } from "next/navigation";
 
-export default function MatematicasPage() {
-  const router = useRouter();
+import { useState } from "react";
+import { ArrowLeft } from 'lucide-react';
+import { topicsData } from "./topicsData-grade2";
+import TopicReader from "./topic-reader";
+import TopicQuiz from "./topic-quiz";
+import TopicGames from "./topic-games";
 
-  const juegos = [
-    {
-      id: "suma",
-      titulo: "Sumas hasta 20",
-      descripcion: "Suma números del 1 al 20",
-      color: "#10B981", // verde
-      icono: <Plus size={38} strokeWidth={3} color="#7C3AED" />,
-      enlace: "/juegos/sumas", // 👈 ruta o enlace del juego
-    },
-    {
-      id: "resta",
-      titulo: "Restas hasta 20",
-      descripcion: "Resta números del 1 al 20",
-      color: "#EC4899", // rosado
-      icono: <Minus size={38} strokeWidth={3} color="#7C3AED" />,
-      enlace: "/juegos/restas",
-    },
-    {
-      id: "multiplicacion",
-      titulo: "Introducción a la Multiplicación",
-      descripcion: "Primeros pasos en multiplicación",
-      color: "#F59E0B", // amarillo
-      icono: <X size={38} strokeWidth={3} color="#7C3AED" />,
-      enlace: "/juegos/multiplicacion",
-    },
-    {
-      id: "figuras",
-      titulo: "Figuras 2D",
-      descripcion: "Aprende sobre polígonos",
-      color: "#A855F7", // morado
-      icono: <Triangle size={38} strokeWidth={2.5} color="#D4D4D8" />,
-      enlace: "/juegos/figuras",
-    },
-    {
-      id: "medidas",
-      titulo: "Medidas",
-      descripcion: "Largo, ancho y altura",
-      color: "#6366F1", // azul
-      icono: <Ruler size={38} strokeWidth={2.5} color="#D4D4D8" />,
-      enlace: "/juegos/medidas",
-    },
-  ];
+type View = "list" | "reading" | "quiz" | "games";
+
+export default function Grade2MathPage() {
+  const [currentView, setCurrentView] = useState<View>("list");
+  const [selectedTopic, setSelectedTopic] = useState<any | null>(null);
+
+  const topics = Object.values(topicsData);
+
+  const handleSelectTopic = (topic: any) => {
+    setSelectedTopic(topic);
+    setCurrentView("reading");
+  };
+
+  const handleBack = () => {
+    if (currentView === "reading") {
+      setSelectedTopic(null);
+      setCurrentView("list");
+    } else if (currentView === "quiz" || currentView === "games") {
+      setCurrentView("reading");
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-[#f7faff] flex flex-col items-center py-10 px-4">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">
-        Matemáticas Interactivas 🧮
-      </h1>
+    <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
+          {currentView !== "list" && (
+            <button
+              onClick={handleBack}
+              className="p-2 hover:bg-gray-100 rounded-lg transition"
+            >
+              <ArrowLeft className="w-6 h-6 text-gray-600" />
+            </button>
+          )}
+          <h1 className="text-2xl font-bold text-gray-900">Matemática - 2do Grado</h1>
+        </div>
+      </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-5xl w-full">
-        {juegos.map((juego) => (
-          <div
-            key={juego.id}
-            className="rounded-xl p-6 flex flex-col justify-center shadow-md cursor-pointer transform transition hover:scale-[1.03] hover:shadow-lg"
-            style={{ backgroundColor: juego.color }}
-            onClick={() => router.push(juego.enlace)}
-          >
-            <div className="flex items-start gap-3">
-              <div>{juego.icono}</div>
+      <section className="max-w-5xl mx-auto px-6 py-8">
+        {currentView === "list" && (
+          <div className="space-y-6">
+            <div className="flex justify-center">
+              <h2 className="text-3xl font-bold mb-4 text-blue-600">
+                Temas Disponibles - 2do Grado
+              </h2>
             </div>
-            <h2 className="text-white text-xl font-bold mt-4 mb-1">
-              {juego.titulo}
-            </h2>
-            <p className="text-white/80 text-sm">{juego.descripcion}</p>
+
+            {topics.map((topic) => (
+              <button
+                key={topic.id}
+                onClick={() => handleSelectTopic(topic)}
+                className="w-full group hover:scale-[1.02] transition"
+              >
+                <div
+                  className="rounded-2xl h-40 shadow-lg relative overflow-hidden"
+                  style={{
+                    backgroundImage: `url(${topic.background})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                >
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition"></div>
+
+                  <div className="relative z-10 p-6 text-white flex items-end h-full">
+                    <div>
+                      <h3 className="text-2xl font-bold">
+                        {topic.icon} {topic.title}
+                      </h3>
+                      <p className="opacity-90 text-sm">
+                        Haz clic para ver el contenido
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
+        )}
+
+        {currentView === "reading" && selectedTopic && (
+          <TopicReader
+            topic={selectedTopic}
+            onQuizStart={() => setCurrentView("quiz")}
+            onGamesStart={() => setCurrentView("games")}
+            onBack={handleBack}
+          />
+        )}
+
+        {currentView === "quiz" && selectedTopic && (
+          <TopicQuiz topic={selectedTopic} onBack={handleBack} />
+        )}
+
+        {currentView === "games" && selectedTopic && (
+          <TopicGames topic={selectedTopic} onBack={handleBack} />
+        )}
+      </section>
+    </main>
   );
 }
