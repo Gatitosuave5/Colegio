@@ -269,7 +269,7 @@ Clasificar es agrupar objetos por color, tamaño, forma o uso.
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEwLLNpAjed1g3rOvJySX2sQxrzdbY0S3YV9gTFWKXTtvxjnYPlSPrHlcMVJDWIfFqs4k&usqp=CAU",
 
     image:
-      "https://scontent.flim15-2.fna.fbcdn.net/v/t1.6435-9/116043563_104241151379335_7532405929132849190_n.jpg",
+      "https://image.slidesharecdn.com/sumasrestas-130116014627-phpapp02/75/Sumas-restas-7-2048.jpg",
 
     explanation: `
 Los problemas de suma son historias donde juntamos cantidades.
