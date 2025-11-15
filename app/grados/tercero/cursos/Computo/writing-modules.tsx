@@ -105,7 +105,22 @@ const modules: Record<string, { title: string; icon: string; color: string; less
   },
 }
 
-export default function WritingModules({ onBack }: { onBack: () => void }) {
+
+const storyIdMap: Record<string, string> = {
+  "mecanografia": "typing",
+  "Uso-de-mayusculas": "capitalization",
+  "copiado-de-textos": "textcopying",
+  "palabras-y-silabas": "words",
+  "numeros-y-operaciones": "numbers"
+}
+
+export default function WritingModules({
+  onBack,
+  contenidosActivos = []   // ← 🔥 valor por defecto para evitar undefined
+}: {
+  onBack: () => void
+  contenidosActivos?: any[]
+}) {
   const [currentModule, setCurrentModule] = useState<"typing" | "capitalization" | "textcopying" | "words" | "numbers" | null>(null)
   const [currentView, setCurrentView] = useState<View>("list")
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null)
@@ -166,7 +181,11 @@ export default function WritingModules({ onBack }: { onBack: () => void }) {
           </div>
 
           <div className="flex flex-col gap-6 max-w-5xl mx-auto">
-            {Object.entries(modules).map(([key, module]) => {
+          {Object.entries(modules)
+              .filter(([key]) =>
+                contenidosActivos.some((c) => storyIdMap[c.storyId] === key)
+              )
+              .map(([key, module]) => {
               const backgroundImages: Record<string, string> = {
                 typing: "/images/typing-background.png",
                 capitalization: "/images/capitalization-background.png",

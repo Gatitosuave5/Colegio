@@ -7,6 +7,7 @@ import { ChevronRight, Search, Trophy, X } from "lucide-react";
 import { Card } from "@/app/components/ui/card";
 import StoryList from "@/app/grados/primero/cursos/Lectura/story-list";
 import LiteratureModule from "@/app/grados/primero/cursos/Lectura/literature-module";
+import WritingModules from "@/app/grados/tercero/cursos/Computo/writing-modules";
 
 interface Salon {
   grado: number;
@@ -257,13 +258,10 @@ useEffect(() => {
 
   if (selectedSubject === "computo") {
     return (
-      <main className="min-h-screen bg-gray-50">
-        <button onClick={() => setSelectedSubject(null)} className="absolute top-6 right-6 bg-red-500 text-white px-4 py-2 rounded-lg">
-          ← Volver
-        </button>
-        <div className="text-center mt-20 text-3xl font-bold text-blue-600">💻 Área de Cómputo</div>
-        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
-      </main>
+      <WritingModules
+        onBack={() => setSelectedSubject(null)}
+        contenidosActivos={contenidosActivos}   // ← LE PASAMOS LOS ACTIVOS
+      />
     );
   }
   

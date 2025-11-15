@@ -43,61 +43,40 @@ export default function TeacherPanel() {
       { id_contenido: 11, categoria: "Matemática", titulo: "Sumas con llevadas" },
       { id_contenido: 12, categoria: "Matemática", titulo: "Restas con llevadas" },
       { id_contenido: 13, categoria: "Matemática", titulo: "Figuras y lados" },
-      { id_contenido: 14, categoria: "Matemática", titulo: "Medidas básicas" },
-      { id_contenido: 15, categoria: "Matemática", titulo: "Mitad y doble" },
-      { id_contenido: 16, categoria: "Matemática", titulo: "Problemas con dinero" },
-      { id_contenido: 17, categoria: "Matemática", titulo: "Series avanzadas" },
-      { id_contenido: 18, categoria: "Matemática", titulo: "Horas y minutos" },
-      { id_contenido: 19, categoria: "Matemática", titulo: "Tablas del 1 al 5" },
-      { id_contenido: 20, categoria: "Matemática", titulo: "Pares e impares" },
+   
     ],
     3: [
       { id_contenido: 21, categoria: "Matemática", titulo: "Multiplicación (1–10)" },
       { id_contenido: 22, categoria: "Matemática", titulo: "División básica" },
       { id_contenido: 23, categoria: "Matemática", titulo: "Perímetro de figuras" },
       { id_contenido: 24, categoria: "Matemática", titulo: "Ángulos básicos" },
-      { id_contenido: 25, categoria: "Matemática", titulo: "Gráficos de barras" },
-      { id_contenido: 26, categoria: "Matemática", titulo: "Fracciones simples" },
-      { id_contenido: 27, categoria: "Matemática", titulo: "Romanos hasta 100" },
-      { id_contenido: 28, categoria: "Matemática", titulo: "Múltiplos y divisores" },
-      { id_contenido: 29, categoria: "Matemática", titulo: "Problemas con dinero" },
-      { id_contenido: 30, categoria: "Matemática", titulo: "Orden hasta 1000" },
+     
+
+      { id_contenido: 64, categoria: "Área de computo", titulo: "Mecanografia", storyId: "mecanografia", activo: false },
+      { id_contenido: 65, categoria: "Área de computo", titulo: "Uso de Mayúsculas", storyId: "Uso-de-mayusculas", activo: false },
+      { id_contenido: 66, categoria: "Área de computo", titulo: "Copiado de Textos", storyId: "copiado-de-textos", activo: false },
+      { id_contenido: 67, categoria: "Área de computo", titulo: "Palabras y Sílabas", storyId: "palabras-y-silabas", activo: false },
+      { id_contenido: 68, categoria: "Área de computo", titulo: "Números y Operaciones", storyId: "numeros-y-operaciones", activo: false },
+
+
     ],
     4: [
       { id_contenido: 31, categoria: "Matemática", titulo: "Mínimo común múltiplo" },
       { id_contenido: 32, categoria: "Matemática", titulo: "Máximo común divisor" },
       { id_contenido: 33, categoria: "Matemática", titulo: "Fracciones avanzadas" },
-      { id_contenido: 34, categoria: "Matemática", titulo: "Decimales básicos" },
-      { id_contenido: 35, categoria: "Matemática", titulo: "Área cuadrado/rectángulo" },
-      { id_contenido: 36, categoria: "Matemática", titulo: "Romanos hasta 1000+" },
-      { id_contenido: 37, categoria: "Matemática", titulo: "Perímetro y área" },
-      { id_contenido: 38, categoria: "Matemática", titulo: "Gráficos y tablas" },
-      { id_contenido: 39, categoria: "Matemática", titulo: "Dinero y cambio" },
-      { id_contenido: 40, categoria: "Matemática", titulo: "Problemas complejos" },
+
     ],
     5: [
       { id_contenido: 41, categoria: "Matemática", titulo: "Operaciones con decimales" },
       { id_contenido: 42, categoria: "Matemática", titulo: "Fracciones avanzadas" },
       { id_contenido: 43, categoria: "Matemática", titulo: "Razones y proporciones" },
-      { id_contenido: 44, categoria: "Matemática", titulo: "Área del triángulo" },
-      { id_contenido: 45, categoria: "Matemática", titulo: "Volumen de prismas" },
-      { id_contenido: 46, categoria: "Matemática", titulo: "Potencias" },
-      { id_contenido: 47, categoria: "Matemática", titulo: "Raíz cuadrada básica" },
-      { id_contenido: 48, categoria: "Matemática", titulo: "Ecuaciones simples" },
-      { id_contenido: 49, categoria: "Matemática", titulo: "Probabilidad" },
-      { id_contenido: 50, categoria: "Matemática", titulo: "Porcentajes" },
+
     ],
     6: [
       { id_contenido: 51, categoria: "Matemática", titulo: "Coordenadas" },
       { id_contenido: 52, categoria: "Matemática", titulo: "Ecuaciones con incógnita" },
       { id_contenido: 53, categoria: "Matemática", titulo: "Polígonos y ángulos" },
-      { id_contenido: 54, categoria: "Matemática", titulo: "Área avanzada" },
-      { id_contenido: 55, categoria: "Matemática", titulo: "Volumen 3D" },
-      { id_contenido: 56, categoria: "Matemática", titulo: "Porcentajes reales" },
-      { id_contenido: 57, categoria: "Matemática", titulo: "Unidades de medida" },
-      { id_contenido: 58, categoria: "Matemática", titulo: "Media, moda y mediana" },
-      { id_contenido: 59, categoria: "Matemática", titulo: "Gráficos circulares" },
-      { id_contenido: 60, categoria: "Matemática", titulo: "Problemas combinados" },
+ 
     ],
   }
 
