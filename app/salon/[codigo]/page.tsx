@@ -338,42 +338,50 @@ useEffect(() => {
         </div>
       </nav>
 
-      {/*  NAV CON USUARIO + TABLA */}
-      <div className="sticky top-16 z-20 bg-teal-700 text-white px-6 py-4 shadow-md">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="text-3xl">🌍</div>
-            <div>
-              <h1 className="text-2xl font-bold">mundo primaria</h1>
-              <p className="text-xs text-teal-100">Aprende y diviértete</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <div className="bg-teal-600 px-4 py-2 rounded-lg">
-              <p className="text-sm font-semibold text-white">👤 {nombreAlumno}</p>
-              <p className="text-lg font-bold text-yellow-300">
-                {(alumnos.find(a => a.nombre === nombreAlumno)?.puntaje || 0).toLocaleString()} pts
-              </p>
-            </div>
-
-            <button
-              onClick={() => setShowLeaderboard(true)}
-              className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2"
-            >
-              <Trophy className="w-5 h-5" />
-              Tabla
-            </button>
-
-            <button
-              onClick={() => router.push("/")}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition"
-            >
-              Salir
-            </button>
-          </div>
-        </div>
+     {/*  NAV CON USUARIO + TABLA */}
+<div className="sticky top-16 z-20 bg-teal-700 text-white px-6 py-4 shadow-md">
+  <div className="max-w-7xl mx-auto flex items-center justify-between">
+    
+    {/* LOGO + TÍTULO */}
+    <div className="flex items-center gap-3">
+            <img 
+            src="/imagenes/cuba-escudo.png"
+            alt="Escudo Cuba"
+            className="w-20 h-20 object-contain"
+          />
+      <div>
+        <h1 className="text-2xl font-bold">CubaAprende</h1>
+        <p className="text-xs text-teal-100">Aprende y diviértete</p>
       </div>
+    </div>
+
+    {/* INFO USUARIO */}
+    <div className="flex items-center gap-6">
+      <div className="bg-teal-600 px-4 py-2 rounded-lg">
+        <p className="text-sm font-semibold text-white">👤 {nombreAlumno}</p>
+        <p className="text-lg font-bold text-yellow-300">
+          {(alumnos.find(a => a.nombre === nombreAlumno)?.puntaje || 0).toLocaleString()} pts
+        </p>
+      </div>
+
+      <button
+        onClick={() => setShowLeaderboard(true)}
+        className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2"
+      >
+        <Trophy className="w-5 h-5" />
+        Tabla
+      </button>
+
+      <button
+        onClick={() => router.push("/")}
+        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition"
+      >
+        Salir
+      </button>
+    </div>
+
+  </div>
+</div>
 
       {/*  PANEL DE PUNTAJES */}
       {showLeaderboard && (
