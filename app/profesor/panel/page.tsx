@@ -58,6 +58,24 @@ export default function TeacherPanel() {
       { id_contenido: 67, categoria: "Área de computo", titulo: "Palabras y Sílabas", storyId: "palabras-y-silabas", activo: false },
       { id_contenido: 68, categoria: "Área de computo", titulo: "Números y Operaciones", storyId: "numeros-y-operaciones", activo: false },
 
+      { id_contenido: 69, categoria: "Lectura", titulo: "La Mariposa Azul y la Pradera de las Luces", 
+        storyId: "La-Mariposa-Azul-y-la-Pradera-de-las-Luces", activo: false },
+      
+      { id_contenido: 70, categoria: "Lectura", titulo: "El León que Perdió su Rugido", 
+        storyId: "El-León-que-Perdió-su-Rugido", activo: false },
+      
+      { id_contenido: 71, categoria: "Lectura", titulo: "La Ciudad de los Colores Perdidos", 
+        storyId: "La-Ciudad-de-los-Colores-Perdidos", activo: false },
+      
+      { id_contenido: 72, categoria: "Lectura", titulo: "El Tren que No Quería Parar", 
+        storyId: "El-Tren-que-No-Quería-Parar", activo: false },
+      
+      { id_contenido: 73, categoria: "Lectura", titulo: "La Isla del Faro Solitario", 
+          storyId: "La-Isla-del-Faro-Solitario", activo: false },
+      
+      { id_contenido: 74, categoria: "Lectura", titulo: "Las Aventuras del Reino Encantado", 
+        storyId: "Las-Aventuras-del-Reino-Encantado", activo: false },
+      
 
     ],
     4: [

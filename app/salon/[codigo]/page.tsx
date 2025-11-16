@@ -8,6 +8,7 @@ import { Card } from "@/app/components/ui/card";
 import StoryList from "@/app/grados/primero/cursos/Lectura/story-list";
 import LiteratureModule from "@/app/grados/primero/cursos/Lectura/literature-module";
 import WritingModules from "@/app/grados/tercero/cursos/Computo/writing-modules";
+import ReadingModules from "@/app/grados/tercero/cursos/Lectura/reading-modules";
 
 interface Salon {
   grado: number;
@@ -20,6 +21,13 @@ interface Alumno {
   puntaje?: number;
 }
 
+interface Story {
+  id: string;
+  title: string;
+  author: string;
+  cover: string;
+  difficulty: string;
+}
 export default function SalonPage() {
   const { codigo } = useParams();
   const router = useRouter();
@@ -248,10 +256,29 @@ useEffect(() => {
   }
 
   if (selectedSubject === "reading") {
+  
+    // Detecta si los cuentos activos pertenecen al módulo EXPLICACIONES (1er grado)
+    const cuentos1er = ["caperucita-roja", "el-patito-feo", "cenicienta"];
+  
+    const usaLiterature = contenidosActivos.some(c =>
+      cuentos1er.includes(c.storyId)
+    );
+  
+    // Si son cuentos de 1er grado → LiteratureModule
+    if (usaLiterature) {
+      return (
+        <LiteratureModule 
+          onBack={() => setSelectedSubject(null)}
+          contenidosActivos={contenidosActivos}
+        />
+      );
+    }
+  
+    // Si son cuentos de 3er grado → ReadingModules
     return (
-      <LiteratureModule 
+      <ReadingModules
         onBack={() => setSelectedSubject(null)}
-        contenidosActivos={contenidosActivos}   // ← PASAMOS LOS ACTIVOS
+        contenidosActivos={contenidosActivos}
       />
     );
   }
@@ -264,6 +291,9 @@ useEffect(() => {
       />
     );
   }
+
+
+
   
   if (selectedSubject === "science") {
     return (
