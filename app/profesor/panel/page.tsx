@@ -46,11 +46,7 @@ export default function TeacherPanel() {
    
     ],
     3: [
-      { id_contenido: 21, categoria: "Matemática", titulo: "Multiplicación (1–10)" },
-      { id_contenido: 22, categoria: "Matemática", titulo: "División básica" },
-      { id_contenido: 23, categoria: "Matemática", titulo: "Perímetro de figuras" },
-      { id_contenido: 24, categoria: "Matemática", titulo: "Ángulos básicos" },
-     
+
 
       { id_contenido: 64, categoria: "Área de computo", titulo: "Mecanografia", storyId: "mecanografia", activo: false },
       { id_contenido: 65, categoria: "Área de computo", titulo: "Uso de Mayúsculas", storyId: "Uso-de-mayusculas", activo: false },
@@ -75,6 +71,36 @@ export default function TeacherPanel() {
       
       { id_contenido: 74, categoria: "Lectura", titulo: "Las Aventuras del Reino Encantado", 
         storyId: "Las-Aventuras-del-Reino-Encantado", activo: false },
+
+        { id_contenido: 75, categoria: "Matemática", titulo: "Multiplicación (Tablas 1–10)", 
+          storyId: "multiplicacion-tablas-1-10", activo: false },
+        
+        { id_contenido: 76, categoria: "Matemática", titulo: "División Básica", 
+          storyId: "division-basica", activo: false },
+        
+        { id_contenido: 77, categoria: "Matemática", titulo: "Perímetro de Figuras", 
+          storyId: "perimetro-de-figuras", activo: false },
+        
+        { id_contenido: 78, categoria: "Matemática", titulo: "Partes de la División", 
+          storyId: "partes-de-la-division", activo: false },
+        
+        { id_contenido: 79, categoria: "Matemática", titulo: "Partes de la Resta", 
+          storyId: "partes-de-la-resta", activo: false },
+        
+        { id_contenido: 80, categoria: "Matemática", titulo: "Problemas Multiplicación y División", 
+          storyId: "problemas-multiplicacion-division", activo: false },
+        
+        { id_contenido: 81, categoria: "Matemática", titulo: "Figuras Geométricas", 
+          storyId: "figuras-geometricas", activo: false },
+        
+        { id_contenido: 82, categoria: "Matemática", titulo: "Medición de Longitudes", 
+          storyId: "medicion-de-longitudes", activo: false },
+        
+        { id_contenido: 83, categoria: "Matemática", titulo: "Lectura y Comparación de Números hasta 10,000", 
+          storyId: "lectura-comparacion-numeros-10000", activo: false },
+        
+        { id_contenido: 84, categoria: "Matemática", titulo: "Suma y Resta con Llevadas", 
+          storyId: "suma-resta-con-llevadas", activo: false },
       
 
     ],

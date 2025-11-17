@@ -9,11 +9,36 @@ import TopicGames from "./topic-games";
 
 type View = "list" | "reading" | "quiz" | "games";
 
-export default function Grade3MathPage() {
+interface ContenidoActivo {
+  storyId: string;
+}
+
+const mathTopicMap = {
+  "multiplicacion-tablas-1-10": "multiplicacion",
+  "division-basica": "division-basica",
+  "perimetro-de-figuras": "perimetro",
+  "partes-de-la-division": "partes-division",
+  "partes-de-la-resta": "partes-resta",
+  "problemas-multiplicacion-division": "problemas-multdiv",
+  "figuras-geometricas": "figuras-geometricas",
+  "medicion-de-longitudes": "medicion-longitud",
+  "lectura-comparacion-numeros-10000": "lectura-numeros",
+  "suma-resta-con-llevadas": "suma-resta-llevadas",
+} as const;
+
+export default function Grade3MathPage({
+  contenidosActivos,
+  onBack,
+}: {
+  contenidosActivos: ContenidoActivo[];
+  onBack: () => void;
+}) {
   const [currentView, setCurrentView] = useState<View>("list");
   const [selectedTopic, setSelectedTopic] = useState<any | null>(null);
 
-  const topics = Object.values(topicsData);
+  const topics = Object.values(topicsData).filter(topic =>
+    contenidosActivos.some(c => mathTopicMap[c.storyId as keyof typeof mathTopicMap] === topic.id)
+  );
 
   const handleSelectTopic = (topic: any) => {
     setSelectedTopic(topic);
@@ -33,17 +58,26 @@ export default function Grade3MathPage() {
     <main className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
-          {currentView !== "list" && (
-            <button
-              onClick={handleBack}
-              className="p-2 hover:bg-gray-100 rounded-lg transition"
-            >
-              <ArrowLeft className="w-6 h-6 text-gray-600" />
-            </button>
-          )}
-          <h1 className="text-2xl font-bold text-gray-900">Matemática - 3er Grado</h1>
-        </div>
-      </header>
+
+    {currentView === "list" && (   // ⬅️ SOLO mostrar flecha en la LISTA
+      <button
+        onClick={() => {
+          const codigoSalon = localStorage.getItem("codigoSalon");
+          if (codigoSalon) {
+            window.location.href = `/salon/${codigoSalon}`;
+          } else {
+            window.location.href = "/";
+          }
+        }}
+        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+      >
+        <ArrowLeft className="w-6 h-6 text-gray-600" />
+      </button>
+    )}
+
+          <h1 className="text-2xl font-bold text-gray-900">Matemática</h1>
+      </div>
+    </header>
 
       <section className="max-w-5xl mx-auto px-6 py-8">
         {currentView === "list" && (

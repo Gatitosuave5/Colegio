@@ -9,6 +9,7 @@ import StoryList from "@/app/grados/primero/cursos/Lectura/story-list";
 import LiteratureModule from "@/app/grados/primero/cursos/Lectura/literature-module";
 import WritingModules from "@/app/grados/tercero/cursos/Computo/writing-modules";
 import ReadingModules from "@/app/grados/tercero/cursos/Lectura/reading-modules";
+import Grade3MathPage from "@/app/grados/tercero/cursos/matematicas/page";
 
 interface Salon {
   grado: number;
@@ -240,21 +241,13 @@ useEffect(() => {
   //  Pantalla de cada módulo
   if (selectedSubject === "math") {
     return (
-      <main className="min-h-screen bg-gray-50">
-        <button
-          onClick={() => setSelectedSubject(null)}
-          className="absolute top-6 right-6 bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition"
-        >
-          ← Volver
-        </button>
-        <div className="text-center mt-20 text-3xl font-bold text-blue-600">
-          📐 Módulo de Matemática
-        </div>
-        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
-      </main>
+      <Grade3MathPage
+        contenidosActivos={contenidosActivos}
+        onBack={() => setSelectedSubject(null)}
+      />
     );
   }
-
+  
   if (selectedSubject === "reading") {
   
     // Detecta si los cuentos activos pertenecen al módulo EXPLICACIONES (1er grado)
@@ -372,8 +365,19 @@ useEffect(() => {
         Tabla
       </button>
 
-      <button
-        onClick={() => router.push("/")}
+            <button
+        onClick={async () => {
+          await fetch("http://localhost:3001/api/alumnos_temporales/eliminar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              nombre: nombreAlumno,
+              salon_codigo: salon_codigo,
+            }),
+          });
+
+          router.push("/");
+        }}
         className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition"
       >
         Salir
