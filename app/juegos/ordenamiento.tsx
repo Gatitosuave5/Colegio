@@ -179,9 +179,10 @@ export default function JuegoOrdenamiento({ themeId = 1 }: OrdenimientoProps) {
                   const evento = eventosRevueltos.find(e => e.id === id);
                   return (
                     <div key={idx} className="flex justify-between items-center p-3 bg-white rounded border-2 border-yellow-300">
-                      <div>
-                        <span className="font-bold text-yellow-700">{idx + 1}.</span> {evento?.texto}
-                      </div>
+                     <div className="text-yellow-900 font-semibold !opacity-100">
+  <span className="font-bold text-yellow-700">{idx + 1}.</span> {evento?.texto}
+</div>
+
                       <Button
                         onClick={() => removerEvento(idx)}
                         variant="ghost"
