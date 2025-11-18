@@ -523,7 +523,7 @@ const quizzes: Record<string, Question[]> = {
       question: "¿Para qué sirve practicar con números?",
       options: [
         "Solo para perder tiempo",
-        "Para mejorar velocidad mecanográfica y comprensión matemática",
+        "Para mejorar la comprensión matemática",
         "Para confundir",
         "No sirve para nada",
       ],
