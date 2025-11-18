@@ -129,16 +129,16 @@ El perímetro es la suma de todos los lados de una figura.
       },
     ],
     quiz: [
-      { question: "¿Cuál es el perímetro de un cuadrado de lado 6 cm?", options: ["20", "24", "28"], correct: 1 },
-      { question: "¿Cuál es el perímetro de un rectángulo de 5 cm x 3 cm?", options: ["15", "16", "17"], correct: 1 },
-      { question: "¿Cuál es el perímetro de un rectángulo de 10 cm x 4 cm?", options: ["26", "27", "28"], correct: 2 },
-      { question: "¿Cuál es el perímetro de un cuadrado de lado 7 cm?", options: ["26", "27", "28"], correct: 2 },
-      { question: "Un triángulo equilátero de lado 5 cm tiene perímetro de:", options: ["14", "15", "16"], correct: 1 },
-      { question: "¿Cuál es el perímetro de un rectángulo de 8 cm x 2 cm?", options: ["18", "19", "20"], correct: 2 },
-      { question: "¿Cuál es el perímetro de un cuadrado de lado 9 cm?", options: ["34", "35", "36"], correct: 2 },
-      { question: "¿Cuál es el perímetro de un rectángulo de 6 cm x 4 cm?", options: ["18", "19", "20"], correct: 2 },
-      { question: "Un triángulo con lados de 4, 5 y 6 cm tiene perímetro de:", options: ["14", "15", "16"], correct: 1 },
-      { question: "¿Cuál es el perímetro de un cuadrado de lado 12 cm?", options: ["46", "47", "48"], correct: 2 },
+      { question: "Un cuadrado tiene lado 3 cm. ¿Cuál es su perímetro?", options: ["9 cm", "10 cm", "12 cm"], correct: 2 },
+      { question: "Un cuadrado tiene lado 4 cm. ¿Perímetro?", options: ["12 cm", "14 cm", "16 cm"], correct: 2 },
+      { question: "Un cuadrado tiene lado 2 cm. ¿Perímetro?", options: ["6 cm", "8 cm", "10 cm"], correct: 1 },
+      { question: "Un rectángulo mide 4 cm de largo y 2 cm de ancho. ¿Perímetro?", options: ["10 cm", "12 cm", "14 cm"], correct: 1 },
+      { question: "Un rectángulo de 5 cm de largo y 3 cm de ancho. ¿Perímetro?", options: ["12 cm", "14 cm", "16 cm"], correct: 2 },
+      { question: "Un cuadrado tiene lados de 5 cm. ¿Perímetro?", options: ["15 cm", "20 cm", "25 cm"], correct: 1 },
+      { question: "Un rectángulo de 6 cm de largo y 2 cm de ancho. ¿Perímetro?", options: ["14 cm", "16 cm", "18 cm"], correct: 0 },
+      { question: "Un cuadrado tiene lado 6 cm. ¿Perímetro?", options: ["18 cm", "20 cm", "24 cm"], correct: 2 },
+      { question: "Un rectángulo de 3 cm x 2 cm tiene perímetro:", options: ["8 cm", "10 cm", "12 cm"], correct: 1 },
+      { question: "Un cuadrado tiene lado 1 cm. ¿Perímetro?", options: ["2 cm", "3 cm", "4 cm"], correct: 2 }
     ],
   },
 
@@ -174,68 +174,59 @@ Ejemplo: 17 ÷ 3 = 5 resto 2
         explanation: "Dividendo: 30, Divisor: 6, Cociente: 5, Resto: 0",
       },
     ],
-    quiz : [
+    quiz: [
       { 
-        question: "En 49 ÷ 7, ¿cuál es el dividendo?", 
-        options: ["7", "48", "6"], 
-       // dividend = el número que se divide → 48
+        question: "En 12 ÷ 3, ¿cuál es el dividendo?",
+        options: ["12", "3", "4"],
         correct: 0
       },
       { 
-        question: "En 56 ÷ 8 = 7, ¿cuál es el divisor?", 
-        options: ["7", "56", "8"], 
-        // divisor = el número por el que se divide → 8
-        correct: 2 
-      },
-      { 
-        question: "En 42 ÷ 6 = 7, ¿cuál es el cociente?", 
-        options: ["42", "6", "7"], 
-        // cociente = resultado de la división → 7
-        correct: 2 
-      },
-      { 
-        question: "¿Cuál es el residuo de 25 ÷ 4?", 
-        options: ["0", "1", "2"], 
-        // 4 × 6 = 24 → resto 1
+        question: "En 20 ÷ 4, ¿cuál es el divisor?", 
+        options: ["20", "4", "5"], 
         correct: 1 
       },
       { 
-        question: "En 33 ÷ 5 = 6 resto 3, ¿cuál es el dividendo?", 
-        options: ["5", "33", "6"], 
-        // dividendo = 33
+        question: "En 18 ÷ 6 = 3, ¿cuál es el resultado?", 
+        options: ["6", "18", "3"], 
+        correct: 2 
+      },
+      { 
+        question: "En 15 ÷ 3, ¿cuál es el dividendo?", 
+        options: ["5", "3", "15"], 
+        correct: 2 
+      },
+      { 
+        question: "En 16 ÷ 4, ¿cuál es el divisor?", 
+        options: ["16", "4", "2"], 
         correct: 1 
       },
       { 
-        question: "¿Cuál es el resto de 30 ÷ 7?", 
-        options: ["1", "2", "3"], 
-        // 7 × 4 = 28 → resto 2
-        correct: 1
+        question: "En 24 ÷ 6 = 4, ¿cuál es el resultado?", 
+        options: ["6", "4", "24"], 
+        correct: 1 
       },
       { 
-        question: "En 45 ÷ 9 = 5, ¿cuál es el resto?", 
-        options: ["0", "1", "2"], 
-        // división exacta → resto 0
+        question: "En 9 ÷ 3, ¿qué número es el divisor?", 
+        options: ["9", "3", "6"], 
+        correct: 1 
+      },
+      { 
+        question: "En 21 ÷ 7, ¿cuál es el dividendo?", 
+        options: ["21", "7", "3"], 
         correct: 0 
       },
       { 
-        question: "¿Cuál es el resto de 29 ÷ 6?", 
-        options: ["4", "5", "6"], 
-        // 6 × 4 = 24 → resto 5
-        correct: 1 
+        question: "En 30 ÷ 5 = 6, ¿cuál es el resultado?", 
+        options: ["6", "5", "30"], 
+        correct: 0 
       },
       { 
-        question: "En 58 ÷ 8 = 7 resto 2, ¿cuál es el divisor?", 
-        options: ["7", "8", "2"], 
-        // divisor = 8
-        correct: 1 
-      },
-      { 
-        question: "¿Cuál es el resto de 50 ÷ 8?", 
-        options: ["1", "2", "3"], 
-        // 8 × 6 = 48 → resto 2
-        correct: 1 
+        question: "En 14 ÷ 2, ¿cuál es el divisor?", 
+        options: ["2", "7", "14"], 
+        correct: 0 
       }
     ]
+    
     
   },
 
@@ -396,16 +387,65 @@ Conversiones:
       },
     ],
     quiz: [
-      { question: "¿Cuántos centímetros tiene 1 metro?", options: ["50", "100", "200"], correct: 1 },
-      { question: "¿Cuántos metros son 500 centímetros?", options: ["4", "5", "6"], correct: 1 },
-      { question: "¿Cuántos centímetros son 3 metros?", options: ["200", "300", "400"], correct: 1 },
-      { question: "Una puerta mide aproximadamente:", options: ["2 cm", "20 cm", "2 m"], correct: 2 },
-      { question: "Un lápiz mide aproximadamente:", options: ["20 cm", "20 m", "200 cm"], correct: 0 },
-      { question: "¿Cuántos metros son 800 centímetros?", options: ["6", "7", "8"], correct: 2 },
-      { question: "¿Cuántos centímetros son 6 metros?", options: ["500", "600", "700"], correct: 1 },
-      { question: "La altura de un edificio se mide en:", options: ["centímetros", "metros", "ambas"], correct: 1 },
-      { question: "¿Cuántos centímetros son 2 metros?", options: ["100", "200", "300"], correct: 1 },
-      { question: "El grosor de un papel se mide en:", options: ["metros", "centímetros", "kilómetros"], correct: 1 },
+      { 
+        question: "¿Cuántos centímetros tiene 1 metro?",
+        options: ["50", "100", "10"],
+        correct: 1
+      },
+    
+      { 
+        question: "¿Cuántos centímetros son 2 metros?",
+        options: ["100", "150", "200"],
+        correct: 2
+      },
+    
+      { 
+        question: "¿Cuántos metros son 300 centímetros?",
+        options: ["2", "3", "4"],
+        correct: 1
+      },
+    
+      { 
+        question: "Un lápiz mide aproximadamente:",
+        options: ["20 cm", "2 m", "200 cm"],
+        correct: 0
+      },
+    
+      { 
+        question: "Una regla del colegio mide:",
+        options: ["30 cm", "3 m", "300 cm"],
+        correct: 0
+      },
+    
+      { 
+        question: "¿Cuántos centímetros son 1 metro y medio? (1.5 m)",
+        options: ["150 cm", "100 cm", "120 cm"],
+        correct: 0
+      },
+    
+      { 
+        question: "La altura de una mesa es aproximadamente:",
+        options: ["1 m", "10 cm", "10 m"],
+        correct: 0
+      },
+    
+      { 
+        question: "El grosor de un cuaderno se mide en:",
+        options: ["metros", "centímetros", "kilómetros"],
+        correct: 1
+      },
+    
+      { 
+        question: "La longitud de una botella de agua es aproximadamente:",
+        options: ["25 cm", "2 m", "250 cm"],
+        correct: 0
+      },
+    
+      { 
+        question: "¿Cuántos centímetros son 50 centímetros más 50 centímetros?",
+        options: ["50", "100", "150"],
+        correct: 1
+      }
     ],
   },
 
@@ -434,27 +474,93 @@ Comparación: > (mayor), < (menor), = (igual)
     examples: [
       {
         title: "Lectura",
-        operation: "3,456",
-        explanation: "Tres mil cuatrocientos cincuenta y seis",
+        operation: "456",
+        explanation: "cuatrocientos cincuenta y seis",
       },
       {
         title: "Comparación",
-        operation: "3,456 > 2,789",
-        explanation: "3,456 es mayor que 2,789",
+        operation: "456 < 789",
+        explanation: "456 es menor que 789",
       },
     ],
     quiz: [
-      { question: "¿Cómo se lee 5,234?", options: ["Cinco mil doscientos treinta y cuatro", "Cincuenta mil...", "Quinientos..."], correct: 0 },
-      { question: "¿Cuál es mayor: 3,456 o 3,465?", options: ["3,456", "3,465", "Son iguales"], correct: 1 },
-      { question: "¿Cuál es menor: 7,890 o 7,980?", options: ["7,890", "7,980", "Son iguales"], correct: 0 },
-      { question: "¿Cómo se escribe 'Dos mil quinientos treinta y uno'?", options: ["2,531", "2,513", "2,315"], correct: 0 },
-      { question: "¿Cuál número es mayor: 8,765 o 8,756?", options: ["8,765", "8,756", "Son iguales"], correct: 0 },
-      { question: "¿Cómo se lee 9,999?", options: ["Nueve mil novecientos noventa y nueve", "Novecientos...", "Noventa y nueve"], correct: 0 },
-      { question: "¿Cuál es el número mayor: 4,321 o 4,231?", options: ["4,321", "4,231", "Son iguales"], correct: 0 },
-      { question: "¿Cuántas unidades tiene 5,678?", options: ["8", "7", "8 unidades"], correct: 0 },
-      { question: "En 6,543 ¿cuántas centenas hay?", options: ["5", "54", "6"], correct: 0 },
-      { question: "¿Cómo se escribe 'Siete mil doscientos cuarenta y tres'?", options: ["7,243", "7,324", "7,234"], correct: 0 },
-    ],
+      { 
+        question: "¿Cómo se descompone el número 345?",
+        options: [
+          "3 centenas, 4 decenas, 5 unidades",
+          "3 centenas, 5 decenas, 4 unidades",
+          "4 centenas, 3 decenas, 5 unidades"
+        ],
+        correct: 0
+      },
+    
+      { 
+        question: "¿Cómo se descompone el número 482?",
+        options: [
+          "4 centenas, 8 decenas, 2 unidades",
+          "8 centenas, 4 decenas, 2 unidades",
+          "4 centenas, 2 decenas, 8 unidades"
+        ],
+        correct: 0
+      },
+    
+      { 
+        question: "¿Cómo se descompone el número 256?",
+        options: [
+          "2 centenas, 6 decenas, 5 unidades",
+          "2 centenas, 5 decenas, 6 unidades",
+          "5 centenas, 2 decenas, 6 unidades"
+        ],
+        correct: 1
+      },
+    
+      { 
+        question: "¿Cómo se lee el número 234?",
+        options: [
+          "Doscientos treinta y cuatro",
+          "Doscientos cuarenta y tres",
+          "Trescientos veinticuatro"
+        ],
+        correct: 0
+      },
+    
+      { 
+        question: "¿Cuál número es mayor?",
+        options: ["450", "405", "354"],
+        correct: 0
+      },
+    
+      { 
+        question: "¿Cuál número es menor?",
+        options: ["312", "321", "231"],
+        correct: 2
+      },
+    
+      { 
+        question: "En el número 528, ¿cuántas centenas hay?",
+        options: ["5", "2", "8"],
+        correct: 0
+      },
+    
+      { 
+        question: "En el número 670, ¿cuántas decenas hay?",
+        options: ["7", "6", "0"],
+        correct: 0
+      },
+    
+      { 
+        question: "En el número 194, ¿cuántas unidades hay?",
+        options: ["9", "4", "1"],
+        correct: 1
+      },
+    
+      { 
+        question: "¿Cómo se escribe 'cuatrocientos veinte'?",
+        options: ["420", "402", "240"],
+        correct: 0
+      }
+    ]
+    
   },
 
   "suma-resta-llevadas": {

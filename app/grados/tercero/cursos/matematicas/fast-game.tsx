@@ -14,9 +14,11 @@ export default function FastGame({ topic, onBack }) {
   const [questions, setQuestions] = useState<FastQuestion[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(50);
   const [gameActive, setGameActive] = useState(true);
   const [answered, setAnswered] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+
 
   useEffect(() => {
     generateQuestions();
@@ -53,41 +55,70 @@ export default function FastGame({ topic, onBack }) {
     }
     else if (topic.id === "lectura-numeros") {
       qs = [
-        { question: "¿Cómo se lee 5,234?", options: ["Cinco mil doscientos treinta y cuatro", "Cincuenta mil...", "Quinientos..."], correct: 0 },
-        { question: "¿Cuál es mayor: 3,456 o 3,465?", options: ["3,456", "3,465", "Son iguales"], correct: 1 },
-        { question: "¿Cuál es menor: 7,890 o 7,980?", options: ["7,890", "7,980", "Son iguales"], correct: 0 },
-        { question: "¿Cómo se escribe 'Dos mil quinientos treinta y uno'?", options: ["2,531", "2,513", "2,315"], correct: 0 },
-        { question: "¿Cuál número es mayor: 8,765 o 8,756?", options: ["8,765", "8,756", "Son iguales"], correct: 0 },
-        { question: "¿Cómo se lee 9,999?", options: ["Nueve mil novecientos noventa y nueve", "Novecientos...", "Noventa y nueve"], correct: 0 },
+        { 
+          question: "¿Cómo se lee 345?", 
+          options: ["Trescientos cuarenta y cinco", "Tres mil cuarenta y cinco", "Treinta y cuatro con cinco"], 
+          correct: 0 
+        },
+        { 
+          question: "¿Cuál es mayor: 278 o 287?", 
+          options: ["278", "287", "Son iguales"], 
+          correct: 1 
+        },
+        { 
+          question: "¿Cuál es menor: 590 o 509?", 
+          options: ["590", "509", "Son iguales"], 
+          correct: 1 
+        },
+        { 
+          question: "¿Cómo se escribe 'Cuatrocientos doce'?", 
+          options: ["412", "421", "402"], 
+          correct: 0 
+        },
+        { 
+          question: "¿Qué número es mayor: 736 o 763?", 
+          options: ["736", "763", "Son iguales"], 
+          correct: 1 
+        },
+        { 
+          question: "¿Cómo se lee 829?", 
+          options: ["Ochocientos veinte y nueve", "Ochocientos veintinueve", "Ochenta dos nueve"], 
+          correct: 1 
+        }
       ];
     }
 
     setQuestions(qs.sort(() => Math.random() - 0.5));
     setCurrentIdx(0);
     setScore(0);
-    setTimeLeft(30);
+    setTimeLeft(60);
     setGameActive(true);
     setAnswered(false);
   };
 
   const handleAnswer = (optionIdx: number) => {
     if (!answered) {
+      setSelectedOption(optionIdx);
+  
       if (optionIdx === questions[currentIdx].correct) {
         setScore(score + 1);
       }
+  
       setAnswered(true);
-
+  
       setTimeout(() => {
         if (currentIdx < questions.length - 1) {
           setCurrentIdx(currentIdx + 1);
           setAnswered(false);
-          setTimeLeft(30);
+          setSelectedOption(null);
+          setTimeLeft(60);
         } else {
           setGameActive(false);
         }
       }, 1200);
     }
   };
+  
 
   if (!gameActive || currentIdx >= questions.length) {
     return (
@@ -161,22 +192,25 @@ export default function FastGame({ topic, onBack }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {q.options.map((option, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleAnswer(idx)}
-              className={`
-                p-6 rounded-lg font-bold text-lg transition-all 
-                ${
-                  answered
-                    ? idx === q.correct
-                      ? "bg-green-500 text-white scale-110 shadow-lg"
-                      : "bg-gray-300 text-gray-600 opacity-70"
-                    : "bg-blue-600 hover:bg-blue-700 text-white shadow"
-                }
-              `}
-            >
-              {option}
-            </button>
+          <button
+          key={idx}
+          onClick={() => handleAnswer(idx)}
+          className={`
+            p-6 rounded-lg font-bold text-lg transition-all 
+            ${
+              answered
+                ? idx === q.correct
+                  ? "bg-green-500 text-white scale-110 shadow-lg"     
+                  : idx === selectedOption
+                  ? "bg-red-500 text-white scale-105 shadow"          
+                  : "bg-gray-300 text-gray-600 opacity-70"            
+                : "bg-blue-600 hover:bg-blue-700 text-white shadow"   
+            }
+          `}
+        >
+          {option}
+        </button>
+        
           ))}
         </div>
       </Card>
