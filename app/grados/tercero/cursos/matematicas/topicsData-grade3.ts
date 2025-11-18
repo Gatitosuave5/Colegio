@@ -174,18 +174,69 @@ Ejemplo: 17 ÷ 3 = 5 resto 2
         explanation: "Dividendo: 30, Divisor: 6, Cociente: 5, Resto: 0",
       },
     ],
-    quiz: [
-      { question: "En 48 ÷ 7, ¿cuál es el dividendo?", options: ["7", "48", "6"], correct: 1 },
-      { question: "En 56 ÷ 8 = 7, ¿cuál es el divisor?", options: ["7", "56", "8"], correct: 2 },
-      { question: "En 42 ÷ 6 = 7, ¿cuál es el cociente?", options: ["42", "6", "7"], correct: 2 },
-      { question: "¿Cuál es el resto de 25 ÷ 4?", options: ["0", "1", "2"], correct: 1 },
-      { question: "En 33 ÷ 5 = 6 resto 3, ¿cuál es el dividendo?", options: ["5", "33", "6"], correct: 1 },
-      { question: "¿Cuál es el resto de 30 ÷ 7?", options: ["1", "2", "3"], correct: 1 },
-      { question: "En 45 ÷ 9 = 5, ¿cuál es el resto?", options: ["0", "1", "2"], correct: 0 },
-      { question: "¿Cuál es el resto de 29 ÷ 6?", options: ["4", "5", "6"], correct: 2 },
-      { question: "En 58 ÷ 8 = 7 resto 2, ¿cuál es el divisor?", options: ["7", "8", "2"], correct: 1 },
-      { question: "¿Cuál es el resto de 50 ÷ 8?", options: ["1", "2", "3"], correct: 1 },
-    ],
+    quiz : [
+      { 
+        question: "En 49 ÷ 7, ¿cuál es el dividendo?", 
+        options: ["7", "48", "6"], 
+       // dividend = el número que se divide → 48
+        correct: 0
+      },
+      { 
+        question: "En 56 ÷ 8 = 7, ¿cuál es el divisor?", 
+        options: ["7", "56", "8"], 
+        // divisor = el número por el que se divide → 8
+        correct: 2 
+      },
+      { 
+        question: "En 42 ÷ 6 = 7, ¿cuál es el cociente?", 
+        options: ["42", "6", "7"], 
+        // cociente = resultado de la división → 7
+        correct: 2 
+      },
+      { 
+        question: "¿Cuál es el residuo de 25 ÷ 4?", 
+        options: ["0", "1", "2"], 
+        // 4 × 6 = 24 → resto 1
+        correct: 1 
+      },
+      { 
+        question: "En 33 ÷ 5 = 6 resto 3, ¿cuál es el dividendo?", 
+        options: ["5", "33", "6"], 
+        // dividendo = 33
+        correct: 1 
+      },
+      { 
+        question: "¿Cuál es el resto de 30 ÷ 7?", 
+        options: ["1", "2", "3"], 
+        // 7 × 4 = 28 → resto 2
+        correct: 1
+      },
+      { 
+        question: "En 45 ÷ 9 = 5, ¿cuál es el resto?", 
+        options: ["0", "1", "2"], 
+        // división exacta → resto 0
+        correct: 0 
+      },
+      { 
+        question: "¿Cuál es el resto de 29 ÷ 6?", 
+        options: ["4", "5", "6"], 
+        // 6 × 4 = 24 → resto 5
+        correct: 1 
+      },
+      { 
+        question: "En 58 ÷ 8 = 7 resto 2, ¿cuál es el divisor?", 
+        options: ["7", "8", "2"], 
+        // divisor = 8
+        correct: 1 
+      },
+      { 
+        question: "¿Cuál es el resto de 50 ÷ 8?", 
+        options: ["1", "2", "3"], 
+        // 8 × 6 = 48 → resto 2
+        correct: 1 
+      }
+    ]
+    
   },
 
   "partes-resta": {
@@ -393,69 +444,16 @@ Comparación: > (mayor), < (menor), = (igual)
       },
     ],
     quiz: [
-      { 
-        question: "En el número 345, ¿cuántas centenas hay?",
-        options: ["3", "4", "5"],
-        correct: 0
-      },
-    
-      { 
-        question: "En el número 482, ¿cuántas decenas hay?",
-        options: ["8", "2", "4"],
-        correct: 0
-      },
-    
-      { 
-        question: "En el número 256, ¿cuántas unidades hay?",
-        options: ["2", "5", "6"],
-        correct: 2
-      },
-    
-      { 
-        question: "¿Cómo se lee el número 234?",
-        options: [
-          "Doscientos treinta y cuatro",
-          "Doscientos cuarenta y tres",
-          "Trescientos veinticuatro"
-        ],
-        correct: 0
-      },
-    
-      { 
-        question: "¿Cuál número es mayor?",
-        options: ["450", "405", "354"],
-        correct: 0
-      },
-    
-      { 
-        question: "¿Cuál número es menor?",
-        options: ["312", "321", "231"],
-        correct: 2
-      },
-    
-      { 
-        question: "En el número 528, ¿cuántas centenas hay?",
-        options: ["5", "2", "8"],
-        correct: 0
-      },
-    
-      { 
-        question: "En el número 670, ¿cuántas decenas hay?",
-        options: ["7", "6", "0"],
-        correct: 0
-      },
-    
-      { 
-        question: "En el número 194, ¿cuántas unidades hay?",
-        options: ["9", "4", "1"],
-        correct: 1
-      },
-    
-      { 
-        question: "¿Cómo se escribe 'cuatrocientos veinte'?",
-        options: ["420", "402", "240"],
-        correct: 0
-      }
+      { question: "¿Cómo se lee 5,234?", options: ["Cinco mil doscientos treinta y cuatro", "Cincuenta mil...", "Quinientos..."], correct: 0 },
+      { question: "¿Cuál es mayor: 3,456 o 3,465?", options: ["3,456", "3,465", "Son iguales"], correct: 1 },
+      { question: "¿Cuál es menor: 7,890 o 7,980?", options: ["7,890", "7,980", "Son iguales"], correct: 0 },
+      { question: "¿Cómo se escribe 'Dos mil quinientos treinta y uno'?", options: ["2,531", "2,513", "2,315"], correct: 0 },
+      { question: "¿Cuál número es mayor: 8,765 o 8,756?", options: ["8,765", "8,756", "Son iguales"], correct: 0 },
+      { question: "¿Cómo se lee 9,999?", options: ["Nueve mil novecientos noventa y nueve", "Novecientos...", "Noventa y nueve"], correct: 0 },
+      { question: "¿Cuál es el número mayor: 4,321 o 4,231?", options: ["4,321", "4,231", "Son iguales"], correct: 0 },
+      { question: "¿Cuántas unidades tiene 5,678?", options: ["8", "7", "8 unidades"], correct: 0 },
+      { question: "En 6,543 ¿cuántas centenas hay?", options: ["5", "54", "6"], correct: 0 },
+      { question: "¿Cómo se escribe 'Siete mil doscientos cuarenta y tres'?", options: ["7,243", "7,324", "7,234"], correct: 0 },
     ],
   },
 
