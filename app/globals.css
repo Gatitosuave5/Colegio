@@ -104,8 +104,8 @@ body {
   position: absolute;
   bottom: 120px;
   left: -150px;
-  width: 110px;
-  height: 70px;
+  width: 100px;
+  height: 80px;
   background: url("https://img1.picmix.com/output/stamp/normal/4/0/9/7/2097904_ae036.gif") no-repeat center/contain;
   animation: dolphinSwim 18s linear infinite;
   opacity: 0.9;
@@ -129,17 +129,30 @@ body {
   }
 }
 
-/* ================== PECES ================== */
+/* ================== BARCO ================== */
+.boat {
+  position: absolute;
+  bottom: 160px;
+  left: -250px;
+  width: 550px;
+  height: 350px;
+  background: url("https://www.gifsanimados.org/data/media/271/barco-imagen-animada-0031.gif") no-repeat center/contain;
+  animation: dolphinSwim 22s linear infinite;
+  opacity: 0.95;
+  z-index: 10; /* barco al frente */
+}
+
+
 .fish {
   position: absolute;
   bottom: 80px;
-  width: 60px;
-  height: 40px;
+  width: 100px;
+  height: 80px;
   background: url("https://i.gifer.com/WiCA.gif") no-repeat center/contain;
   opacity: 0.8;
-  transform: scale(-1);
 }
 
+/* PECES */
 .fish1 {
   left: -120px;
   animation: fishSwim1 20s linear infinite;
@@ -149,23 +162,112 @@ body {
   bottom: 150px;
   animation: fishSwim2 25s linear infinite;
 }
+/* ================== AVES TIPO 2 ================== */
+.bird2-type {
+  position: absolute;
+  top: 20px; /* altura del vuelo, puedes ajustar */
+  width: 300px;   /* antes 130px */
+  height: 250px;  /* antes 100px */
+  background: url("https://i.pinimg.com/originals/22/c0/8e/22c08eddcd1019468ed3f79f05de3252.gif")
+    no-repeat center/contain;
+  opacity: 0.9;
+  pointer-events: none;
+}
 
+/* Primera ave */
+.birdA {
+  animation: birdType2Fly1 26s linear infinite;
+  animation-delay: 0s; /* empieza de inmediato */
+}
+
+.birdB {
+  animation: birdType2Fly2 28s linear infinite;
+  animation-delay: 13s; /* empieza a mitad de ciclo de birdA */
+}
+
+
+/* Animaciones */
+@keyframes birdType2Fly1 {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(2500px);
+  }
+}
+
+@keyframes birdType2Fly2 {
+  0% {
+    transform: translateX(0) scale(0.9);
+  }
+  100% {
+    transform: translateX(2600px) scale(0.9);
+  }
+}
+
+/* ================== AVES ================== */
+.bird {
+  position: absolute;
+  top: 120px; /* altura del vuelo */
+  width: 200px;   /* antes 130px */
+  height: 250px;  /* antes 100px */
+  background: url("https://i.pinimg.com/originals/18/66/28/18662833035f21c9d0b34b52faa6d1f8.gif")
+    no-repeat center/contain;
+  opacity: 0.9;
+  pointer-events: none; /* para que no interfiera */
+}
+
+/* Animación de vuelo horizontal */
+.bird1 {
+  left: -200px;
+  animation: birdFly1 22s linear infinite;
+}
+
+.bird2 {
+  left: -350px;
+  top: 170px;
+  animation: birdFly2 28s linear infinite;
+}
+
+/* Keyframes */
+@keyframes birdFly1 {
+  0% {
+    transform: translateX(0) scaleX(-1);   /* volteado */
+  }
+  100% {
+    transform: translateX(2200px) scaleX(-1);
+  }
+}
+
+@keyframes birdFly2 {
+  0% {
+    transform: translateX(0) scaleX(-1);   /* volteado */
+  }
+  100% {
+    transform: translateX(2200px) scaleX(-1);
+  }
+}
+
+
+/* ANIMACIONES CON GIRO HORIZONTAL */
 @keyframes fishSwim1 {
   0% {
-    transform: translateX(0);
+    transform: translateX(0) scaleX(-1);   /* volteado */
   }
   100% {
-    transform: translateX(2000px);
+    transform: translateX(2000px) scaleX(-1);
   }
 }
+
 @keyframes fishSwim2 {
   0% {
-    transform: translateX(0);
+    transform: translateX(0) scaleX(-1);   /* volteado */
   }
   100% {
-    transform: translateX(2200px);
+    transform: translateX(2200px) scaleX(-1);
   }
 }
+
 
 /* ================== EFECTO FLOTANTE ================== */
 @keyframes float {
@@ -178,4 +280,26 @@ body {
 }
 .animate-float {
   animation: float 4s ease-in-out infinite;
+}
+/* ================== TIBURÓN ================== */
+.shark {
+  position: absolute;
+  bottom: 320px;
+  right: -250px;
+  width: 220px;
+  height: 120px;
+  background: url("https://i.pinimg.com/originals/e8/9b/1d/e89b1dfa346f81327035e9dbb8cd9338.gif") no-repeat center/contain;
+  opacity: 0.95;
+  animation: sharkSwim 28s linear infinite;
+  z-index: 5; /* tiburón detrás del barco */
+}
+
+/* Animación: de derecha → izquierda */
+@keyframes sharkSwim {
+  0% {
+    transform: translateX(0) scaleX(1); 
+  }
+  100% {
+    transform: translateX(-2600px) scaleX(1);
+  }
 }

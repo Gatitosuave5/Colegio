@@ -47,8 +47,15 @@ export default function PaginaInicio() {
         <div className="wave wave2"></div>
         <div className="wave wave3"></div>
         <div className="dolphin"></div>
+        <div className="boat"></div>
         <div className="fish fish1"></div>
         <div className="fish fish2"></div>
+        <div className="bird bird1"></div>
+        <div className="bird bird2"></div>
+        <div className="bird2-type birdA"></div>
+        <div className="bird2-type birdB"></div>
+        <div className="shark"></div>
+
       </div>
 
       {/* Botón Profesores */}
