@@ -351,7 +351,9 @@ export default function ReadingModules({
   }
 
   const handleGamesStart = () => {
-    if (currentModule && quizScores[currentModule] && quizScores[currentModule] >= 65) {
+    const unlocked = localStorage.getItem(`unlocked-${selectedStory?.id}`) === "true"
+
+      if (currentModule && (quizScores[currentModule] >= 65 || unlocked)) {
       setCurrentView("games")
     } else {
       alert("🔒 Necesitas 65 puntos en el cuestionario para desbloquear los juegos. ¡Intenta de nuevo!")

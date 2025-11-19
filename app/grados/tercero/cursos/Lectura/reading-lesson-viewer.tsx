@@ -27,7 +27,10 @@ export default function ReadingLessonViewer({
   quizScore?: number
   storyImage?: string // Added image URL prop
 }) {
-  const isGamesUnlocked = quizScore >= 65
+  const isGamesUnlocked =
+  (typeof window !== "undefined" &&
+    sessionStorage.getItem(`unlocked-${story.id}`) === "true") ||
+  quizScore >= 65
   const paragraphs = story.content.split('\n\n')
 
   const colors = [

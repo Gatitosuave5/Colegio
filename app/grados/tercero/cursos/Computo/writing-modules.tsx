@@ -155,16 +155,32 @@ export default function WritingModules({
   }
 
   const handleGamesStart = () => {
-    if (quizScores[currentModule] && quizScores[currentModule] >= 65) {
+    if (!currentModule || !selectedLesson) return
+  
+    // 🔓 Revisar si ya está desbloqueado en sessionStorage (por lección)
+    const isUnlockedInSession =
+      typeof window !== "undefined" &&
+      sessionStorage.getItem(`unlocked-${selectedLesson.id}`) === "true"
+  
+    // 🏆 Guardamos siempre el MEJOR puntaje que haya logrado el alumno
+    const bestScore = quizScores[currentModule] || 0
+  
+    if (isUnlockedInSession || bestScore >= 65) {
       setCurrentView("games")
     } else {
       alert("Debes obtener al menos 65 puntos para desbloquear los juegos. Intenta de nuevo.")
     }
   }
 
+  
+  
+
   const handleQuizComplete = (score: number) => {
     if (currentModule) {
-      setQuizScores(prev => ({ ...prev, [currentModule]: score }))
+      setQuizScores(prev => ({
+        ...prev,
+        [currentModule]: Math.max(prev[currentModule] ?? 0, score), // 👈 mejor puntaje
+      }))
       setCurrentView("reading")
     }
   }
@@ -286,15 +302,16 @@ export default function WritingModules({
     )
   }
 
-  if (currentView === "quiz" && currentModule) {
+  if (currentView === "quiz" && currentModule && selectedLesson) {
     return (
       <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
         <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"></div>
         </header>
         <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <WritingQuiz 
-            quiz={{ id: currentModule, title: modules[currentModule].title }} 
+          <WritingQuiz
+            quiz={{ id: currentModule, title: modules[currentModule].title }}
+            lessonId={selectedLesson.id}   // 👈 clave para sessionStorage
             onBack={handleBack}
             onQuizComplete={handleQuizComplete}
           />

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react'
 import { Card } from "@/app/components/ui/card"
 
@@ -15,6 +15,30 @@ interface Question {
   question: string
   options: string[]
   correctAnswerIndex: number
+}
+
+async function agregarPuntos(puntos: number) {
+  const nombreAlumno = localStorage.getItem("nombreAlumno");
+  const codigoSalon = localStorage.getItem("codigoSalon");
+
+  if (!nombreAlumno || !codigoSalon) return;
+
+  // 1. Traer el ID del alumno temporal
+  const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
+  const data = await res.json();
+  const alumno = data.alumnos.find(a => a.nombre === nombreAlumno);
+
+  if (!alumno) return;
+
+  // 2. Enviar puntos
+  await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: alumno.id,
+      puntaje: puntos
+    })
+  });
 }
 
 const quizQuestions: Record<string, Question[]> = {
@@ -356,6 +380,8 @@ const quizQuestions: Record<string, Question[]> = {
   ]
 }
 
+
+
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array]
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -380,11 +406,32 @@ export default function ReadingQuiz({
   const [feedback, setFeedback] = useState<string>("")
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [shuffledOptions, setShuffledOptions] = useState<Record<number, { text: string; originalIndex: number }[]>>({})
-
+  const [score, setScore] = useState<number | null>(null)
   const questions = quizQuestions[story.id] || []
   const currentQuestion = questions[currentQuestionIndex]
   const correctCount = userAnswers.filter((answer, idx) => answer === questions[idx]?.correctAnswerIndex).length
+  const [alreadyUnlocked, setAlreadyUnlocked] = useState(() => {
+    return localStorage.getItem(`unlocked-${story.id}`) === "true"
+  })
+  const [bestScore, setBestScore] = useState(() => {
+    const saved = localStorage.getItem(`best-score-${story.id}`)
+    return saved ? Number(saved) : 0
+  })
 
+  // Guardar mejor puntaje
+const previousBest = Number(localStorage.getItem(`best-score-${story.id}`) || 0)
+if (score > previousBest) {
+  localStorage.setItem(`best-score-${story.id}`, String(score))
+  setBestScore(score)
+}
+
+  useEffect(() => {
+    const unlocked = localStorage.getItem(`unlocked-${story.id}`) === "true"
+    if (unlocked) {
+      Promise.resolve().then(() => setAlreadyUnlocked(true))
+    }
+  }, [story.id])
+  
   const getShuffledOptions = (questionIndex: number) => {
     if (!shuffledOptions[questionIndex] && currentQuestion) {
       const options = currentQuestion.options.map((text, originalIndex) => ({ text, originalIndex }))
@@ -395,6 +442,8 @@ export default function ReadingQuiz({
     return shuffledOptions[questionIndex] || []
   }
 
+  
+  
   const handleAnswer = (shuffledIndex: number) => {
     const optionsArray = getShuffledOptions(currentQuestionIndex)
     const originalIndex = optionsArray[shuffledIndex]?.originalIndex
@@ -403,6 +452,8 @@ export default function ReadingQuiz({
     const newAnswers = [...userAnswers]
     newAnswers[currentQuestionIndex] = originalIndex
 
+    
+
     const isCorrect = originalIndex === currentQuestion.correctAnswerIndex
     
     if (isCorrect) {
@@ -410,7 +461,8 @@ export default function ReadingQuiz({
     } else {
       setFeedback(`Incorrecto. La respuesta correcta era: ${currentQuestion.options[currentQuestion.correctAnswerIndex]}`)
     }
-
+   
+    
     setUserAnswers(newAnswers)
 
     setTimeout(() => {
@@ -419,14 +471,88 @@ export default function ReadingQuiz({
         setFeedback("")
         setSelectedAnswer(null)
       } else {
-        const score = Math.round((newAnswers.filter((answer, idx) => answer === questions[idx]?.correctAnswerIndex).length / questions.length) * 100)
-        setCompleted(true)
-        onQuizComplete(score)
+        const finalScore = Math.round(
+          (newAnswers.filter((answer, idx) => answer === questions[idx]?.correctAnswerIndex).length / questions.length) * 100
+        )
+        setScore(finalScore)
+        setCompleted(true) 
+
+        agregarPuntos(finalScore)
+
+        localStorage.setItem(`completed-quiz-${story.id}`, "true")
+        
       }
-    }, 2500)
+    }, 1000)
   }
 
   const optionsArray = getShuffledOptions(currentQuestionIndex)
+
+  const handleBackFromResults = () => {
+    if (score !== null) {
+  
+      const wasUnlocked = localStorage.getItem(`unlocked-${story.id}`) === "true"
+  
+      // Si ya estaba desbloqueado, nunca se vuelve a bloquear
+      if (wasUnlocked) {
+        sessionStorage.setItem(`unlocked-${story.id}`, "true")
+      } else {
+        // Sólo desbloquea si supera el puntaje
+        if (score >= 65) {
+          localStorage.setItem(`unlocked-${story.id}`, "true")
+        }
+      }
+  
+      onQuizComplete(score)
+    }
+  
+    onBack()
+  }
+
+  if (completed) {
+    const correctAnswers = userAnswers.filter(
+      (ans, idx) => ans === questions[idx]?.correctAnswerIndex
+    ).length
+
+    const finalScore = score ?? Math.round(
+      (correctAnswers / questions.length) * 100
+    )
+
+    const message =
+      finalScore >= 70
+        ? "¡Excelente trabajo! 🌟"
+        : finalScore >= 40
+        ? "¡Buen intento! Puedes mejorar 💪"
+        : "Sigue practicando, ¡tú puedes! 🙌"
+
+    return (
+      <div className="text-center mt-12">
+        <Card className="bg-gradient-to-b from-green-50 to-white border-0 shadow-lg p-12 rounded-2xl">
+          <div className="text-6xl mb-6">🎉</div>
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            ¡Cuestionario Completado!
+          </h2>
+
+          <p className="text-2xl font-bold text-gray-800 mb-2">
+            Puntaje: {finalScore} / 100
+          </p>
+
+          <p className="text-xl text-gray-600 mb-6">{message}</p>
+
+          <p className="text-gray-500 text-sm mb-8">
+            Respondiste correctamente {correctAnswers} de {questions.length} preguntas.
+          </p>
+
+          <button
+            onClick={handleBackFromResults}
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300"
+          >
+            Volver a la lectura
+          </button>
+        </Card>
+      </div>
+    )
+  }
+  
 
   return (
     <div>

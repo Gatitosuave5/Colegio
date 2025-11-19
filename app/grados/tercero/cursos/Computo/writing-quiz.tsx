@@ -17,32 +17,6 @@ interface Quiz {
   title: string
 }
 
-async function agregarPuntos(puntos: number) {
-  const nombreAlumno = localStorage.getItem("nombreAlumno");
-  const codigoSalon = localStorage.getItem("codigoSalon");
-
-  if (!nombreAlumno || !codigoSalon) return;
-
-  // 1. Traer el ID del alumno temporal
-  const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
-  const data = await res.json();
-  const alumno = data.alumnos.find(a => a.nombre === nombreAlumno);
-
-  if (!alumno) return;
-
-  // 2. Enviar puntos
-  await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      id: alumno.id,
-      puntaje: puntos
-    })
-  });
-}
-
-
-
 const quizzes: Record<string, Question[]> = {
   typing: [
     {
@@ -583,10 +557,12 @@ const getShuffledQuestion = (question: Question): Question => {
 
 export default function WritingQuiz({
   quiz,
+  lessonId,
   onBack,
   onQuizComplete,
 }: {
   quiz: { id: string; title: string }
+  lessonId: string
   onBack: () => void
   onQuizComplete?: (score: number) => void
 }) {
@@ -632,6 +608,11 @@ export default function WritingQuiz({
 
   const handleBackFromResults = () => {
     if (onQuizComplete) {
+      // 🔓 Si llegó a 65 o más, marcamos la lección como desbloqueada
+      if (typeof window !== "undefined" && score >= 65 && lessonId) {
+        sessionStorage.setItem(`unlocked-${lessonId}`, "true")
+      }
+  
       onQuizComplete(score)
     }
     onBack()

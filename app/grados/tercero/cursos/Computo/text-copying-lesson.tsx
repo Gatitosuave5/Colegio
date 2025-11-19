@@ -28,7 +28,10 @@ export default function TextCopyingLessonReader({
     "bg-emerald-50 border-l-4 border-emerald-300",
   ]
 
-  const isGamesUnlocked = quizScore >= 65
+  const isGamesUnlocked =
+  (typeof window !== "undefined" &&
+    sessionStorage.getItem(`unlocked-${lesson.id}`) === "true") ||
+  quizScore >= 65
 
   return (
     <div>
