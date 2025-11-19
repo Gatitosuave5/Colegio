@@ -17,7 +17,7 @@ interface Story {
   content: string[]
   difficulty: "fácil" | "medio" | "difícil"
 }
-export default function LiteratureModule({ onBack }: { onBack: () => void }) {
+export default function LiteratureModule({ onBack }) {
 
   const [currentView, setCurrentView] = useState<View>("list")
   const [selectedStory, setSelectedStory] = useState<Story | null>(null)
@@ -94,7 +94,7 @@ export default function LiteratureModule({ onBack }: { onBack: () => void }) {
       const res = await fetch(`http://localhost:3001/api/contenidos?codigo=${codigo}`)
       const data = await res.json()
   
-      //  GUARDAR SOLO STORY IDs
+      // 🔥 GUARDAR SOLO STORY IDs
       const activos = (data.contenidos || [])
         .filter(c => c.categoria === "Lectura")
         .map(c => c.storyId)

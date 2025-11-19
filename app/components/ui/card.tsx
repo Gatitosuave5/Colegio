@@ -1,26 +1,33 @@
 "use client";
-import React from "react";
+
+import React, { HTMLAttributes } from "react";
+
+// 👇 Permitimos todas las props de un <div>
+interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  className?: string;
+  style?: React.CSSProperties;
+}
 
 export function Card({
   children,
   className = "",
   style = {},
   ...props
-}: {
-  children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-}) {
+}: CardProps) {
   return (
     <div
       className={`rounded-2xl shadow-md p-6 transition-colors duration-300 ${className}`}
-      style={style}    
-      {...props}
+      style={style}
+      {...props}   // 👈 Ahora acepta onClick y cualquier otra prop
     >
       {children}
     </div>
   );
 }
+
+// ============================
+// 🟦 SUBCOMPONENTES
+// ============================
 
 export function CardHeader({
   children,
@@ -51,5 +58,3 @@ export function CardContent({
 }) {
   return <div className={`${className}`}>{children}</div>;
 }
-
-
