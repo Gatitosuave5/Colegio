@@ -65,9 +65,9 @@ export default function Home() {
     },
   ]
 
-  if (selectedSubject === "language") {
-    return <LiteratureModule onBack={() => setSelectedSubject(null)} />
-  }
+  // if (selectedSubject === "language") {
+  //   return <LiteratureModule onBack={() => setSelectedSubject(null)} />
+  // }
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
