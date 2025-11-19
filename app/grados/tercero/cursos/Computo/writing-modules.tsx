@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ArrowLeft } from 'lucide-react'
 import { Card } from "@/app/components/ui/card"
 import TypingPracticeLessonReader from "./typing-practice-lesson"
@@ -121,6 +121,24 @@ export default function WritingModules({
   onBack: () => void
   contenidosActivos?: any[]
 }) {
+
+  useEffect(() => {
+    // Sólo activar cuando ENTRAS al módulo
+    history.pushState({ module: true }, "");
+  
+    const handleBack = (event: PopStateEvent) => {
+      // Cuando el navegador intenta retroceder → volvemos al lobby
+      onBack();
+      
+      // Volvemos a insertar el estado para bloquear múltiples atrás
+      history.pushState({ module: true }, "");
+    };
+  
+    window.addEventListener("popstate", handleBack);
+  
+    return () => window.removeEventListener("popstate", handleBack);
+  }, []);
+
   const [currentModule, setCurrentModule] = useState<"typing" | "capitalization" | "textcopying" | "words" | "numbers" | null>(null)
   const [currentView, setCurrentView] = useState<View>("list")
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null)
@@ -168,19 +186,12 @@ export default function WritingModules({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
             <button
-                onClick={() => {
-                  const codigoSalon = localStorage.getItem("codigoSalon");
-                  if (codigoSalon) {
-                    window.location.href = `/salon/${codigoSalon}`;
-                  } else {
-                    window.location.href = "/";
-                  }
-                }}
+                onClick={onBack}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <ArrowLeft className="w-6 h-6 text-gray-600" />
               </button>
-              <h1 className="text-2xl font-bold text-gray-900">Módulos de Escritura</h1>
+              <h1 className="text-2xl font-bold text-gray-900"> Área de Cómputo</h1>
             </div>
           </div>
         </header>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import io, { Socket } from "socket.io-client";
 import { ChevronRight, Search, Trophy, X } from "lucide-react";
@@ -10,6 +10,7 @@ import LiteratureModule from "@/app/grados/primero/cursos/Lectura/literature-mod
 import WritingModules from "@/app/grados/tercero/cursos/Computo/writing-modules";
 import ReadingModules from "@/app/grados/tercero/cursos/Lectura/reading-modules";
 import Grade3MathPage from "@/app/grados/tercero/cursos/matematicas/page";
+import { v4 as uuidv4 } from "uuid";
 
 interface Salon {
   grado: number;
@@ -40,8 +41,13 @@ export default function SalonPage() {
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showLeaderboard, setShowLeaderboard] = useState(false);
-
+  const [miPuntaje, setMiPuntaje] = useState<number | null>(null);
+  const registradoRef = useRef(false);
+  const [clientId, setClientId] = useState<string | null>(null);
   const [nombreAlumno, setNombreAlumno] = useState("Alumno");
+  const [alumnoCargado, setAlumnoCargado] = useState(false);
+
+  const [yaEntro, setYaEntro] = useState(false);
 
 useEffect(() => {
   if (typeof window !== "undefined") {
@@ -80,7 +86,31 @@ const stories: Story[] = [
   },
 ];
 
-// ✅ CARGAR CONTENIDOS SELECCIONADOS DEL SALÓN
+useEffect(() => {
+  let stored = localStorage.getItem("clientId");
+
+  if (!stored) {
+    stored = crypto.randomUUID();
+    localStorage.setItem("clientId", stored);
+  }
+
+  setClientId(stored);
+}, []);
+
+useEffect(() => {
+  const cargarAlumno = async () => {
+    const res = await fetch(`http://localhost:3001/api/alumno?nombre=${nombreAlumno}&salon=${codigo}`);
+    const data = await res.json();
+
+    if (data.alumno) {
+      setMiPuntaje(data.alumno.puntaje);
+    }
+
+    setAlumnoCargado(true);   
+  };
+
+  cargarAlumno();
+}, [nombreAlumno, codigo]);
 
 // ✅ Cargar contenidos guardados en el salón
 useEffect(() => {
@@ -106,6 +136,44 @@ useEffect(() => {
 // // }
 
 
+
+// 🔥 NUEVO — DETECTOR DE RELOAD vs CIERRE REAL
+useEffect(() => {
+  let ultimoTiempo = Date.now();
+  localStorage.setItem("ultima_actividad", ultimoTiempo.toString());
+
+  const handler = () => {
+    const ahora = Date.now();
+    const ultima = parseInt(localStorage.getItem("ultima_actividad") || "0");
+
+    const diferencia = ahora - ultima;
+
+    // 🔄 Reload detectado (NO BORRAR)
+    if (diferencia < 800) {
+      console.log("🔄 Reload detectado — NO borramos alumno");
+      return;
+    }
+
+    // ❌ Cierre real (SÍ BORRAR)
+    console.log("❌ Cierre real — borrando alumno");
+    fetch("http://localhost:3001/api/alumnos_temporales/eliminar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nombre: nombreAlumno,
+        salon_codigo,
+      }),
+      keepalive: true,
+    });
+  };
+
+  window.addEventListener("beforeunload", handler);
+
+  return () => window.removeEventListener("beforeunload", handler);
+}, [nombreAlumno, salon_codigo]);
+
+
+
   const API = "http://localhost:3001";
 
   //  Conectar socket
@@ -126,49 +194,64 @@ useEffect(() => {
     obtenerSalon();
   }, [codigo]);
 
-  //  Registrar alumno
-  useEffect(() => {
-    if (!socket || !salon) return;
-    socket.emit("alumno-entra", { nombre: nombreAlumno, salon: codigo });
-  }, [socket, salon, codigo, nombreAlumno]);
+
+  
+
 
   //  Recibir lista
+
   useEffect(() => {
     if (!socket) return;
-    socket.on(`alumnos-${codigo}`, (lista: Alumno[]) => setAlumnos(lista));
-    return () => socket.off(`alumnos-${codigo}`);
+  
+    const canal = `alumnos-${codigo}`;
+  
+    socket.on(canal, (lista) => {
+      console.log("Lista recibida:", lista);
+      setAlumnos(lista);
+    });
+  
+    socket.emit("solicitar-alumnos", codigo); // ← solicitar lista al entrar
+  
+    return () => socket.off(canal);
   }, [socket, codigo]);
 
-  //  sendBeacon para borrar al cerrar
+  
   useEffect(() => {
-    const enviarCierre = () => {
-      fetch(`${API}/api/alumnos_temporales/eliminar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nombre: nombreAlumno,
-          salon_codigo
-        }),
-        keepalive: true, //  permite que la petición se complete incluso si la página cierra
-      });
-    };
+    if (!socket) return;
+    if (!clientId) return;
+    if (!salon) return;
   
-    window.addEventListener("beforeunload", enviarCierre);
-    return () => window.removeEventListener("beforeunload", enviarCierre);
-  }, [nombreAlumno, salon_codigo]);
+    // 🔥 NUEVO: esperar a cargar alumno de BD
+    if (!alumnoCargado) return;
   
+    if (registradoRef.current) return;
+  
+    console.log("🔥 Registrando alumno con clientId:", clientId);
+  
+    socket.emit("alumno-entra", {
+      clientId,
+      nombre: nombreAlumno,
+      salon: codigo,
+    });
+  
+    registradoRef.current = true;
+  
+  }, [socket, clientId, salon, alumnoCargado]);
+  
+  //  sendBeacon para borrar al cerrar
+
   useEffect(() => {
     localStorage.setItem("codigoSalon", codigo as string);
   }, [codigo]);
 
   const navCategories = [
-    { id: 1, label: "Lenguaje", color: "bg-blue-500" },
-    { id: 2, label: "Cálculo", color: "bg-green-500" },
+    { id: 1, label: "Cuentos", color: "bg-blue-500" },
+    { id: 2, label: "Matematica", color: "bg-green-500" },
     { id: 3, label: "Lectura", color: "bg-red-500" },
-    { id: 4, label: "Estadístico", color: "bg-purple-500" },
-    { id: 5, label: "Otros", color: "bg-orange-500" },
+    { id: 4, label: "Mecanografia", color: "bg-purple-500" },
+    { id: 5, label: "Juegos", color: "bg-orange-500" },
     { id: 6, label: "Recursos", color: "bg-pink-500" },
-    { id: 7, label: "Aventurero", color: "bg-indigo-500" },
+    { id: 7, label: "Otros", color: "bg-indigo-500" },
   ];
 
   const subjects = [
@@ -219,6 +302,8 @@ useEffect(() => {
     { id: 3, title: "Cuentos de Magia", emoji: "✨" },
     { id: 4, title: "Cuentos Clásicos", emoji: "🎭" },
   ];
+
+  if (!clientId) return null;
 
   if (cargando)
     return (
@@ -523,24 +608,7 @@ useEffect(() => {
           </div>
 
           {/*  BUSCAR RECURSOS */}
-          <div className="bg-gray-100 rounded-lg p-6 mb-12">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">Buscar Recursos</h3>
-            <div className="flex gap-2">
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  placeholder="Busca por tema..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                />
-                <Search className="absolute right-3 top-2.5 w-5 h-5 text-gray-400" />
-              </div>
-              <button className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition">
-                Buscar
-              </button>
-            </div>
-          </div>
+        
 
           {/*  DESTACADO DEL MES */}
           <div>

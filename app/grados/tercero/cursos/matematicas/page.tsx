@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft } from 'lucide-react';
 import { topicsData } from "./topicsData-grade3";
 import TopicReader from "./topic-reader";
@@ -45,6 +45,23 @@ export default function Grade3MathPage({
     setCurrentView("reading");
   };
 
+  useEffect(() => {
+    
+    history.pushState({ module: true }, "");
+  
+    const handleBack = (event: PopStateEvent) => {
+      
+      onBack();
+      
+     
+      history.pushState({ module: true }, "");
+    };
+  
+    window.addEventListener("popstate", handleBack);
+  
+    return () => window.removeEventListener("popstate", handleBack);
+  }, []);
+
   const handleBack = () => {
     if (currentView === "reading") {
       setSelectedTopic(null);
@@ -59,25 +76,19 @@ export default function Grade3MathPage({
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
 
-    {currentView === "list" && (   // ⬅️ SOLO mostrar flecha en la LISTA
-      <button
-        onClick={() => {
-          const codigoSalon = localStorage.getItem("codigoSalon");
-          if (codigoSalon) {
-            window.location.href = `/salon/${codigoSalon}`;
-          } else {
-            window.location.href = "/";
-          }
-        }}
-        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-      >
-        <ArrowLeft className="w-6 h-6 text-gray-600" />
-      </button>
-    )}
+          {/* 🔥 USAR onBack EN VEZ DE window.location.href */}
+          {currentView === "list" && (
+            <button
+              onClick={onBack}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <ArrowLeft className="w-6 h-6 text-gray-600" />
+            </button>
+          )}
 
           <h1 className="text-2xl font-bold text-gray-900">Matemática</h1>
-      </div>
-    </header>
+        </div>
+      </header>
 
       <section className="max-w-5xl mx-auto px-6 py-8">
         {currentView === "list" && (
