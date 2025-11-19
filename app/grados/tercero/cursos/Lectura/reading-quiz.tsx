@@ -17,11 +17,16 @@ interface Question {
   correctAnswerIndex: number
 }
 
-async function agregarPuntos(puntos: number) {
+async function agregarPuntos(puntos: number, storyId: string) {
+
   const nombreAlumno = localStorage.getItem("nombreAlumno");
   const codigoSalon = localStorage.getItem("codigoSalon");
 
   if (!nombreAlumno || !codigoSalon) return;
+
+  //  Evitar enviar puntos si YA se envió antes
+  const yaEnviado = localStorage.getItem(`puntos-enviados-${storyId}`)
+  if (yaEnviado === "true") return;
 
   // 1. Traer el ID del alumno temporal
   const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
@@ -39,7 +44,11 @@ async function agregarPuntos(puntos: number) {
       puntaje: puntos
     })
   });
+
+  // ❗ Marcar que ya se enviaron los puntos
+  localStorage.setItem(`puntos-enviados-${storyId}`, "true");
 }
+
 
 const quizQuestions: Record<string, Question[]> = {
   "story-1": [
@@ -477,7 +486,7 @@ if (score > previousBest) {
         setScore(finalScore)
         setCompleted(true) 
 
-        agregarPuntos(finalScore)
+        agregarPuntos(finalScore, story.id)
 
         localStorage.setItem(`completed-quiz-${story.id}`, "true")
         

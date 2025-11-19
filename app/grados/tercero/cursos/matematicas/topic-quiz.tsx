@@ -4,11 +4,16 @@ import { useState } from "react";
 import { Card } from "./card";
 import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
 
-async function agregarPuntos(puntos: number) {
+async function agregarPuntos(puntos: number, storyId: string) {
+
   const nombreAlumno = localStorage.getItem("nombreAlumno");
   const codigoSalon = localStorage.getItem("codigoSalon");
 
   if (!nombreAlumno || !codigoSalon) return;
+
+  //  Evitar enviar puntos si YA se envió antes
+  const yaEnviado = localStorage.getItem(`puntos-enviados-${storyId}`)
+  if (yaEnviado === "true") return;
 
   // 1. Traer el ID del alumno temporal
   const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
@@ -26,6 +31,9 @@ async function agregarPuntos(puntos: number) {
       puntaje: puntos
     })
   });
+
+  
+  localStorage.setItem(`puntos-enviados-${storyId}`, "true");
 }
 
 
@@ -60,7 +68,7 @@ export default function TopicQuiz({ topic, onBack }) {
       localStorage.setItem(`math_unlock_${topic.id}`, "true");
     }
 
-    agregarPuntos(score);
+    agregarPuntos(score, topic.id)
 
     return (
       <div className="text-center">

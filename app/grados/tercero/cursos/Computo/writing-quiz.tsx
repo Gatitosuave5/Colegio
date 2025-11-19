@@ -17,6 +17,35 @@ interface Quiz {
   title: string
 }
 
+async function agregarPuntos(puntos: number, lessonId: string) {
+
+  const nombreAlumno = localStorage.getItem("nombreAlumno");
+  const codigoSalon = localStorage.getItem("codigoSalon");
+
+  if (!nombreAlumno || !codigoSalon) return;
+
+  const yaEnviado = localStorage.getItem(`puntos-enviados-${lessonId}`);
+  if (yaEnviado === "true") return;
+
+  const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
+  const data = await res.json();
+  const alumno = data.alumnos.find(a => a.nombre === nombreAlumno);
+
+  if (!alumno) return;
+
+  await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: alumno.id,
+      puntaje: puntos
+    })
+  });
+
+  localStorage.setItem(`puntos-enviados-${lessonId}`, "true");
+}
+
+
 const quizzes: Record<string, Question[]> = {
   typing: [
     {
@@ -577,14 +606,7 @@ export default function WritingQuiz({
   const [score, setScore] = useState(0)
   const [completed, setCompleted] = useState(false)
 
-  useEffect(() => {
-    if (completed && onQuizComplete) {
-      const timer = setTimeout(() => {
-        onQuizComplete(score)
-      }, 2000)
-      return () => clearTimeout(timer)
-    }
-  }, [completed, score, onQuizComplete])
+
 
   const handleAnswer = (answerIndex: number) => {
     setSelectedAnswer(answerIndex)
@@ -607,6 +629,10 @@ export default function WritingQuiz({
   }
 
   const handleBackFromResults = () => {
+
+
+    agregarPuntos(score, lessonId);
+
     if (onQuizComplete) {
       // 🔓 Si llegó a 65 o más, marcamos la lección como desbloqueada
       if (typeof window !== "undefined" && score >= 65 && lessonId) {
