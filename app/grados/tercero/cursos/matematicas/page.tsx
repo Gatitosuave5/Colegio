@@ -46,19 +46,14 @@ export default function Grade3MathPage({
   };
 
   useEffect(() => {
-    
     history.pushState({ module: true }, "");
-  
-    const handleBack = (event: PopStateEvent) => {
-      
+
+    const handleBack = () => {
       onBack();
-      
-     
       history.pushState({ module: true }, "");
     };
-  
+
     window.addEventListener("popstate", handleBack);
-  
     return () => window.removeEventListener("popstate", handleBack);
   }, []);
 
@@ -72,11 +67,17 @@ export default function Grade3MathPage({
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <main
+      className="min-h-screen bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage:
+          "url('https://wallpapers.com/images/high/school-picture-background-1080-x-1920-lzswkjagfr2cf5ei.webp')",
+      }}
+    >
+      <header className="bg-white/80 border-b border-gray-200 sticky top-0 z-50 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
 
-          {/* 🔥 USAR onBack EN VEZ DE window.location.href */}
+          {/* 🔥 Botón volver hacia afuera del módulo */}
           {currentView === "list" && (
             <button
               onClick={onBack}
@@ -90,7 +91,8 @@ export default function Grade3MathPage({
         </div>
       </header>
 
-      <section className="max-w-5xl mx-auto px-6 py-8">
+      <section className="max-w-5xl mx-auto px-6 py-8 bg-white/70 backdrop-blur-md rounded-xl mt-6">
+
         {currentView === "list" && (
           <div className="space-y-6">
             <div className="flex justify-center">

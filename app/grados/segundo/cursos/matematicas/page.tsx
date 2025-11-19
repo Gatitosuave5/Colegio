@@ -30,8 +30,14 @@ export default function Grade2MathPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <main
+      className="min-h-screen bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage:
+          "url('https://wallpapers.com/images/high/school-picture-background-1080-x-1920-lzswkjagfr2cf5ei.webp')",
+      }}
+    >
+      <header className="bg-white/80 border-b border-gray-200 sticky top-0 z-50 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
           {currentView !== "list" && (
             <button
@@ -41,11 +47,13 @@ export default function Grade2MathPage() {
               <ArrowLeft className="w-6 h-6 text-gray-600" />
             </button>
           )}
-          <h1 className="text-2xl font-bold text-gray-900">Matemática - 2do Grado</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Matemática - 2do Grado
+          </h1>
         </div>
       </header>
 
-      <section className="max-w-5xl mx-auto px-6 py-8">
+      <section className="max-w-5xl mx-auto px-6 py-8 bg-white/70 backdrop-blur-md rounded-xl mt-6">
         {currentView === "list" && (
           <div className="space-y-6">
             <div className="flex justify-center">
