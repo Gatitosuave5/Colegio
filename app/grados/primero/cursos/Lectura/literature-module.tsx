@@ -9,13 +9,6 @@ import GamesComponent from "@/app/grados/primero/cursos/Lectura/games-component"
 
 type View = "list" | "reading" | "quiz" | "games"
 
-interface Contenido {
-  categoria: string;
-  storyId: string;
-}
-
-
-
 interface Story {
   id: string
   title: string
@@ -101,10 +94,10 @@ export default function LiteratureModule({ onBack }: { onBack: () => void }) {
       const res = await fetch(`http://localhost:3001/api/contenidos?codigo=${codigo}`)
       const data = await res.json()
   
-      // GUARDAR SOLO STORY IDs
+      //  GUARDAR SOLO STORY IDs
       const activos = (data.contenidos || [])
-      .filter((c: Contenido) => c.categoria === "Lectura")
-      .map((c: Contenido) => c.storyId)
+        .filter(c => c.categoria === "Lectura")
+        .map(c => c.storyId)
   
       setContenidosActivos(activos)
     }
@@ -137,7 +130,12 @@ export default function LiteratureModule({ onBack }: { onBack: () => void }) {
 
       {/* Content */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          
+          {currentView === "list" && (
+            <StoryList
+            stories={stories.filter(s => contenidosActivos.includes(s.id))}
+              onSelectStory={handleStorySelect}
+            />
+          )}
 
           {currentView === "reading" && selectedStory && (
             <StoryReader
