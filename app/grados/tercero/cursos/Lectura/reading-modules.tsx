@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ArrowLeft } from 'lucide-react'
 import { Card } from "@/app/components/ui/card"
 import ReadingLessonViewer from "./reading-lesson-viewer"
@@ -315,6 +315,23 @@ export default function ReadingModules({
     )
   );
 
+  useEffect(() => {
+    // Sólo activar cuando ENTRAS al módulo
+    history.pushState({ module: true }, "");
+  
+    const handleBack = (event: PopStateEvent) => {
+      // Cuando el navegador intenta retroceder → volvemos al lobby
+      onBack();
+      
+      // Volvemos a insertar el estado para bloquear múltiples atrás
+      history.pushState({ module: true }, "");
+    };
+  
+    window.addEventListener("popstate", handleBack);
+  
+    return () => window.removeEventListener("popstate", handleBack);
+  }, []);
+
   // 🟢 Estados (estos ya los tenías)
   const [currentModule, setCurrentModule] = useState<string | null>(null);
   const [currentView, setCurrentView] = useState<View>("list");
@@ -363,19 +380,13 @@ export default function ReadingModules({
       <main className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
         <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-            <button
-                  onClick={() => {
-                    const codigoSalon = localStorage.getItem("codigoSalon");
-                    if (codigoSalon) {
-                      window.location.href = `/salon/${codigoSalon}`;
-                    } else {
-                      window.location.href = "/";
-                    }
-                  }}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                  <ArrowLeft className="w-6 h-6 text-gray-600" />
-                </button>
+          <div className="flex items-center gap-4">
+              <button
+                onClick={onBack}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <ArrowLeft className="w-6 h-6 text-gray-600" />
+              </button>
               <h1 className="text-2xl font-bold text-gray-900">📚 Módulos de Lectura</h1>
             </div>
           </div>

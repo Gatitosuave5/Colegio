@@ -47,7 +47,7 @@ io.on("connection", async (socket) => {
   });
 
   // Alumno entra al salón
-  socket.on("alumno-entra", async ({ nombre, salon }) => {
+  socket.on("alumno-entra", async ({ clientId, nombre, salon }) => {
     // Verificar si existe el salón
     const [salonExiste] = await db.execute(
       "SELECT codigo FROM salones WHERE codigo = ? LIMIT 1",
@@ -62,16 +62,29 @@ io.on("connection", async (socket) => {
   
     console.log(` ${nombre} entró al salón ${salon}`);
   
-    await db.execute(
-      "INSERT IGNORE INTO alumnos_temporales (nombre, salon_codigo) VALUES (?, ?)",
-      [nombre, salon]
-    );
-  
+   // 🔍 Buscar si ya existe
+// 1️⃣ Ver si ya existe el alumno por clientId
+      // 1️⃣ Buscar si ya existe ese clientId
+      const [existe] = await db.execute(
+        "SELECT id FROM alumnos_temporales WHERE clientId = ? AND salon_codigo = ? LIMIT 1",
+        [clientId, salon]
+      );
+
+        // 2️⃣ Si no existe → crear alumno
+        if (existe.length === 0) {
+          await db.execute(
+            "INSERT INTO alumnos_temporales (clientId, nombre, salon_codigo, puntaje) VALUES (?, ?, ?, 0)",
+            [clientId, nombre, salon]
+          );
+          
+          console.log("Alumno nuevo registrado:", clientId);
+        } else {
+          console.log("Alumno ya existente:", clientId);
+        }
     const [alumnos] = await db.execute(
-      "SELECT nombre FROM alumnos_temporales WHERE salon_codigo = ?",
+      "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
       [salon]
     );
-  
     io.emit(`alumnos-${salon}`, alumnos);
   });
 
@@ -220,29 +233,35 @@ app.post("/api/alumnos_temporales", async (req, res) => {
   }
 
   try {
-    // ✅ 1. Verificar si el salón existe
-    const [salon] = await db.execute(
-      "SELECT * FROM salones WHERE codigo = ? LIMIT 1",
-      [salon_codigo.trim()]
-    );
+    
 
-    if (salon.length === 0) {
-      console.log(` Salon no existe: ${salon_codigo}`);
-      return res.status(404).json({ error: "El salón no existe" });
+    if (existe.length > 0) {
+      return res.json({ success: true, mensaje: "Alumno ya registrado" });
     }
 
-    //  2. Insertar alumno porque el salón existe
     await db.execute(
-      "INSERT INTO alumnos_temporales (nombre, salon_codigo, ultima_actividad) VALUES (?, ?, NOW())",
-      [nombre, salon_codigo.trim()]
+      "INSERT INTO alumnos_temporales (nombre, salon_codigo, puntaje) VALUES (?, ?, 0)",
+      [nombre, salon_codigo]
     );
 
-    res.json({ success: true });
+    return res.json({ success: true });
 
   } catch (error) {
     console.error("Error guardando alumno temporal:", error);
     res.status(500).json({ error: "Error del servidor" });
   }
+});
+
+
+app.get("/api/alumno", async (req, res) => {
+  const { nombre, salon } = req.query;
+
+  const [rows] = await db.execute(
+    "SELECT * FROM alumnos_temporales WHERE nombre = ? AND salon_codigo = ? LIMIT 1",
+    [nombre, salon]
+  );
+
+  res.json({ alumno: rows[0] || null });
 });
 
 

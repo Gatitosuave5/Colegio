@@ -4,6 +4,31 @@ import { useState } from "react";
 import { Card } from "./card";
 import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
 
+async function agregarPuntos(puntos: number) {
+  const nombreAlumno = localStorage.getItem("nombreAlumno");
+  const codigoSalon = localStorage.getItem("codigoSalon");
+
+  if (!nombreAlumno || !codigoSalon) return;
+
+  // 1. Traer el ID del alumno temporal
+  const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
+  const data = await res.json();
+  const alumno = data.alumnos.find(a => a.nombre === nombreAlumno);
+
+  if (!alumno) return;
+
+  // 2. Enviar puntos
+  await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: alumno.id,
+      puntaje: puntos
+    })
+  });
+}
+
+
 export default function TopicQuiz({ topic, onBack }) {
   const questions = topic.quiz;
   const [current, setCurrent] = useState(0);
@@ -35,6 +60,8 @@ export default function TopicQuiz({ topic, onBack }) {
       localStorage.setItem(`math_unlock_${topic.id}`, "true");
     }
 
+    agregarPuntos(score);
+
     return (
       <div className="text-center">
         <Card className="p-10 bg-white shadow-lg rounded-2xl">
@@ -53,6 +80,8 @@ export default function TopicQuiz({ topic, onBack }) {
         </Card>
       </div>
     );
+
+    
   }
 
   const q = questions[current];
