@@ -8,6 +8,17 @@ import QuizGames from "@/app/grados/tercero/cursos/Ciencias/science-quiz" // Fix
 import ScienceGames from "./science-games"
 import ScienceQuiz from "@/app/grados/tercero/cursos/Ciencias/science-quiz"
 
+const scienceTopicMap = {
+  "seres-vivos-entorno": "living",
+  "cuerpo-humano": "body",
+  "tierra-clima-recursos": "earth",
+  "fuerza-movimiento-energia": "energy",
+} as const;
+
+interface ContenidoActivo {
+  storyId: keyof typeof scienceTopicMap;
+}
+
 type View = "list" | "reading" | "quiz" | "games"
 
 interface Lesson {
@@ -101,14 +112,18 @@ const modules: Record<string, { title: string; icon: string; color: string; less
 
 export default function ScienceModules({
   onBack,
+  contenidosActivos = [],
 }: {
-  onBack: () => void
+  onBack: () => void;
+  contenidosActivos?: ContenidoActivo[];
 }) {
   const [currentModule, setCurrentModule] = useState<"living" | "body" | "earth" | "energy" | null>(null)
   const [currentView, setCurrentView] = useState<View>("list")
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null)
   const [quizScores, setQuizScores] = useState<Record<string, number>>({})
 
+
+  
   const handleModuleSelect = (moduleId: "living" | "body" | "earth" | "energy") => {
     setCurrentModule(moduleId)
     setCurrentView("reading")
@@ -164,7 +179,11 @@ export default function ScienceModules({
           </div>
 
           <div className="flex flex-col gap-6 max-w-5xl mx-auto">
-            {Object.entries(modules).map(([key, module]) => {
+          {Object.entries(modules)
+              .filter(([key]) =>
+                contenidosActivos.some(c => scienceTopicMap[c.storyId] === key)
+              )
+              .map(([key, module]) => {
               const backgroundImages: Record<string, string> = {
                 living: "/images/seresvivos.jpeg",
                 body: "/images/cuerpohumano.jpeg",

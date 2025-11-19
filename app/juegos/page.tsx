@@ -8,10 +8,19 @@ import JigsawPuzzleMulti from './jigsaw-puzzle-multi';
 import JuegoAdivinanzas from './adivinanzas';
 import JuegoMemoria from './memoria';
 import JuegoOrdenamiento from './ordenamiento';
+import { ArrowLeft } from 'lucide-react';
 
 type Screen = 'home' | 'modeSelect' | 'themeSelect' | 'game';
 
-export default function Page() {
+export default function Page({
+  salon_codigo,
+  nombreAlumno,
+  onBack,
+}: {
+  salon_codigo: string;
+  nombreAlumno: string;
+  onBack: () => void;
+}) {
   const [screen, setScreen] = useState<Screen>('home');
   const [selectedMode, setSelectedMode] = useState<string>('');
   const [selectedTheme, setSelectedTheme] = useState<number>(0);
@@ -43,7 +52,19 @@ export default function Page() {
 
   // Render based on current screen
   if (screen === 'home') {
-    return <HomePage onPlay={handlePlayClick} />;
+    return (
+      <main className="min-h-screen bg-white relative">
+        {/* 🔙 BOTÓN ATRÁS */}
+        <button
+          onClick={onBack}
+          className="absolute top-6 left-6 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <ArrowLeft className="w-6 h-6 text-gray-600" />
+        </button>
+  
+        <HomePage onPlay={handlePlayClick} />
+      </main>
+    );
   }
 
   if (screen === 'modeSelect') {

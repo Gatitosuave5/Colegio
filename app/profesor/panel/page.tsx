@@ -101,6 +101,18 @@ export default function TeacherPanel() {
         
         { id_contenido: 84, categoria: "Matemática", titulo: "Suma y Resta con Llevadas", 
           storyId: "suma-resta-con-llevadas", activo: false },
+
+        { id_contenido: 85, categoria: "Ciencias", titulo: "Seres vivos y su entorno",
+            storyId: "seres-vivos-entorno", activo: false },
+          
+        { id_contenido: 86, categoria: "Ciencias", titulo: "El cuerpo humano",
+            storyId: "cuerpo-humano", activo: false },
+          
+        { id_contenido: 87, categoria: "Ciencias", titulo: "Tierra, clima y recursos naturales",
+            storyId: "tierra-clima-recursos", activo: false },
+          
+        { id_contenido: 88, categoria: "Ciencias", titulo: "Fuerza, movimiento y energía",
+            storyId: "fuerza-movimiento-energia", activo: false },
       
 
     ],

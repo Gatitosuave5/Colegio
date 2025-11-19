@@ -9,6 +9,7 @@ import TextCopyingLessonReader from "./text-copying-lesson"
 import WritingQuiz from "./writing-quiz"
 import WritingGames from "./writing-games"
 
+
 type View = "list" | "reading" | "quiz" | "games"
 
 interface Lesson {

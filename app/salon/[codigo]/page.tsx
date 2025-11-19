@@ -11,6 +11,8 @@ import WritingModules from "@/app/grados/tercero/cursos/Computo/writing-modules"
 import ReadingModules from "@/app/grados/tercero/cursos/Lectura/reading-modules";
 import Grade3MathPage from "@/app/grados/tercero/cursos/matematicas/page";
 import { v4 as uuidv4 } from "uuid";
+import ScienceModules from "@/app/grados/tercero/cursos/Ciencias/science-modules";
+import Page from "@/app/juegos/page";
 
 interface Salon {
   grado: number;
@@ -259,14 +261,14 @@ useEffect(() => {
       id: "math",
       title: "Matemática",
       description: "¡Aprende números y operaciones!",
-      icon: "📐",
+      icon: "",
       image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Ij0fEwE08Kfk6UTtgMPAZWTLUXcGkc.png",
     },
     {
       id: "reading",
       title: "Lectura",
       description: "¡Lee y descubre historias increíbles!",
-      icon: "📚",
+      icon: "",
       image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-kxJ59lX9gd7Eo94Ti2mfB35MKkStu0.png",
     },
 
@@ -274,7 +276,7 @@ useEffect(() => {
       id: "computo",
       title: "Área de Cómputo",
       description: "¡Aprende tecnología e informática!",
-      icon: "💻",
+      icon: "",
       image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-NV0n45YulMMpocVaVCmLrrOTcW2nM1.png",
     },
 
@@ -282,7 +284,7 @@ useEffect(() => {
       id: "science",
       title: "Ciencia y Medio Ambiente",
       description: "¡Explora la naturaleza y los secretos científicos!",
-      icon: "🌿",
+      icon: "",
       image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-q1wtJrp9Fszx3L9k8E9NrjbzxUBu4p.png",
     },
 
@@ -290,7 +292,7 @@ useEffect(() => {
       id: "games",
       title: "Juegos Educativos",
       description: "¡Diviértete mientras aprendes!",
-      icon: "🎮",
+      icon: "",
       image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-UeBIfZqCPx3vOmmP8m3xkVhPmsWkoN.png",
     },
 
@@ -375,28 +377,22 @@ useEffect(() => {
   
   if (selectedSubject === "science") {
     return (
-      <main className="min-h-screen bg-gray-50">
-        <button onClick={() => setSelectedSubject(null)} className="absolute top-6 right-6 bg-red-500 text-white px-4 py-2 rounded-lg">
-          ← Volver
-        </button>
-        <div className="text-center mt-20 text-3xl font-bold text-green-600">🌿 Ciencia y Medio Ambiente</div>
-        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
-      </main>
+      <ScienceModules
+        onBack={() => setSelectedSubject(null)}
+        contenidosActivos={contenidosActivos}
+      />
     );
   }
   
   if (selectedSubject === "games") {
     return (
-      <main className="min-h-screen bg-gray-50">
-        <button onClick={() => setSelectedSubject(null)} className="absolute top-6 right-6 bg-red-500 text-white px-4 py-2 rounded-lg">
-          ← Volver
-        </button>
-        <div className="text-center mt-20 text-3xl font-bold text-green-600">🎮 Juegos Educativos</div>
-        <p className="text-center text-gray-600 mt-4">Próximamente contenido interactivo...</p>
-      </main>
-    );
+      <Page
+        salon_codigo={salon_codigo as string}
+        nombreAlumno={nombreAlumno}
+        onBack={() => setSelectedSubject(null)}   
+      />
+    )
   }
-  
 
 
   return (
