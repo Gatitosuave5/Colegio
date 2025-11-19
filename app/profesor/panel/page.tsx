@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import io from "socket.io-client";
-import type { Socket } from "socket.io-client"
+import type { Socket } from "socket.io-client";
 
 interface Salon {
   id: string
@@ -158,7 +158,7 @@ const [editandoEstudiante, setEditandoEstudiante] = useState<number | null>(null
 const [nuevoNombre, setNuevoNombre] = useState("")
 
 //  FALTABA ESTO
-const [socket, setSocket] = useState<Socket | null>(null)
+const [socket, setSocket] = useState<any>(null)
 
 //  SOCKET EFECTO REAL
 useEffect(() => {
