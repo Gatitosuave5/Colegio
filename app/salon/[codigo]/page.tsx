@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import ScienceModules from "@/app/grados/tercero/cursos/Ciencias/science-modules";
 import Page from "@/app/juegos/page";
 
+
 interface Salon {
   grado: number;
   aula: string;
@@ -92,7 +93,7 @@ useEffect(() => {
   let stored = localStorage.getItem("clientId");
 
   if (!stored) {
-    stored = crypto.randomUUID();
+    stored = uuidv4();   
     localStorage.setItem("clientId", stored);
   }
 
