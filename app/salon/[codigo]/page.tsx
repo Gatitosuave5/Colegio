@@ -101,7 +101,7 @@ useEffect(() => {
 
 useEffect(() => {
   const cargarAlumno = async () => {
-    const res = await fetch(`http://localhost:3001/api/alumno?nombre=${nombreAlumno}&salon=${codigo}`);
+    const res = await fetch(`http://34.130.57.30/api/login/api/alumno?nombre=${nombreAlumno}&salon=${codigo}`);
     const data = await res.json();
 
     if (data.alumno) {
@@ -118,7 +118,7 @@ useEffect(() => {
 useEffect(() => {
   const cargarContenidos = async () => {
     try {
-      const res = await fetch(`http://localhost:3001/api/contenidos?codigo=${codigo}`);
+      const res = await fetch(`http://34.130.57.30/api/login/api/contenidos?codigo=${codigo}`);
       const data = await res.json();
 
       console.log("✅ Contenidos del salón:", data);
@@ -158,7 +158,7 @@ useEffect(() => {
 
     // ❌ Cierre real (SÍ BORRAR)
     console.log("❌ Cierre real — borrando alumno");
-    fetch("http://localhost:3001/api/alumnos_temporales/eliminar", {
+    fetch("http://34.130.57.30/api/login/api/alumnos_temporales/eliminar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -176,7 +176,7 @@ useEffect(() => {
 
 
 
-  const API = "http://localhost:3001";
+  const API = "http://34.130.57.30/api/login";
 
   //  Conectar socket
   useEffect(() => {
@@ -448,7 +448,7 @@ useEffect(() => {
 
             <button
         onClick={async () => {
-          await fetch("http://localhost:3001/api/alumnos_temporales/eliminar", {
+          await fetch("http://34.130.57.30/api/login/api/alumnos_temporales/eliminar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
