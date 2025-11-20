@@ -21,7 +21,7 @@ interface Estudiante {
 
 export default function TeacherPanel() {
 
- const API = "http://34.130.57.30"
+ const API = "http://34.130.57.30:3001"
 
   const contenidosPorGrado: Record<number, any[]> = {
     1: [
@@ -162,7 +162,7 @@ const [socket, setSocket] = useState<any>(null)
 
 //  SOCKET EFECTO REAL
 useEffect(() => {
-  const s = io("http://34.130.57.30")
+  const s = io("http://34.130.57.30:3001")
   setSocket(s)
 
   if (salonSeleccionado?.codigo) {
@@ -199,7 +199,7 @@ useEffect(() => {
     setMostrarModalIntegrantes(true)
   
     try {
-      const res = await fetch(`http://34.130.57.30/api/alumnos_temporales?codigo=${encodeURIComponent(salon.codigo.trim())}`)
+      const res = await fetch(`http://34.130.57.30:3001/api/alumnos_temporales?codigo=${encodeURIComponent(salon.codigo.trim())}`)
   
       const texto = await res.text()
       console.log("Respuesta del backend:", texto)

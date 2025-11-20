@@ -27,13 +27,13 @@ async function agregarPuntos(puntos: number, lessonId: string) {
   const yaEnviado = localStorage.getItem(`puntos-enviados-${lessonId}`);
   if (yaEnviado === "true") return;
 
-  const res = await fetch(`http://34.130.57.30/api/login/api/alumnos_temporales?codigo=${codigoSalon}`);
+  const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
   const data = await res.json();
   const alumno = data.alumnos.find(a => a.nombre === nombreAlumno);
 
   if (!alumno) return;
 
-  await fetch("http://34.130.57.30/api/login/api/alumnos_temporales/puntaje", {
+  await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
