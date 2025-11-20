@@ -46,7 +46,7 @@ export default function SalonPage() {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [miPuntaje, setMiPuntaje] = useState<number | null>(null);
   const registradoRef = useRef(false);
-  const [clientId, setClientId] = useState<string | null>(null);
+  
   const [nombreAlumno, setNombreAlumno] = useState("Alumno");
   const [alumnoCargado, setAlumnoCargado] = useState(false);
 
@@ -89,16 +89,7 @@ const stories: Story[] = [
   },
 ];
 
-useEffect(() => {
-  let stored = localStorage.getItem("clientId");
 
-  if (!stored) {
-    stored = uuidv4();   
-    localStorage.setItem("clientId", stored);
-  }
-
-  setClientId(stored);
-}, []);
 
 useEffect(() => {
   const cargarAlumno = async () => {
@@ -221,25 +212,20 @@ useEffect(() => {
   
   useEffect(() => {
     if (!socket) return;
-    if (!clientId) return;
     if (!salon) return;
-  
-    // 🔥 NUEVO: esperar a cargar alumno de BD
     if (!alumnoCargado) return;
-  
     if (registradoRef.current) return;
   
-    console.log("🔥 Registrando alumno con clientId:", clientId);
+    console.log("🔥 Registrando alumno");
   
     socket.emit("alumno-entra", {
-      clientId,
       nombre: nombreAlumno,
       salon: codigo,
     });
   
     registradoRef.current = true;
   
-  }, [socket, clientId, salon, alumnoCargado]);
+  }, [socket, salon, alumnoCargado]);
   
   //  sendBeacon para borrar al cerrar
 
@@ -306,7 +292,7 @@ useEffect(() => {
     { id: 4, title: "Cuentos Clásicos", emoji: "🎭" },
   ];
 
-  if (!clientId) return null;
+ 
 
   if (cargando)
     return (
