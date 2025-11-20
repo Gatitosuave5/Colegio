@@ -28,11 +28,10 @@ export default function PaginaInicio() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        nombre: nombre,
-        salon_codigo: codigo,
+        nombre,
+        salon_codigo: codigo
       }),
     });
-  
     
     router.push(`/salon/${codigo}`);
   };
