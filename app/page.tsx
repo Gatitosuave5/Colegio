@@ -24,7 +24,7 @@ export default function PaginaInicio() {
     localStorage.setItem("codigoSalon", codigo);
   
    
-    await fetch("http://34.130.57.30/api/alumnos_temporales", {
+    await fetch("/api/alumnos_temporales", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
