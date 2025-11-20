@@ -16,14 +16,14 @@ async function agregarPuntos(puntos: number, storyId: string) {
   if (yaEnviado === "true") return;
 
   // 1. Traer el ID del alumno temporal
-  const res = await fetch(`https://cubaaprende.site/api/alumnos_temporales?codigo=${codigoSalon}`);
+  const res = await fetch(`https://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
   const data = await res.json();
   const alumno = data.alumnos.find(a => a.nombre === nombreAlumno);
 
   if (!alumno) return;
 
   // 2. Enviar puntos
-  await fetch("https://cubaaprende.site/api/alumnos_temporales/puntaje", {
+  await fetch("https://localhost:3001/api/alumnos_temporales/puntaje", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

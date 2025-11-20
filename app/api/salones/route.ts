@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = "https://cubaaprende.site";
+const BACKEND_URL = "https://localhost:3001";
 
 /* GET: listar salones o buscar por código */
 export async function GET(request: Request) {

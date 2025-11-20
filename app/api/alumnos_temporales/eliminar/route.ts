@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const BACKEND_URL = "https://cubaaprende.site";
+const BACKEND_URL = "https://localhost:3001";
 
 export async function POST(request: Request) {
   try {
