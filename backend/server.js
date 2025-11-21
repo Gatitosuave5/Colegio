@@ -178,7 +178,7 @@ app.put("/api/salones", async (req, res) => {
 /* ACTUALIZAR PUNTAJE */
 app.post("/api/alumnos_temporales/puntaje", async (req, res) => {
   try {
-    const { id, puntaje } = req.body;
+    const { id, puntaje, codigo } = req.body;
 
     if (!id) return res.status(400).json({ error: "ID requerido" });
 
@@ -187,13 +187,23 @@ app.post("/api/alumnos_temporales/puntaje", async (req, res) => {
       [puntaje, id]
     );
 
-    res.json({ success: true });
+    // NUEVO: ENVIAR LISTA ACTUALIZADA AL SOCKET
+    if (codigo) {
+      const [alumnos] = await db.execute(
+        "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
+        [codigo]
+      );
 
+      io.emit(`alumnos-${codigo}`, alumnos);
+    }
+
+    res.json({ success: true });
   } catch (error) {
     console.error("Error actualizando puntaje:", error);
     res.status(500).json({ error: "No se pudo actualizar puntaje" });
   }
 });
+
 
 /* DELETE - ELIMINAR SALÓN */
 app.delete("/api/salones", async (req, res) => {

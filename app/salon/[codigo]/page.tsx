@@ -21,6 +21,7 @@ interface Salon {
 }
 
 interface Alumno {
+  id: number;
   nombre: string;
   salon_codigo: string;
   puntaje?: number;
@@ -41,6 +42,7 @@ export default function SalonPage() {
   const [salon, setSalon] = useState<Salon | null>(null);
   const [cargando, setCargando] = useState(true);
   const [alumnos, setAlumnos] = useState<Alumno[]>([]);
+  
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showLeaderboard, setShowLeaderboard] = useState(false);
@@ -48,6 +50,8 @@ export default function SalonPage() {
   const registradoRef = useRef(false);
   
   const [nombreAlumno, setNombreAlumno] = useState("Alumno");
+
+  const alumnoActual = alumnos.find(a => a.nombre === nombreAlumno);
   const [alumnoCargado, setAlumnoCargado] = useState(false);
 
   const [yaEntro, setYaEntro] = useState(false);
@@ -97,7 +101,7 @@ useEffect(() => {
     const data = await res.json();
 
     if (data.alumno) {
-      setMiPuntaje(data.alumno.puntaje);
+      setMiPuntaje(data.alumno.puntaje)
     }
 
     setAlumnoCargado(true);   
@@ -129,6 +133,11 @@ useEffect(() => {
 //   comunicacion: []
 // // }
 
+const actualizarRanking = async () => {
+  const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigo}`);
+  const data = await res.json();
+  setAlumnos(data.alumnos || []);
+};
 
 
 // 🔥 NUEVO — DETECTOR DE RELOAD vs CIERRE REAL
@@ -189,10 +198,13 @@ useEffect(() => {
   }, [codigo]);
 
 
+  useEffect(() => {
+    if (!showLeaderboard) return;
   
-
-
-  //  Recibir lista
+    const interval = setInterval(actualizarRanking, 2000);
+  
+    return () => clearInterval(interval);
+  }, [showLeaderboard]);
 
   useEffect(() => {
     if (!socket) return;
@@ -304,7 +316,7 @@ useEffect(() => {
     { id: 4, title: "Cuentos Clásicos", emoji: "🎭" },
   ];
 
- 
+
 
   if (cargando)
     return (
@@ -438,23 +450,29 @@ useEffect(() => {
       </div>
 
       <button
-        onClick={() => setShowLeaderboard(true)}
-        className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2"
-      >
-        <Trophy className="w-5 h-5" />
-        Tabla
+          onClick={() => {
+            actualizarRanking();     
+            setShowLeaderboard(true);
+          }}
+          className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2"
+        >
+          <Trophy className="w-5 h-5" />
+          Tabla
       </button>
+
 
             <button
         onClick={async () => {
-          await fetch("http://localhost:3001/api/alumnos_temporales/eliminar", {
+          await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              nombre: nombreAlumno,
-              salon_codigo: salon_codigo,
+              id: alumnoActual?.id,                        
+              puntaje: miPuntaje,    
+              codigo: localStorage.getItem("codigoSalon"),
             }),
           });
+          
 
           router.push("/");
         }}
