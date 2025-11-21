@@ -28,13 +28,13 @@ async function agregarPuntos(puntos: number, lessonId: string | number) {
 
   console.log("🔎 Key generada:", key);
 
-  // ✔ Solo registrar una vez
+  //  Solo registrar una vez
   if (localStorage.getItem(key) === "true") {
     console.log(`⚠ Puntaje ya registrado para contenido ${lessonId} (Alumno ${idAlumno})`);
     return;
   }
 
-  // 🔥 Registrar directamente por ID (sin buscar por nombre)
+  //  Registrar directamente por ID (sin buscar por nombre)
   await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -351,7 +351,7 @@ export default function ReadingModules({
   }
 
   const handleGamesStart = () => {
-    const unlocked = localStorage.getItem(`unlocked-${selectedStory?.id}`) === "true"
+    const unlocked = sessionStorage.getItem(`unlocked-${selectedStory?.id}`) === "true"
 
       if (currentModule && (quizScores[currentModule] >= 65 || unlocked)) {
       setCurrentView("games")

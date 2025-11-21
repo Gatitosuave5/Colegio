@@ -4,37 +4,41 @@ import { useState } from "react";
 import { Card } from "./card";
 import { ArrowLeft, CheckCircle, XCircle } from 'lucide-react';
 
-async function agregarPuntos(puntos: number, storyId: string) {
-
-  const nombreAlumno = localStorage.getItem("nombreAlumno");
+async function agregarPuntos(puntos: number, storyId: string | number) {
+  const idAlumno = sessionStorage.getItem("idAlumno");  // ID REAL
   const codigoSalon = localStorage.getItem("codigoSalon");
 
-  if (!nombreAlumno || !codigoSalon) return;
+  if (!idAlumno || !codigoSalon || !storyId) return;
 
-  //  Evitar enviar puntos si YA se envió antes
-  const yaEnviado = localStorage.getItem(`puntos-enviados-${storyId}`)
-  if (yaEnviado === "true") return;
+  storyId = storyId.toString();
 
-  // 1. Traer el ID del alumno temporal
-  const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
-  const data = await res.json();
-  const alumno = data.alumnos.find(a => a.nombre === nombreAlumno);
+  //  Clave única por alumno + contenido + salón
+  const key = `puntaje-guardado-${codigoSalon}-${storyId}-${idAlumno}`;
 
-  if (!alumno) return;
+  console.log("🔎 Key generada:", key);
 
-  // 2. Enviar puntos
+  //  Evita doble registro SOLO para ese alumno
+  if (localStorage.getItem(key) === "true") {
+    console.log(`⚠ Puntaje ya registrado para ${storyId} (Alumno ${idAlumno})`);
+    return;
+  }
+
+  //  Enviar puntaje directamente con ID real
   await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      id: alumno.id,
+      id: idAlumno,
       puntaje: puntos
     })
   });
 
-  
-  localStorage.setItem(`puntos-enviados-${storyId}`, "true");
+  //  Guardar bloqueo
+  localStorage.setItem(key, "true");
+
+  console.log("✔ Puntaje registrado y bloqueado:", key);
 }
+
 
 
 export default function TopicQuiz({ topic, onBack }) {

@@ -17,37 +17,40 @@ interface Question {
   correctAnswerIndex: number
 }
 
-async function agregarPuntos(puntos: number, storyId: string) {
-
-  const nombreAlumno = localStorage.getItem("nombreAlumno");
+async function agregarPuntos(puntos: number, lessonId: string | number) {
+  const idAlumno = sessionStorage.getItem("idAlumno");   // ✔ alumno real en sesión
   const codigoSalon = localStorage.getItem("codigoSalon");
 
-  if (!nombreAlumno || !codigoSalon) return;
+  if (!idAlumno || !codigoSalon || !lessonId) return;
 
-  //  Evitar enviar puntos si YA se envió antes
-  const yaEnviado = localStorage.getItem(`puntos-enviados-${storyId}`)
-  if (yaEnviado === "true") return;
+  lessonId = lessonId.toString();
 
-  // 1. Traer el ID del alumno temporal
-  const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
-  const data = await res.json();
-  const alumno = data.alumnos.find(a => a.nombre === nombreAlumno);
+  //  Llave única por alumno + salón + contenido real
+  const key = `puntaje-guardado-${codigoSalon}-${lessonId}-${idAlumno}`;
+  console.log("🔎 Key generada:", key);
 
-  if (!alumno) return;
+  //  Evitar doble registro
+  if (localStorage.getItem(key) === "true") {
+    console.log(`⚠ Ya se registró antes (Alumno: ${idAlumno} / Contenido: ${lessonId})`);
+    return;
+  }
 
-  // 2. Enviar puntos
+  //  Registrar sin buscar por nombre
   await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      id: alumno.id,
+      id: idAlumno,
       puntaje: puntos
     })
   });
 
-  // ❗ Marcar que ya se enviaron los puntos
-  localStorage.setItem(`puntos-enviados-${storyId}`, "true");
+  //  Bloquear envío
+  localStorage.setItem(key, "true");
+
+  console.log("✔ Puntaje registrado y bloqueado:", key);
 }
+
 
 
 const quizQuestions: Record<string, Question[]> = {

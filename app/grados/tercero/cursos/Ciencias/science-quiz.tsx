@@ -12,6 +12,44 @@ interface Question {
   explanation: string
 }
 
+async function agregarPuntos(puntos: number, lessonId: string | number) {
+  const idAlumno = sessionStorage.getItem("idAlumno");   // ID real del alumno
+  const codigoSalon = localStorage.getItem("codigoSalon");
+
+  if (!idAlumno || !codigoSalon || !lessonId) return;
+
+  lessonId = lessonId.toString();
+
+  //  Clave única por salón + contenido + alumno
+  const key = `puntaje-guardado-${codigoSalon}-${lessonId}-${idAlumno}`;
+
+  console.log("🔎 Key generada:", key);
+
+  //  Evitar doble envío POR alumno (no global)
+  if (localStorage.getItem(key) === "true") {
+    console.log(`⚠ Puntaje ya registrado para contenido ${lessonId} (Alumno ${idAlumno})`);
+    return;
+  }
+
+  //  Enviar puntaje directamente al backend usando ID
+  await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: idAlumno,
+      puntaje: puntos,
+    }),
+  });
+
+  // Guardar bloqueo
+  localStorage.setItem(key, "true");
+  console.log("✔ Puntaje registrado y bloqueado:", key);
+}
+
+
+
+
+
 const scienceQuizzes: Record<string, Question[]> = {
   living_beings: [
     {
@@ -561,11 +599,16 @@ export default function ScienceQuiz({
   }
 
   const handleBackFromResults = () => {
+    console.log("📌 Mandando puntos", score, "para modulo:", quiz.id);
+    agregarPuntos(score, quiz.id);
+  
     if (onQuizComplete) {
-      onQuizComplete(score)
+      onQuizComplete(score);
     }
-    onBack()
-  }
+  
+    onBack();
+  };
+  
 
   if (completed) {
     const isSuccess = score >= 65
