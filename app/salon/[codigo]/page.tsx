@@ -216,15 +216,27 @@ useEffect(() => {
     if (!alumnoCargado) return;
     if (registradoRef.current) return;
   
-    console.log("🔥 Registrando alumno");
+    console.log("🔥 Registrando alumno con clientId:");
   
+    // 📌 REGISTRO EN LA DB
+    fetch("http://localhost:3001/api/alumnos_temporales", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nombre: nombreAlumno,
+        salon_codigo: codigo,
+        puntaje: 0
+      }),
+    });
+  
+    // 📌 REGISTRO EN SOCKET
     socket.emit("alumno-entra", {
+      
       nombre: nombreAlumno,
       salon: codigo,
     });
   
     registradoRef.current = true;
-  
   }, [socket, salon, alumnoCargado]);
   
   //  sendBeacon para borrar al cerrar

@@ -22,10 +22,13 @@ async function agregarPuntos(puntos: number, lessonId: string) {
   const nombreAlumno = localStorage.getItem("nombreAlumno");
   const codigoSalon = localStorage.getItem("codigoSalon");
 
-  if (!nombreAlumno || !codigoSalon) return;
+  if (!nombreAlumno || !codigoSalon || !lessonId) return;
 
-  const yaEnviado = localStorage.getItem(`puntos-enviados-${lessonId}`);
-  if (yaEnviado === "true") return;
+  // 🔥 Bloquea puntos después de la primera vez
+  if (localStorage.getItem(`puntaje-guardado-${lessonId}`) === "true") {
+    console.log("⚠ Ya se registró puntaje para la lección:", lessonId);
+    return;
+  }
 
   const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
   const data = await res.json();
@@ -42,7 +45,8 @@ async function agregarPuntos(puntos: number, lessonId: string) {
     })
   });
 
-  localStorage.setItem(`puntos-enviados-${lessonId}`, "true");
+  // 🔥 Guardar bloqueo
+  localStorage.setItem(`puntaje-guardado-${lessonId}`, "true");
 }
 
 
@@ -631,6 +635,7 @@ export default function WritingQuiz({
   const handleBackFromResults = () => {
 
 
+    console.log("📌 Mandando puntos", score, "para modulo:", quiz.id);
     agregarPuntos(score, lessonId);
 
     if (onQuizComplete) {

@@ -183,7 +183,7 @@ app.post("/api/alumnos_temporales/puntaje", async (req, res) => {
     if (!id) return res.status(400).json({ error: "ID requerido" });
 
     await db.execute(
-      "UPDATE alumnos_temporales SET puntaje = puntaje + ?, ultima_actividad = NOW() WHERE id = ?",
+      "UPDATE alumnos_temporales SET puntaje = COALESCE(puntaje, 0) + ?, ultima_actividad = NOW() WHERE id = ?",
       [puntaje, id]
     );
 
