@@ -50,7 +50,7 @@ export default function SalonPage() {
   const registradoRef = useRef(false);
   
   const [nombreAlumno, setNombreAlumno] = useState("Alumno");
-
+  const [mostrarMiPuntaje, setMostrarMiPuntaje] = useState(false);
   const alumnoActual = alumnos.find(a => a.nombre === nombreAlumno);
   const [alumnoCargado, setAlumnoCargado] = useState(false);
 
@@ -442,11 +442,25 @@ useEffect(() => {
 
     {/* INFO USUARIO */}
     <div className="flex items-center gap-6">
-      <div className="bg-teal-600 px-4 py-2 rounded-lg">
-        <p className="text-sm font-semibold text-white">👤 {nombreAlumno}</p>
-        <p className="text-lg font-bold text-yellow-300">
-          {(alumnos.find(a => a.nombre === nombreAlumno)?.puntaje || 0).toLocaleString()} pts
+    <div
+        className={`bg-teal-600 rounded-lg transition-all duration-300 cursor-pointer ${
+          mostrarMiPuntaje ? "px-5 py-3 scale-[1.02]" : "px-4 py-2"
+        }`}
+        onClick={async () => {
+          await actualizarRanking(); // refresca el puntaje al hacer click
+          setMostrarMiPuntaje(true);
+        }}
+        onMouseLeave={() => setMostrarMiPuntaje(false)}
+      >
+        <p className="text-sm font-semibold text-white select-none">
+          👤 {nombreAlumno}
         </p>
+
+        {mostrarMiPuntaje && (
+          <p className="text-lg font-bold text-yellow-300 mt-1 transition-opacity duration-200">
+            {(alumnos.find(a => a.nombre === nombreAlumno)?.puntaje || 0).toLocaleString()} pts
+          </p>
+        )}
       </div>
 
       <button
