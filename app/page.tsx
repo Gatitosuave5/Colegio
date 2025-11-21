@@ -19,20 +19,30 @@ export default function PaginaInicio() {
       return;
     }
   
-    
+    // Guardar datos iniciales
     localStorage.setItem("nombreAlumno", nombre);
     localStorage.setItem("codigoSalon", codigo);
   
-   
+    // Registrar alumno
     await fetch("http://localhost:3001/api/alumnos_temporales", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        nombre,
-        salon_codigo: codigo
-      }),
+      body: JSON.stringify({ nombre, salon_codigo: codigo }),
     });
-    
+  
+    // 🔎 Obtener lista para capturar ID recién insertado
+    const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigo}`);
+    const data = await res.json();
+  
+    const alumno = data.alumnos.find(a => a.nombre === nombre);
+  
+    if (alumno) {
+      sessionStorage.setItem("idAlumno", alumno.id.toString());
+      console.log("✔ ID guardado en sesión:", alumno.id);
+    } else {
+      console.warn("❌ No se encontró el alumno después de registrarlo");
+    }
+  
     router.push(`/salon/${codigo}`);
   };
   

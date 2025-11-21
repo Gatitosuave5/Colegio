@@ -17,37 +17,39 @@ interface Quiz {
   title: string
 }
 
-async function agregarPuntos(puntos: number, lessonId: string) {
-
-  const nombreAlumno = localStorage.getItem("nombreAlumno");
+async function agregarPuntos(puntos: number, lessonId: string | number) {
+  const idAlumno = sessionStorage.getItem("idAlumno");
   const codigoSalon = localStorage.getItem("codigoSalon");
 
-  if (!nombreAlumno || !codigoSalon || !lessonId) return;
+  if (!idAlumno || !codigoSalon || !lessonId) return;
 
-  // 🔥 Bloquea puntos después de la primera vez
-  if (localStorage.getItem(`puntaje-guardado-${lessonId}`) === "true") {
-    console.log("⚠ Ya se registró puntaje para la lección:", lessonId);
+  lessonId = lessonId.toString(); // asegurar string
+  const key = `puntaje-guardado-${codigoSalon}-${lessonId}-${idAlumno}`;
+
+  console.log("🔎 Key generada:", key);
+
+  // ✔ Solo registrar una vez
+  if (localStorage.getItem(key) === "true") {
+    console.log(`⚠ Puntaje ya registrado para contenido ${lessonId} (Alumno ${idAlumno})`);
     return;
   }
 
-  const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`);
-  const data = await res.json();
-  const alumno = data.alumnos.find(a => a.nombre === nombreAlumno);
-
-  if (!alumno) return;
-
+  // 🔥 Registrar directamente por ID (sin buscar por nombre)
   await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      id: alumno.id,
-      puntaje: puntos
-    })
+      id: idAlumno,     // ya tienes el ID real del alumno
+      puntaje: puntos,
+    }),
   });
 
-  // 🔥 Guardar bloqueo
-  localStorage.setItem(`puntaje-guardado-${lessonId}`, "true");
+  // Guardar estado
+  localStorage.setItem(key, "true");
+  console.log("✔ Puntaje registrado y bloqueado:", key);
 }
+
+
 
 
 const quizzes: Record<string, Question[]> = {
@@ -636,7 +638,7 @@ export default function WritingQuiz({
 
 
     console.log("📌 Mandando puntos", score, "para modulo:", quiz.id);
-    agregarPuntos(score, lessonId);
+     agregarPuntos(score, lessonId);
 
     if (onQuizComplete) {
       // 🔓 Si llegó a 65 o más, marcamos la lección como desbloqueada

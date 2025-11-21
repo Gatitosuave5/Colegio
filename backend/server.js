@@ -63,7 +63,7 @@ io.on("connection", async (socket) => {
     console.log(` ${nombre} entró al salón ${salon}`);
   
     await db.execute(
-      "INSERT IGNORE INTO alumnos_temporales (nombre, salon_codigo) VALUES (?, ?)",
+      "INSERT INTO alumnos_temporales (nombre, salon_codigo) VALUES (?, ?)",
       [nombre, salon]
     );
   
@@ -220,24 +220,26 @@ app.post("/api/alumnos_temporales", async (req, res) => {
   }
 
   try {
-    // ✅ 1. Verificar si el salón existe
     const [salon] = await db.execute(
       "SELECT * FROM salones WHERE codigo = ? LIMIT 1",
       [salon_codigo.trim()]
     );
 
     if (salon.length === 0) {
-      console.log(` Salon no existe: ${salon_codigo}`);
       return res.status(404).json({ error: "El salón no existe" });
     }
 
-    //  2. Insertar alumno porque el salón existe
-    await db.execute(
+    // 🔥 Insertar alumno y obtener ID
+    const [result] = await db.execute(
       "INSERT INTO alumnos_temporales (nombre, salon_codigo, ultima_actividad) VALUES (?, ?, NOW())",
       [nombre, salon_codigo.trim()]
     );
 
-    res.json({ success: true });
+    // 🔥 Devolver el ID al frontend
+    res.json({
+      success: true,
+      id: result.insertId,
+    });
 
   } catch (error) {
     console.error("Error guardando alumno temporal:", error);
