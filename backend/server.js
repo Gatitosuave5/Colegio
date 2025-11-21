@@ -261,13 +261,17 @@ app.post("/api/alumnos_temporales", async (req, res) => {
 /* ELIMINAR alumno — compatible con sendBeacon */
 
 app.post("/api/alumnos_temporales/eliminar", async (req, res) => {
-  try {
-    const { nombre, salon_codigo } = req.body;
+     try {
+          const { id, salon_codigo } = req.body;
 
-    await db.execute(
-      "DELETE FROM alumnos_temporales WHERE nombre = ? AND salon_codigo = ?",
-      [nombre, salon_codigo]
-    );
+      if (!id) {
+        return res.status(400).json({ error: "ID requerido para eliminar alumno" });
+      }
+
+      await db.execute(
+        "DELETE FROM alumnos_temporales WHERE id = ?",
+        [id]
+      );
 
     // Notificar en tiempo real
     const [alumnos] = await db.execute(

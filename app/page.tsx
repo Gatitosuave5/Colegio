@@ -22,27 +22,25 @@ export default function PaginaInicio() {
     // Guardar datos iniciales
     localStorage.setItem("nombreAlumno", nombre);
     localStorage.setItem("codigoSalon", codigo);
-  
-    // Registrar alumno
-    await fetch("http://localhost:3001/api/alumnos_temporales", {
+
+
+    const resCreate = await fetch("http://localhost:3001/api/alumnos_temporales", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nombre, salon_codigo: codigo }),
     });
-  
-    // 🔎 Obtener lista para capturar ID recién insertado
-    const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${codigo}`);
-    const data = await res.json();
-  
-    const alumno = data.alumnos.find(a => a.nombre === nombre);
-  
-    if (alumno) {
-      sessionStorage.setItem("idAlumno", alumno.id.toString());
-      console.log("✔ ID guardado en sesión:", alumno.id);
+    
+    const dataCreate = await resCreate.json();
+    
+    // Guardar ID sin buscar por nombre
+    if (dataCreate?.id) {
+      sessionStorage.setItem("idAlumno", dataCreate.id.toString());
+      console.log("✔ ID guardado desde INSERT:", dataCreate.id);
     } else {
-      console.warn("❌ No se encontró el alumno después de registrarlo");
+      console.warn("❌ No se devolvió ID en la creación del alumno");
     }
-  
+    
+    // Redirigir
     router.push(`/salon/${codigo}`);
   };
   

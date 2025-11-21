@@ -635,21 +635,23 @@ export default function WritingQuiz({
   }
 
   const handleBackFromResults = () => {
-
-
     console.log("📌 Mandando puntos", score, "para modulo:", quiz.id);
-     agregarPuntos(score, lessonId);
-
+    agregarPuntos(score, lessonId);
+  
+    const idAlumno = sessionStorage.getItem("idAlumno");
+  
     if (onQuizComplete) {
-      // 🔓 Si llegó a 65 o más, marcamos la lección como desbloqueada
-      if (typeof window !== "undefined" && score >= 65 && lessonId) {
-        sessionStorage.setItem(`unlocked-${lessonId}`, "true")
+      // 🔓 Si llegó a 65 o más, marcamos la lección como desbloqueada por ID único
+      if (typeof window !== "undefined" && score >= 65 && lessonId && idAlumno) {
+        sessionStorage.setItem(`unlocked-${lessonId}-${idAlumno}`, "true");
       }
   
-      onQuizComplete(score)
+      onQuizComplete(score);
     }
-    onBack()
-  }
+  
+    onBack();
+  };
+  
 
   if (completed) {
     const message = score < 50 

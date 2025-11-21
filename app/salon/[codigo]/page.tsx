@@ -48,10 +48,13 @@ export default function SalonPage() {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [miPuntaje, setMiPuntaje] = useState<number | null>(null);
   const registradoRef = useRef(false);
-  
+  const idAlumno = sessionStorage.getItem("idAlumno");
+
   const [nombreAlumno, setNombreAlumno] = useState("Alumno");
   const [mostrarMiPuntaje, setMostrarMiPuntaje] = useState(false);
-  const alumnoActual = alumnos.find(a => a.nombre === nombreAlumno);
+  const alumnoActual = alumnos.find(a => a.id.toString() === idAlumno);
+
+  
   const [alumnoCargado, setAlumnoCargado] = useState(false);
 
   const [yaEntro, setYaEntro] = useState(false);
@@ -163,7 +166,7 @@ useEffect(() => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        nombre: nombreAlumno,
+        id: sessionStorage.getItem("idAlumno"),
         salon_codigo,
       }),
       keepalive: true,
@@ -221,29 +224,23 @@ useEffect(() => {
     return () => socket.off(canal);
   }, [socket, codigo]);
 
-  
   useEffect(() => {
     if (!socket) return;
     if (!salon) return;
     if (!alumnoCargado) return;
     if (registradoRef.current) return;
   
-    console.log("🔥 Registrando alumno con clientId:");
-  
-    // 📌 REGISTRO EN LA DB
+    // 🔥 ESTE BLOQUE YA NO DEBE IR
     fetch("http://localhost:3001/api/alumnos_temporales", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         nombre: nombreAlumno,
-        salon_codigo: codigo,
-        puntaje: 0
+        salon_codigo: codigo
       }),
     });
   
-    // 📌 REGISTRO EN SOCKET
     socket.emit("alumno-entra", {
-      
       nombre: nombreAlumno,
       salon: codigo,
     });
@@ -251,6 +248,7 @@ useEffect(() => {
     registradoRef.current = true;
   }, [socket, salon, alumnoCargado]);
   
+
   //  sendBeacon para borrar al cerrar
 
   useEffect(() => {
@@ -458,7 +456,7 @@ useEffect(() => {
 
         {mostrarMiPuntaje && (
           <p className="text-lg font-bold text-yellow-300 mt-1 transition-opacity duration-200">
-            {(alumnos.find(a => a.nombre === nombreAlumno)?.puntaje || 0).toLocaleString()} pts
+            {(alumnos.find(a => a.id.toString() === idAlumno)?.puntaje || 0).toLocaleString()} pts
           </p>
         )}
       </div>
@@ -481,8 +479,8 @@ useEffect(() => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              id: alumnoActual?.id,                        
-              puntaje: miPuntaje,    
+              id: sessionStorage.getItem("idAlumno"),
+              puntaje: miPuntaje,
               codigo: localStorage.getItem("codigoSalon"),
             }),
           });
@@ -532,7 +530,7 @@ useEffect(() => {
                       <tr
                         key={index}
                         className={`border-b transition ${
-                          student.nombre === nombreAlumno ? "bg-yellow-100 font-semibold" : "hover:bg-gray-50"
+                          student.id.toString() === sessionStorage.getItem("idAlumno") ? "bg-yellow-100 font-semibold" : "hover:bg-gray-50"
                         }`}
                       >
                         <td className="px-4 py-3 text-gray-900 text-center">
