@@ -259,10 +259,10 @@ useEffect(() => {
     { id: 1, label: "Cuentos", color: "bg-blue-500" },
     { id: 2, label: "Matematica", color: "bg-green-500" },
     { id: 3, label: "Lectura", color: "bg-red-500" },
-    { id: 4, label: "Mecanografia", color: "bg-purple-500" },
+    { id: 4, label: "Computo", color: "bg-purple-500" },
     { id: 5, label: "Juegos", color: "bg-orange-500" },
-    { id: 6, label: "Recursos", color: "bg-pink-500" },
-    { id: 7, label: "Otros", color: "bg-indigo-500" },
+    
+    
   ];
 
   const subjects = [
