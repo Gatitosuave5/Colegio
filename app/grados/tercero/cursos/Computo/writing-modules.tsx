@@ -158,12 +158,12 @@ export default function WritingModules({
   const handleGamesStart = () => {
     if (!currentModule || !selectedLesson) return
   
-    // 🔓 Revisar si ya está desbloqueado en sessionStorage (por lección)
+    //  Revisar si ya está desbloqueado en sessionStorage (por lección)
     const isUnlockedInSession =
       typeof window !== "undefined" &&
       sessionStorage.getItem(`unlocked-${selectedLesson.id}`) === "true"
   
-    // 🏆 Guardamos siempre el MEJOR puntaje que haya logrado el alumno
+    //  Guardamos siempre el MEJOR puntaje que haya logrado el alumno
     const bestScore = quizScores[currentModule] || 0
   
     if (isUnlockedInSession || bestScore >= 65) {

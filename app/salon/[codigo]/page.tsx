@@ -13,6 +13,7 @@ import Grade3MathPage from "@/app/grados/tercero/cursos/matematicas/page";
 import { v4 as uuidv4 } from "uuid";
 import ScienceModules from "@/app/grados/tercero/cursos/Ciencias/science-modules";
 import Page from "@/app/juegos/page";
+import Home from "@/app/sumatorios/page";
 
 
 interface Salon {
@@ -305,6 +306,11 @@ useEffect(() => {
       image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-UeBIfZqCPx3vOmmP8m3xkVhPmsWkoN.png",
     },
 
+    
+
+
+
+
   ];
 
   const resources = [
@@ -381,7 +387,15 @@ useEffect(() => {
     );
   }
 
-
+  if (selectedSubject === "sumatorios") {
+    return (
+      <Home
+        salon_codigo={salon_codigo as string}
+        nombreAlumno={nombreAlumno}
+        onBack={() => setSelectedSubject(null)}  
+        />
+    )
+  }
 
   
   if (selectedSubject === "science") {
@@ -565,9 +579,14 @@ useEffect(() => {
 
             {/*  BOTONES RÁPIDOS */}
             <div className="flex gap-2 flex-wrap mb-6">
-              <button className="bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-500 text-sm">✏️ Sumatorios</button>
-              <button className="bg-lime-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-lime-500 text-sm">📝 Fichas Letras</button>
-              <button className="bg-blue-400 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-500 text-sm">📖 Fichas Lectura</button>
+            <button
+                  onClick={() => setSelectedSubject("sumatorios")}
+                  className="bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-500 text-sm"
+                >
+                  ✏️ Sumatorios
+                </button>
+              <button className="bg-lime-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-lime-500 text-sm">📝 Tildes y Palabras</button>
+              
               <button className="bg-purple-400 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-500 text-sm">🎥 Videos Cuento</button>
             </div>
           </div>
