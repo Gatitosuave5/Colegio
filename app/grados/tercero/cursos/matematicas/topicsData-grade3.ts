@@ -591,16 +591,36 @@ Pasos para resta: alineamos números, si no podemos restar pedimos prestado
       },
     ],
     quiz: [
-      { question: "¿Cuánto es 234 + 178?", options: ["410", "411", "412"], correct: 2 },
-      { question: "¿Cuánto es 567 - 234?", options: ["331", "332", "333"], correct: 2 },
+      // correcta en posición 1
+      { question: "¿Cuánto es 234 + 178?", options: ["410", "411", "412"], correct: 1 },
+    
+      // correcta en posición 0
+      { question: "¿Cuánto es 567 - 234?", options: ["333", "331", "332"], correct: 0 },
+    
+      // correcta en posición 2
       { question: "¿Cuánto es 456 + 345?", options: ["799", "800", "801"], correct: 2 },
-      { question: "¿Cuánto es 789 - 456?", options: ["331", "332", "333"], correct: 2 },
+    
+      // correcta en posición 0
+      { question: "¿Cuánto es 789 - 456?", options: ["333", "332", "331"], correct: 0 },
+    
+      // correcta en posición 2
       { question: "¿Cuánto es 678 + 234?", options: ["910", "911", "912"], correct: 2 },
-      { question: "¿Cuánto es 567 - 189?", options: ["376", "377", "378"], correct: 2 },
-      { question: "¿Cuánto es 345 + 267?", options: ["610", "611", "612"], correct: 2 },
-      { question: "¿Cuánto es 800 - 345?", options: ["453", "454", "455"], correct: 2 },
-      { question: "¿Cuánto es 234 + 456 + 123?", options: ["811", "812", "813"], correct: 2 },
-      { question: "¿Cuánto es 1000 - 567?", options: ["432", "433", "434"], correct: 2 },
-    ],
+    
+      // correcta en posición 1
+      { question: "¿Cuánto es 567 - 189?", options: ["376", "378", "377"], correct: 1 },
+    
+      // correcta en posición 0
+      { question: "¿Cuánto es 345 + 267?", options: ["612", "611", "610"], correct: 0 },
+    
+      // correcta en posición 2
+      { question: "¿Cuánto es 800 - 345?", options: ["454", "453", "455"], correct: 2 },
+    
+      // correcta en posición 1
+      { question: "¿Cuánto es 234 + 456 + 123?", options: ["812", "813", "811"], correct: 1 },
+    
+      // correcta en posición 0 **(como pediste)**
+      { question: "¿Cuánto es 1000 - 567?", options: ["433", "432", "434"], correct: 0 },
+    ]
+    
   },
 };

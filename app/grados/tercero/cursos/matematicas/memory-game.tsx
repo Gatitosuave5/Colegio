@@ -113,12 +113,12 @@ export default function MemoryGame({ topic, onBack }) {
     }
     else if (topic.id === "suma-resta-llevadas") {
       const pairs = [
-        { op: "234+178", result: "412" },
-        { op: "567-234", result: "333" },
-        { op: "456+345", result: "801" },
-        { op: "789-456", result: "333" },
-        { op: "678+234", result: "912" },
-        { op: "567-189", result: "378" },
+        { op: "24 + 18", result: "42" },
+        { op: "57 - 21", result: "36" },
+        { op: "43 + 27", result: "70" },
+        { op: "89 - 46", result: "43" },
+        { op: "67 + 22", result: "89" },
+        { op: "78 - 39", result: "39" },
       ];
       gameCards = pairs.flatMap((pair, idx) => [
         {

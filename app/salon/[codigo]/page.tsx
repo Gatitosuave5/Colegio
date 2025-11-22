@@ -635,18 +635,7 @@ useEffect(() => {
           {/*  BUSCAR RECURSOS */}
         
 
-          {/*  DESTACADO DEL MES */}
-          <div>
-            <Card className="p-6 bg-gradient-to-br from-green-50 to-lime-50 border border-green-200">
-              <h3 className="text-lg font-bold text-green-700 mb-4">✨ Destacado del Mes</h3>
-              <p className="text-gray-700 mb-4">
-                Descubre historias fascinantes y ejercicios matemáticos interactivos diseñados especialmente para tu nivel.
-              </p>
-              <button className="bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600 transition">
-                Explorar
-              </button>
-            </Card>
-          </div>
+    
 
         </div>
       </section>

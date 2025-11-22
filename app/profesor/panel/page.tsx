@@ -387,7 +387,7 @@ useEffect(() => {
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
         >
-          <span>✨</span>
+          <span></span>
           {cargando ? "Creando..." : "Crear Salón"}
         </button>
         {gradoActivo && <span className="text-sm text-gray-600">para {gradoActivo}° grado</span>}
@@ -460,18 +460,13 @@ useEffect(() => {
                 </div>
 
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => abrirEditar(salon)}
-                    className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-semibold transition text-sm"
-                  >
-                    ✏️ Editar
-                  </button>
+                  
 
                   <button
                     onClick={() => eliminarSalon(salon.id)}
                     className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded font-semibold transition text-sm"
                   >
-                    🗑️ Eliminar
+                     Eliminar
                   </button>
 
                   {/* ✅ Ver participantes */}
@@ -479,7 +474,7 @@ useEffect(() => {
                     onClick={() => abrirIntegrantes(salon)}
                     className="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded font-semibold text-sm"
                   >
-                    👥 Participantes
+                     Participantes
                   </button>
                 </div>
 
@@ -696,7 +691,7 @@ useEffect(() => {
           </div>
         ))
       ) : (
-        <p className="text-gray-600 text-lg">Selecciona un grado para iniciar ✅</p>
+        <p className="text-gray-600 text-lg">Selecciona un grado para iniciar </p>
       )}
     </div>
   )
