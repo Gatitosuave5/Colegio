@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import ScienceModules from "@/app/grados/tercero/cursos/Ciencias/science-modules";
 import Page from "@/app/juegos/page";
 import Home from "@/app/sumatorios/page";
+import ClientHomePage from "@/app/palabras-y-tildes/client-home";
 
 
 interface Salon {
@@ -397,6 +398,16 @@ useEffect(() => {
     )
   }
 
+  if (selectedSubject === "palabras-tildes") {
+    return (
+      <ClientHomePage
+        salon_codigo={salon_codigo as string}
+        nombreAlumno={nombreAlumno}
+        onBack={() => setSelectedSubject(null)}
+      />
+    )
+  }
+
   
   if (selectedSubject === "science") {
     return (
@@ -585,7 +596,12 @@ useEffect(() => {
                 >
                   ✏️ Sumatorios
                 </button>
-              <button className="bg-lime-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-lime-500 text-sm">📝 Tildes y Palabras</button>
+                <button
+                    onClick={() => setSelectedSubject("palabras-tildes")}
+                    className="bg-lime-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-lime-500 text-sm"
+                  >
+                    📝 Tildes y Palabras
+                  </button>
               
               <button className="bg-purple-400 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-500 text-sm">🎥 Videos Cuento</button>
             </div>
