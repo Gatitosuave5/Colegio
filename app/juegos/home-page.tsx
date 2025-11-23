@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { Button } from './button';
 import { Card, CardContent } from './card';
 
@@ -8,6 +9,20 @@ interface HomePageProps {
 }
 
 export default function HomePage({ onPlay }: HomePageProps) {
+  useEffect(() => {
+    // Empuja estado inicial para evitar que al retroceder recargue
+    history.pushState({ page: "home-page" }, "", window.location.href);
+  
+    const handlePop = () => {
+      // Reinsertar para bloquear navegación real
+      history.pushState({ page: "home-page" }, "", window.location.href);
+    };
+  
+    window.addEventListener("popstate", handlePop);
+  
+    return () => window.removeEventListener("popstate", handlePop);
+  }, []);
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-sky-200 via-yellow-100 to-orange-100 p-6">
       <div className="max-w-4xl mx-auto flex flex-col items-center justify-center min-h-screen text-center">

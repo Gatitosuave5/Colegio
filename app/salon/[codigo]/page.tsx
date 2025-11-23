@@ -604,9 +604,9 @@ useEffect(() => {
 
           {/*  SECCIÓN BIENVENIDA */}
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Recursos Didácticos Gratuitos</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Materiales para Aprender y Jugar</h2>
             <p className="text-gray-600 mb-4">
-              Aquí encontrarás materiales educativos diseñados para aprender de forma divertida e interactiva.
+            Explora juegos, retos y actividades divertidas para aprender mientras te diviertes.
             </p>
             <div className="bg-gradient-to-r from-green-300 to-teal-300 rounded-lg p-4 mb-6">
               <p className="text-gray-800 font-semibold">¡Comienza tu aventura educativa hoy!</p>
