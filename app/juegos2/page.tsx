@@ -36,7 +36,7 @@ const PONG_HEIGHT = 400;
 const PADDLE_WIDTH = 10;
 const PADDLE_HEIGHT = 80;
 const BALL_SIZE = 10;
-const INITIAL_BALL_SPEED = 1;
+const INITIAL_BALL_SPEED = 2;
 
 export default function RetroGames({
     salon_codigo,
@@ -339,7 +339,7 @@ export default function RetroGames({
         setPongScore(s => s + 1);
         
         // Increase speed
-        const newSpeed = Math.abs(newVelX) + 0.04;
+        const newSpeed = Math.abs(newVelX) + 0.1;
         newVelX = newSpeed;
         newVelY = newVelY > 0 ? newSpeed : -newSpeed;
         setBallSpeed(newSpeed);
@@ -747,5 +747,6 @@ export default function RetroGames({
     </div>
   );
 }
+
 
 
