@@ -457,6 +457,6 @@ app.get("/api/alumnos_temporales", async (req, res) => {
 
 
 /* INICIAR SERVIDOR */
-httpServer.listen(3001, () => {
-  console.log("Servidor + WebSockets corriendo en http://localhost:3001");
+httpServer.listen(3001, "0.0.0.0", () => {
+  console.log("Servidor + WebSockets corriendo en 0.0.0.0:3001");
 });
