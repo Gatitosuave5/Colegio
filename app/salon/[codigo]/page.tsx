@@ -16,6 +16,7 @@ import Page from "@/app/juegos/page";
 import Home from "@/app/sumatorios/page";
 import ClientHomePage from "@/app/palabras-y-tildes/client-home";
 import ClientPageCuentos from "@/app/videos-cuentos/page";
+import RetroGames from "@/app/juegos2/page";
 
 
 interface Salon {
@@ -316,12 +317,13 @@ useEffect(() => {
   ];
 
   const resources = [
-    { id: 1, title: "Cuentos", emoji: "📖" },
-    { id: 2, title: "Cuentos de Miedo", emoji: "👻" },
-    { id: 3, title: "Cuentos de Magia", emoji: "✨" },
-    { id: 4, title: "Cuentos Clásicos", emoji: "🎭" },
+    { id: 1, title: "Sumatorios", emoji: "📖" },
+    { id: 2, title: "Tildes y Palabras", emoji: "👻"  },
+    { id: 3, title: "Video Cuentos", emoji: "✨" },
+    { id: 4, title: "Juegos Extras", emoji: "🎭" },
   ];
 
+  
 
 
   if (cargando)
@@ -398,6 +400,16 @@ useEffect(() => {
         contenidosActivos={contenidosActivos}   // ← LE PASAMOS LOS ACTIVOS
       />
     );
+  }
+
+  if (selectedSubject === "retro-games") {
+    return (
+      <RetroGames
+        salon_codigo={salon_codigo as string}
+        nombreAlumno={nombreAlumno}
+        onBack={() => setSelectedSubject(null)}
+      />
+    )
   }
 
   if (selectedSubject === "sumatorios") {
@@ -601,27 +613,7 @@ useEffect(() => {
             </div>
 
             {/*  BOTONES RÁPIDOS */}
-            <div className="flex gap-2 flex-wrap mb-6">
-            <button
-                  onClick={() => setSelectedSubject("sumatorios")}
-                  className="bg-yellow-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-500 text-sm"
-                >
-                  ✏️ Sumatorios
-                </button>
-                <button
-                    onClick={() => setSelectedSubject("palabras-tildes")}
-                    className="bg-lime-400 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-lime-500 text-sm"
-                  >
-                    📝 Tildes y Palabras
-                  </button>
-              
-                  <button
-                onClick={() => setSelectedSubject("cuentos")}
-                className="bg-purple-400 text-white px-4 py-2 rounded-lg font-semibold hover:bg-purple-500 text-sm"
-              >
-                🎥 Videos Cuento
-              </button>
-            </div>
+            
           </div>
 
           {/*  MATERIAS */}
@@ -665,70 +657,54 @@ useEffect(() => {
           </div>
         </div>
 
-
-          {/*  CUENTOS */}
-          <div className="mb-12">
-            <div className="bg-teal-500 text-white px-6 py-3 rounded-lg font-bold mb-6 text-lg">
-              📚 CUENTOS
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {resources.map((resource) => (
-                <Card
-                  key={resource.id}
-                  className="bg-teal-400 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition cursor-pointer hover:scale-105"
-                >
-                  <div className="text-5xl mb-4 text-center">{resource.emoji}</div>
-                  <h3 className="font-bold text-center text-lg">{resource.title}</h3>
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/*  BUSCAR RECURSOS */}
         
 
-    
 
-        </div>
+          {/*  CUENTOS */}
+         {/*  CUENTOS */}
+<div className="mb-12">
+  <div className="bg-teal-500 text-white px-6 py-3 rounded-lg font-bold mb-6 text-lg">
+    📚 EXTRAS
+  </div>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  {resources.map((resource) => (
+    <button
+      key={resource.id}
+      type="button"
+      onClick={() => {
+        if (resource.id === 1) {
+          setSelectedSubject("sumatorios");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        if (resource.id === 2) {
+          setSelectedSubject("palabras-tildes");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        if (resource.id === 3) {
+          setSelectedSubject("cuentos");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        if (resource.id === 4) {
+          setSelectedSubject("retro-games"); 
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }}
+      className="bg-teal-400 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition cursor-pointer hover:scale-105 w-full"
+    >
+      <div className="text-5xl mb-4 text-center">{resource.emoji}</div>
+      <h3 className="font-bold text-center text-lg">{resource.title}</h3>
+    </button>
+  ))}
+</div>
+
+</div>
+
+</div>
       </section>
 
       {/*  FOOTER COMPLETO */}
-      <footer className="bg-gray-900 text-white mt-20">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h4 className="font-bold mb-4">Sobre Nosotros</h4>
-              <p className="text-gray-400 text-sm">Plataforma educativa interactiva para estudiantes de primaria.</p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Materias</h4>
-              <ul className="text-gray-400 text-sm space-y-2">
-                <li><a href="#" className="hover:text-white transition">Matemática</a></li>
-                <li><a href="#" className="hover:text-white transition">Lectura</a></li>
-                <li><a href="#" className="hover:text-white transition">Escritura</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Recursos</h4>
-              <ul className="text-gray-400 text-sm space-y-2">
-                <li><a href="#" className="hover:text-white transition">Ayuda</a></li>
-                <li><a href="#" className="hover:text-white transition">Contacto</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Legal</h4>
-              <ul className="text-gray-400 text-sm space-y-2">
-                <li><a href="#" className="hover:text-white transition">Privacidad</a></li>
-                <li><a href="#" className="hover:text-white transition">Términos</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
-            <p>&copy; 2025 Mundo Primaria. Todos los derechos reservados.</p>
-          </div>
-        </div>
-      </footer>
+      
     </main>
   );
 }

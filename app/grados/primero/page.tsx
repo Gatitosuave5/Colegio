@@ -140,74 +140,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h4 className="font-bold mb-4">Sobre Nosotros</h4>
-              <p className="text-gray-400 text-sm">Plataforma educativa para estudiantes del colegio estatal.</p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Materias</h4>
-              <ul className="text-gray-400 text-sm space-y-2">
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Matemática
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Lenguaje
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Ciencias
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Recursos</h4>
-              <ul className="text-gray-400 text-sm space-y-2">
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Ayuda
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Contacto
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    FAQ
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Legal</h4>
-              <ul className="text-gray-400 text-sm space-y-2">
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Privacidad
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white">
-                    Términos
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
-            <p>&copy; 2025 Colegio Estatal. Todos los derechos reservados.</p>
-          </div>
-        </div>
-      </footer>
+      
     </main>
   )
 }

@@ -67,11 +67,11 @@ export default function ClientPageTildes({ salon_codigo, nombreAlumno, onBack }:
                 Las tildes nos marcan cuál parte suena más fuerte y nos ayudan a no confundir palabras. Por ejemplo:
               </p>
               <div className="mt-4 p-4 bg-white rounded-lg border-2 border-yellow-300">
-                <p className="text-lg font-bold">
-                  <span className="text-orange-600">pa</span>
-                  <span className="text-red-600">pa</span> (la verdura) vs <span className="text-orange-600">pa</span>
-                  <span className="text-red-600">pá</span> (tu padre)
-                </p>
+              <p className="text-lg font-bold text-black">
+                <span className="text-orange-600">pa</span>
+                <span className="text-red-600">pa</span> (la verdura) vs <span className="text-orange-600">pa</span>
+                <span className="text-red-600">pá</span> (tu padre)
+              </p>
               </div>
             </div>
 
