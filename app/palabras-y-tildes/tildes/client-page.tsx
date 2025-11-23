@@ -21,7 +21,7 @@ export default function ClientPageTildes({ salon_codigo, nombreAlumno, onBack }:
   }, []);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
+    <main className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50"> 
       {/* Header */}
       <header className="bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-600 text-white py-6 shadow-lg">
         <div className="container mx-auto px-4 flex items-center justify-between">
