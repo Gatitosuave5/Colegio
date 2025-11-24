@@ -1,8 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef  } from "react"
 import io from "socket.io-client";
 import type { Socket } from "socket.io-client";
+
+
 
 interface Salon {
   id: string
@@ -20,6 +22,22 @@ interface Estudiante {
 }
 
 export default function TeacherPanel() {
+  // Crear socket UNA sola vez
+
+const socketRef = useRef<Socket | null>(null);
+
+useEffect(() => {
+  if (!socketRef.current) {
+    socketRef.current = io("http://localhost:3001");
+  }
+
+  return () => {
+    socketRef.current?.disconnect();
+  };
+}, []);
+
+
+
 
  const API = "http://localhost:3001"
 
@@ -157,23 +175,36 @@ const [integrantes, setIntegrantes] = useState<Estudiante[]>([])
 const [editandoEstudiante, setEditandoEstudiante] = useState<number | null>(null)
 const [nuevoNombre, setNuevoNombre] = useState("")
 
+// 🔥 Crear socket UNA sola vez
+
+
+// 🔥 Escucha actualizaciones EN VIVO del ranking solo cuando el modal está abierto
+useEffect(() => {
+  if (!salonSeleccionado?.codigo) return;
+  if (!socketRef.current) return; // 🟢 asegura que el socket existe
+
+  const canal = `alumnos-${salonSeleccionado.codigo}`;
+  const listener = (lista) => {
+    console.log("🔥 Ranking actualizado EN VIVO:", lista);
+    setIntegrantes(lista);
+  };
+
+  socketRef.current.on(canal, listener);
+
+  return () => {
+    socketRef.current?.off(canal, listener);
+  };
+}, [salonSeleccionado]);
+
+
 //  FALTABA ESTO
-const [socket, setSocket] = useState<any>(null)
+
 
 //  SOCKET EFECTO REAL
-useEffect(() => {
-  const s = io("http://localhost:3001")
-  setSocket(s)
 
-  if (salonSeleccionado?.codigo) {
-    s.on(`alumnos-${salonSeleccionado.codigo}`, (lista) => {
-      console.log(" ACTUALIZACIÓN EN VIVO:", lista)
-      setIntegrantes(lista)
-    })
-  }
 
-  return () => s.disconnect()
-}, [salonSeleccionado])
+//  Actualización EN VIVO del ranking incluso cuando no cambia salonSeleccionado
+
 
   useEffect(() => {
     obtenerSalones()
@@ -227,7 +258,7 @@ useEffect(() => {
       body: JSON.stringify({ id, codigo }),
     })
   
-    socket?.emit("solicitar-alumnos", codigo)
+    socketRef.current?.emit("solicitar-alumnos", codigo)
   }
 
   const guardarNombreEstudiante = async (id: number, codigo: string) => {
@@ -241,7 +272,7 @@ useEffect(() => {
   
     setEditandoEstudiante(null)
     setNuevoNombre("")
-    socket?.emit("solicitar-alumnos", codigo)
+    socketRef.current?.emit("solicitar-alumnos", codigo)
   }
   
 
@@ -321,7 +352,7 @@ useEffect(() => {
       body: JSON.stringify({ id, codigo }),
     });
   
-    socket?.emit("solicitar-alumnos", codigo);
+    socketRef.current?.emit("solicitar-alumnos", codigo);
   };
   
 
