@@ -477,19 +477,19 @@ export default function RetroGames({
         keysPressed.current.add(e.key);
       } else if (currentScreen === 'tetris' && !gameOver) {
         switch (e.key) {
-          case 'ArrowLeft':
+          case 'a':
             e.preventDefault();
             movePiece(-1);
             break;
-          case 'ArrowRight':
+          case 'd':
             e.preventDefault();
             movePiece(1);
             break;
-          case 'ArrowDown':
+          case 's':
             e.preventDefault();
             movePieceDown();
             break;
-          case 'ArrowUp':
+          case 'w':
             e.preventDefault();
             rotatePieceAction();
             break;
@@ -747,6 +747,7 @@ export default function RetroGames({
     </div>
   );
 }
+
 
 
 
