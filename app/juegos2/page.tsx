@@ -309,10 +309,10 @@ export default function RetroGames({
     if (pongGameOver) return;
 
     // Player paddle movement
-    if (keysPressed.current.has('ArrowUp')) {
+    if (keysPressed.current.has('w')) {
       setPlayerPaddleY(prev => Math.max(0, prev - 3.1));
     }
-    if (keysPressed.current.has('ArrowDown')) {
+    if (keysPressed.current.has('s')) {
       setPlayerPaddleY(prev => Math.min(PONG_HEIGHT - PADDLE_HEIGHT, prev + 3.3));
     }
 
@@ -339,7 +339,7 @@ export default function RetroGames({
         setPongScore(s => s + 1);
         
         // Increase speed
-        const newSpeed = Math.abs(newVelX) + 0.1;
+        const newSpeed = Math.abs(newVelX) + 0.3;
         newVelX = newSpeed;
         newVelY = newVelY > 0 ? newSpeed : -newSpeed;
         setBallSpeed(newSpeed);
@@ -747,6 +747,7 @@ export default function RetroGames({
     </div>
   );
 }
+
 
 
 
