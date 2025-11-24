@@ -18,22 +18,22 @@ export default function PaginaInicio() {
       alert("Por favor, ingresa el código del salón.");
       return;
     }
-  
+
     // Guardar datos iniciales
     localStorage.setItem("nombreAlumno", nombre);
     localStorage.setItem("codigoSalon", codigo);
 
-    
+    const resCreate = await fetch(
+      "http://localhost:3001/api/alumnos_temporales",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, salon_codigo: codigo }),
+      }
+    );
 
-
-    const resCreate = await fetch("http://localhost:3001/api/alumnos_temporales", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre, salon_codigo: codigo }),
-    });
-    
     const dataCreate = await resCreate.json();
-    
+
     // Guardar ID sin buscar por nombre
     if (dataCreate?.id) {
       sessionStorage.setItem("idAlumno", dataCreate.id.toString());
@@ -41,11 +41,10 @@ export default function PaginaInicio() {
     } else {
       console.warn("❌ No se devolvió ID en la creación del alumno");
     }
-    
+
     // Redirigir
     router.push(`/salon/${codigo}`);
   };
-  
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen text-center">
@@ -64,16 +63,26 @@ export default function PaginaInicio() {
         <div className="bird2-type birdA"></div>
         <div className="bird2-type birdB"></div>
         <div className="shark"></div>
-
       </div>
 
       {/* Botón Profesores */}
       <button
         onClick={() => setMostrarLogin(true)}
-        className="absolute top-6 right-8 bg-white text-blue-600 px-4 py-1 rounded-full text-sm font-semibold shadow hover:bg-gray-100"
-      >
-        Profesores
-      </button>
+        className="absolute top-13 right-24 rounded-full flex items-center justify-center"
+        style={{
+          width: "140px",
+          height: "140px",
+          fontSize: "12px",
+          backgroundColor: "transparent",
+          color: "transparent",
+          border: "none",
+          boxShadow: "none",
+          opacity: 1,
+          cursor: "default",
+          zIndex: 9999,
+          pointerEvents: "auto",
+        }}
+      ></button>
 
       {/* Contenedor principal */}
       <div className="z-10 flex flex-col items-center justify-center space-y-6 bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl max-w-md w-11/12">
@@ -91,35 +100,35 @@ export default function PaginaInicio() {
 
         {/* Formulario */}
         <div className="w-full text-left space-y-4">
-        <label className="block text-[#2D2D2D] mb-1 text-lg font-semibold">
-              ¿Cómo te llamas?
-            </label>
-            <input
-              type="text"
-              placeholder="Escribe tu nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg bg-gray-100 text-[#1A1A1A] placeholder-gray-500 text-lg outline-none border-2 border-transparent focus:border-blue-400"
-            />
+          <label className="block text-[#2D2D2D] mb-1 text-lg font-semibold">
+            ¿Cómo te llamas?
+          </label>
+          <input
+            type="text"
+            placeholder="Escribe tu nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg bg-gray-100 text-[#1A1A1A] placeholder-gray-500 text-lg outline-none border-2 border-transparent focus:border-blue-400"
+          />
 
-            <label className="block text-[#2D2D2D] mb-1 text-lg font-semibold mt-4">
-              Código del salón
-            </label>
-            <input
-              type="text"
-              placeholder="Ejemplo: AB45X"
-              value={codigo}
-              onChange={(e) => setCodigo(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg bg-gray-100 text-[#1A1A1A] placeholder-gray-500 text-lg outline-none border-2 border-transparent focus:border-blue-400 uppercase"
-              maxLength={6}
-            />
+          <label className="block text-[#2D2D2D] mb-1 text-lg font-semibold mt-4">
+            Código del salón
+          </label>
+          <input
+            type="text"
+            placeholder="Ejemplo: AB45X"
+            value={codigo}
+            onChange={(e) => setCodigo(e.target.value)}
+            className="w-full px-4 py-3 rounded-lg bg-gray-100 text-[#1A1A1A] placeholder-gray-500 text-lg outline-none border-2 border-transparent focus:border-blue-400 uppercase"
+            maxLength={6}
+          />
 
-            <button
-              onClick={handleEntrar}
-              className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg text-lg hover:bg-blue-700 transition">
-              Entrar
-            </button>
-
+          <button
+            onClick={handleEntrar}
+            className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg text-lg hover:bg-blue-700 transition cursor-pointer"
+          >
+            Entrar
+          </button>
         </div>
       </div>
 
