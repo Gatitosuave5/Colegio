@@ -26,7 +26,7 @@ export default function PaginaInicio() {
     
 
 
-    const resCreate = await fetch("https://cubaaprende.site/api/alumnos_temporales", {
+    const resCreate = await fetch("http://localhost:3001/api/alumnos_temporales", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nombre, salon_codigo: codigo }),

@@ -31,12 +31,12 @@ const BOARD_HEIGHT = 20;
 const BLOCK_SIZE = 30;
 
 // Pong constants
-const PONG_WIDTH = 600;
+const PONG_WIDTH = 850;
 const PONG_HEIGHT = 400;
 const PADDLE_WIDTH = 10;
 const PADDLE_HEIGHT = 80;
 const BALL_SIZE = 10;
-const INITIAL_BALL_SPEED = 2;
+const INITIAL_BALL_SPEED = 2.7;
 
 export default function RetroGames({
     salon_codigo,
@@ -339,7 +339,7 @@ export default function RetroGames({
         setPongScore(s => s + 1);
         
         // Increase speed
-        const newSpeed = Math.abs(newVelX) + 0.3;
+        const newSpeed = Math.abs(newVelX) + 0.08;
         newVelX = newSpeed;
         newVelY = newVelY > 0 ? newSpeed : -newSpeed;
         setBallSpeed(newSpeed);
@@ -361,12 +361,21 @@ export default function RetroGames({
       }
 
       // Ball out on right (computer missed - reset ball)
-      if (newX + BALL_SIZE > PONG_WIDTH) {
-        return {
-          x: PONG_WIDTH / 2,
-          y: PONG_HEIGHT / 2
-        };
-      }
+      // Ball out on right (IA missed)
+if (newX + BALL_SIZE > PONG_WIDTH) {
+  // Sumar punto
+  setPongScore(s => s + 1);
+
+  // Reiniciar velocidad
+  setBallSpeed(INITIAL_BALL_SPEED);
+  setBallVel({ x: INITIAL_BALL_SPEED, y: INITIAL_BALL_SPEED });
+
+  // Reiniciar pelota en el centro
+  return {
+    x: PONG_WIDTH / 2,
+    y: PONG_HEIGHT / 2
+  };
+}
 
       setBallVel({ x: newVelX, y: newVelY });
       return { x: newX, y: newY };
@@ -548,7 +557,7 @@ export default function RetroGames({
   return (
     <div
   className="min-h-screen p-8 flex items-center justify-center bg-cover bg-center relative overflow-hidden"
-  style={{ backgroundImage: "url('https://previews.123rf.com/images/graphicsview/graphicsview2209/graphicsview220900239/192286466-cute-children-playing-in-the-garden-sky-scene-wallpaper-background-for-3d-living-room-bedroom-tv-3d.jpg')" }}
+  style={{ backgroundImage: "url('/imagenes/fotito.jpeg')" }}
 >
       {/* Animated decorations */}
       
@@ -671,7 +680,7 @@ export default function RetroGames({
               <div className="text-xl font-bold text-purple-600">Puntos: {score}</div>
             </div>
           </CardHeader>
-          <CardContent className="p-6 flex flex-col items-center gap-4">
+          <CardContent className="p-1 flex flex-col items-center gap-2">
             <canvas
               ref={tetrisCanvasRef}
               width={BOARD_WIDTH * BLOCK_SIZE}
@@ -682,7 +691,7 @@ export default function RetroGames({
             {gameOver && (
               <div className="text-center">
                 <div className="text-3xl font-bold text-red-500 mb-2">¡Game Over!</div>
-                <div className="text-lg mb-4">Puntos finales: {score}</div>
+                <div className="text-lg mb-4 text-black">Puntos finales: {score}</div>
                 <Button onClick={startTetris} className="bg-gradient-to-r from-purple-500 to-pink-500">
                   Jugar de nuevo
                 </Button>
@@ -691,7 +700,7 @@ export default function RetroGames({
 
             {!gameOver && (
               <div className="text-sm text-gray-600 text-center bg-purple-50 p-3 rounded-lg">
-                <p className="font-medium">← → Mover | ↑ Rotar | ↓ Bajar | Espacio: Drop</p>
+                <p className="font-medium">A - S Mover | W Rotar | S Bajar | Espacio: Insertar Rapido</p>
               </div>
             )}
 
@@ -703,14 +712,14 @@ export default function RetroGames({
       )}
 
       {currentScreen === 'pong' && (
-        <Card className="w-full max-w-2xl z-10 bg-white/95 backdrop-blur">
+        <Card className="w-full max-w-5xl z-10 bg-white/95 backdrop-blur">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-2xl text-black">Pong - Retro Atari</CardTitle>
               <div className="text-xl font-bold text-cyan-600">Puntos: {pongScore}</div>
             </div>
           </CardHeader>
-          <CardContent className="p-6 flex flex-col items-center gap-4">
+          <CardContent className="p-6 flex flex-col items-center gap-2">
             <canvas
               ref={pongCanvasRef}
               width={PONG_WIDTH}
@@ -721,7 +730,7 @@ export default function RetroGames({
             {pongGameOver && (
               <div className="text-center bg-red-50 p-6 rounded-xl">
                 <div className="text-3xl font-bold text-red-600 mb-3">¡Game Over!</div>
-                <div className="text-lg mb-2">Puntos finales: {pongScore}</div>
+                <div className="text-lg mb-2 text-black">Puntos finales: {pongScore}</div>
                 <div className="text-sm text-gray-600 mb-4">
                   La velocidad era: {ballSpeed.toFixed(1)}x
                 </div>
