@@ -38,6 +38,9 @@ const db = await mysql.createConnection({
 io.on("connection", async (socket) => {
   console.log("Usuario conectado:", socket.id);
 
+  /* ======================================
+        SOLICITAR LISTA DE ALUMNOS
+  ====================================== */
   socket.on("solicitar-alumnos", async (codigo) => {
     const [alumnos] = await db.execute(
       "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
@@ -46,37 +49,72 @@ io.on("connection", async (socket) => {
     io.emit(`alumnos-${codigo}`, alumnos);
   });
 
-  // Alumno entra al salón
-  socket.on("alumno-entra", async ({ nombre, salon }) => {
-    // Verificar si existe el salón
-    const [salonExiste] = await db.execute(
-      "SELECT codigo FROM salones WHERE codigo = ? LIMIT 1",
-      [salon]
-    );
-  
-    if (salonExiste.length === 0) {
-      console.log(` Intento fallido: salón ${salon} no existe`);
-      
-      return; // NO REGISTRA EN BD
+  /* ======================================
+        ALUMNO ENTRA (REGISTRO)
+        — SIN usar socket_id —
+  ====================================== */
+  socket.on("alumno-entra", async ({ nombre, salon, id }) => {
+    try {
+      socket.data.salon = salon;     // guardar código del salón
+      socket.data.idAlumno = id;     // guardar ID desde el frontend
+
+      console.log(`🔵 Alumno ${nombre} (${id}) entró al salón ${salon}`);
+
+      // Actualizar última actividad
+      await db.execute(
+        "UPDATE alumnos_temporales SET ultima_actividad = NOW() WHERE id = ?",
+        [id]
+      );
+
+      // Obtener lista actualizada
+      const [alumnos] = await db.execute(
+        "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
+        [salon]
+      );
+
+      io.emit(`alumnos-${salon}`, alumnos);
+    } catch (err) {
+      console.log("Error en alumno-entra:", err);
     }
-  
-    console.log(` ${nombre} entró al salón ${salon}`);
-  
-    await db.execute(
-      "INSERT INTO alumnos_temporales (nombre, salon_codigo) VALUES (?, ?)",
-      [nombre, salon]
-    );
-  
-    const [alumnos] = await db.execute(
-      "SELECT nombre FROM alumnos_temporales WHERE salon_codigo = ?",
-      [salon]
-    );
-  
-    io.emit(`alumnos-${salon}`, alumnos);
+  });
+
+  /* ======================================
+        DETECTAR CIERRE DE VENTANA
+        (disconnect)
+        — ELIMINA AL ALUMNO EN VIVO —
+  ====================================== */
+  socket.on("disconnect", async () => {
+    try {
+      const salon = socket.data.salon;
+      const idAlumno = socket.data.idAlumno;
+
+      if (!salon || !idAlumno) return;
+
+      console.log(`❌ Alumno desconectado — ID: ${idAlumno}`);
+
+      // Eliminar alumno de la BD
+      await db.execute(
+        "DELETE FROM alumnos_temporales WHERE id = ?",
+        [idAlumno]
+      );
+
+      // Lista actualizada
+      const [alumnos] = await db.execute(
+        "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
+        [salon]
+      );
+
+      // Emitir actualización a todos
+      io.emit(`alumnos-${salon}`, alumnos);
+
+    } catch (err) {
+      console.log("Error en disconnect:", err);
+    }
   });
 
   console.log("Socket listo");
 });
+
 
 /* =====================================================
   API REST NORMAL

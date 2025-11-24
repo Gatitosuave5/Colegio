@@ -235,19 +235,22 @@ useEffect(() => {
     if (registradoRef.current) return;
   
     // 🔥 ESTE BLOQUE YA NO DEBE IR
-    fetch("http://localhost:3001/api/alumnos_temporales", {
+    fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        nombre: nombreAlumno,
-        salon_codigo: codigo
+        id: sessionStorage.getItem("idAlumno"),
+        puntaje: 0, // ✔ NO SUMA NADA
+        codigo: localStorage.getItem("codigoSalon"),
       }),
     });
   
     socket.emit("alumno-entra", {
       nombre: nombreAlumno,
       salon: codigo,
+      id: sessionStorage.getItem("idAlumno")  // ✔ enviamos el ID real
     });
+    
   
     registradoRef.current = true;
   }, [socket, salon, alumnoCargado]);
@@ -520,27 +523,38 @@ useEffect(() => {
           <Trophy className="w-5 h-5" />
           Tabla
       </button>
+      <button
+  onClick={async () => {
+    const id = sessionStorage.getItem("idAlumno");
+    const codigoSalon = localStorage.getItem("codigoSalon");
+
+    if (id && codigoSalon) {
+      // 🧹 Eliminar alumno definitivamente
+      await fetch("http://localhost:3001/api/alumnos_temporales/eliminar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, salon_codigo: codigoSalon }),
+      });
+
+      // 🔥 Avisar al profesor (actualizar ranking en vivo)
+      socket?.emit("solicitar-alumnos", codigoSalon);
+    }
+
+    // 🧼 Limpiar datos locales
+    sessionStorage.removeItem("idAlumno");
+    localStorage.removeItem("nombreAlumno");
+    localStorage.removeItem("codigoSalon");
+
+    // 🔄 Ir al login
+    router.push("/");
+  }}
+  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition"
+>
+  Salir
+</button>
 
 
-            <button
-        onClick={async () => {
-          await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              id: sessionStorage.getItem("idAlumno"),
-              puntaje: miPuntaje,
-              codigo: localStorage.getItem("codigoSalon"),
-            }),
-          });
-          
-
-          router.push("/");
-        }}
-        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition"
-      >
-        Salir
-      </button>
+    
     </div>
 
   </div>
