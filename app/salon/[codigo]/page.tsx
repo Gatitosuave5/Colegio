@@ -84,7 +84,7 @@ useEffect(() => {
 
     // Consultar alumnos reales en el salón
     const res = await fetch(
-      `https://cubaaprende.site/api/alumnos_temporales?codigo=${codigoSalon}`
+      `https://http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`
     );
     const data = await res.json();
 
@@ -135,7 +135,7 @@ const stories: Story[] = [
 
 useEffect(() => {
   const cargarAlumno = async () => {
-    const res = await fetch(`https://cubaaprende.site/api/alumno?nombre=${nombreAlumno}&salon=${codigo}`);
+    const res = await fetch(`https://http://localhost:3001/api/alumno?nombre=${nombreAlumno}&salon=${codigo}`);
     const data = await res.json();
 
     if (data.alumno) {
@@ -152,7 +152,7 @@ useEffect(() => {
 useEffect(() => {
   const cargarContenidos = async () => {
     try {
-      const res = await fetch(`https://cubaaprende.site/api/contenidos?codigo=${codigo}`);
+      const res = await fetch(`https://http://localhost:3001/api/contenidos?codigo=${codigo}`);
       const data = await res.json();
 
       console.log("✅ Contenidos del salón:", data);
@@ -172,7 +172,7 @@ useEffect(() => {
 // // }
 
 const actualizarRanking = async () => {
-  const res = await fetch(`https://cubaaprende.site/api/alumnos_temporales?codigo=${codigo}`);
+  const res = await fetch(`https://http://localhost:3001/api/alumnos_temporales?codigo=${codigo}`);
   const data = await res.json();
   setAlumnos(data.alumnos || []);
 };
@@ -197,7 +197,7 @@ useEffect(() => {
 
     // ❌ Cierre real (SÍ BORRAR)
     console.log("❌ Cierre real — borrando alumno");
-    fetch("https://cubaaprende.site/api/alumnos_temporales/eliminar", {
+    fetch("https://http://localhost:3001/api/alumnos_temporales/eliminar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -215,7 +215,7 @@ useEffect(() => {
 
 
 
-  const API = "https://cubaaprende.site";
+  const API = "https://http://localhost:3001";
 
   //  Conectar socket
   useEffect(() => {
@@ -266,7 +266,7 @@ useEffect(() => {
     if (registradoRef.current) return;
   
     // 🔥 ESTE BLOQUE YA NO DEBE IR
-    fetch("https://cubaaprende.site/api/alumnos_temporales/puntaje", {
+    fetch("https://http://localhost:3001/api/alumnos_temporales/puntaje", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -561,7 +561,7 @@ useEffect(() => {
 
     if (id && codigoSalon) {
       // 🧹 Eliminar alumno definitivamente
-      await fetch("https://cubaaprende.site/api/alumnos_temporales/eliminar", {
+      await fetch("https://http://localhost:3001/api/alumnos_temporales/eliminar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, salon_codigo: codigoSalon }),

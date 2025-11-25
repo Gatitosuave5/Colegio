@@ -35,7 +35,7 @@ async function agregarPuntos(puntos: number, lessonId: string | number) {
   }
 
   //  Registrar directamente por ID (sin buscar por nombre)
-  await fetch("https://cubaaprende.site/api/alumnos_temporales/puntaje", {
+  await fetch("https://http://localhost:3001/api/alumnos_temporales/puntaje", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

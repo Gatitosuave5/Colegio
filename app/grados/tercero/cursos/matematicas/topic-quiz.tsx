@@ -24,7 +24,7 @@ async function agregarPuntos(puntos: number, storyId: string | number) {
   }
 
   //  Enviar puntaje directamente con ID real
-  await fetch("https://cubaaprende.site/api/alumnos_temporales/puntaje", {
+  await fetch("https://http://localhost:3001/api/alumnos_temporales/puntaje", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
