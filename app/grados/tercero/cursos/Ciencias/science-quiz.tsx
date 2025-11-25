@@ -32,7 +32,7 @@ async function agregarPuntos(puntos: number, lessonId: string | number) {
   }
 
   //  Enviar puntaje directamente al backend usando ID
-  await fetch("http://localhost:3001/api/alumnos_temporales/puntaje", {
+  await fetch("https://cubaaprende.site/api/alumnos_temporales/puntaje", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
