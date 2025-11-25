@@ -21,7 +21,7 @@ interface Estudiante {
 
 export default function TeacherPanel() {
 
- const API = "https://cubaaprende.site"
+ const API = "http://localhost:3001"
 
   const contenidosPorGrado: Record<number, any[]> = {
     1: [
@@ -162,7 +162,7 @@ const [socket, setSocket] = useState<any>(null)
 
 //  SOCKET EFECTO REAL
 useEffect(() => {
-  const s = io("https://cubaaprende.site")
+  const s = io("http://localhost:3001")
   setSocket(s)
 
   if (salonSeleccionado?.codigo) {
@@ -199,7 +199,7 @@ useEffect(() => {
     setMostrarModalIntegrantes(true)
   
     try {
-      const res = await fetch(`https://cubaaprende.site/api/alumnos_temporales?codigo=${encodeURIComponent(salon.codigo.trim())}`)
+      const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${encodeURIComponent(salon.codigo.trim())}`)
   
       const texto = await res.text()
       console.log("Respuesta del backend:", texto)
@@ -375,6 +375,19 @@ useEffect(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 p-10">
+      {/* 🔴 BOTÓN DE SALIDA ARRIBA A LA DERECHA */}
+<div className="w-full flex justify-end mb-4">
+  <button
+    onClick={() => {
+      // Solo regresar al login
+      window.location.href = "/";
+    }}
+    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold shadow-lg transition"
+  >
+    Salir
+  </button>
+</div>
+
       <h1 className="text-4xl font-bold text-blue-700 mb-8">Panel del Profesor</h1>
 
       <div className="mb-8 flex gap-4 items-center">

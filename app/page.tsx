@@ -24,7 +24,7 @@ export default function PaginaInicio() {
     localStorage.setItem("codigoSalon", codigo);
 
     const resCreate = await fetch(
-      "https://cubaaprende.site/api/alumnos_temporales",
+      "http://localhost:3001/api/alumnos_temporales",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
