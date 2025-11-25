@@ -29,7 +29,7 @@ export const topicsData: Record<string, MathTopic> = {
     icon: "✖️",
     gameId: "memory",
     background: "https://scontent.flim15-1.fna.fbcdn.net/v/t1.6435-9/123834617_183647280010460_6640284743810972340_n.png?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=M5K-nHJiNBYQ7kNvwGaIBsM&_nc_oc=AdmAQZF525urfuYWBTLaAQfihNlxHANGDIh5gRkRMgy-p1ndHozbn7fEpwh1Ew2BGeHVBIM8cJx2avHUt5iTGC3H&_nc_zt=23&_nc_ht=scontent.flim15-1.fna&_nc_gid=8_0Yxg4lS5T_PGYxnpOmnA&oh=00_AfgZAY3_TCWXRMCqSuECk7gKrH-GzD4ef79RAjx6DDYWlA&oe=6941806F",
-    image: "https://scontent.flim15-2.fna.fbcdn.net/v/t39.30808-6/498176510_1216176250173655_2641542767466117284_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=CByiZPzkqd0Q7kNvwFAuCV4&_nc_oc=AdktgQk_hbEWnkXb5rwSLLFFr6QbiS-KgHkni9YsaBeCWe4Fk1SSA9i5GybCuYvLkT-yQqgx9xOKMH4cjyOyYevR&_nc_zt=23&_nc_ht=scontent.flim15-2.fna&_nc_gid=GdYjw60Ce1A_N79NekQ1YQ&oh=00_Afgbbvi-TvK_7i5ICmBqZ5VzqQBjV_PHrSQhg-uY8UKMRw&oe=691FDD3C",
+image: "/images/tablas-multiplicar.png",
     explanation: `
 La multiplicación es repetir una suma.
 - 3 × 4 significa 4 + 4 + 4 = 12
