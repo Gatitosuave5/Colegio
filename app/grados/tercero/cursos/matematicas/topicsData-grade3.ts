@@ -49,16 +49,25 @@ La multiplicación es repetir una suma.
       },
     ],
     quiz: [
-      { question: "¿Cuánto es 6 × 7?", options: ["40", "42", "44"], correct: 1 },
-      { question: "¿Cuánto es 8 × 9?", options: ["70", "71", "72"], correct: 2 },
-      { question: "¿Cuánto es 9 × 8?", options: ["70", "71", "72"], correct: 2 },
-      { question: "¿Cuánto es 7 × 7?", options: ["47", "48", "49"], correct: 2 },
-      { question: "¿Cuánto es 10 × 5?", options: ["48", "49", "50"], correct: 2 },
-      { question: "¿Cuánto es 6 × 8?", options: ["46", "47", "48"], correct: 2 },
-      { question: "¿Cuánto es 9 × 6?", options: ["52", "53", "54"], correct: 2 },
-      { question: "¿Cuánto es 7 × 8?", options: ["54", "55", "56"], correct: 2 },
-      { question: "¿Cuánto es 8 × 7?", options: ["54", "55", "56"], correct: 2 },
-      { question: "¿Cuánto es 10 × 10?", options: ["98", "99", "100"], correct: 2 },
+      { question: "¿Cuánto es 6 × 7?", options: ["44", "42", "40"], correct: 1 },
+
+      { question: "¿Cuánto es 8 × 9?", options: ["71", "72", "70"], correct: 1 },
+      
+      { question: "¿Cuánto es 9 × 8?", options: ["72", "70", "71"], correct: 0 },
+      
+      { question: "¿Cuánto es 7 × 7?", options: ["48", "49", "47"], correct: 1 },
+      
+      { question: "¿Cuánto es 10 × 5?", options: ["49", "50", "48"], correct: 1 },
+      
+      { question: "¿Cuánto es 6 × 8?", options: ["48", "46", "47"], correct: 0 },
+      
+      { question: "¿Cuánto es 9 × 6?", options: ["53", "52", "54"], correct: 2 },
+      
+      { question: "¿Cuánto es 7 × 8?", options: ["56", "54", "55"], correct: 0 },
+      
+      { question: "¿Cuánto es 8 × 7?", options: ["55", "56", "54"], correct: 1 },
+      
+      { question: "¿Cuánto es 10 × 10?", options: ["98", "100", "99"], correct: 1 },
     ],
   },
 
@@ -519,7 +528,7 @@ Comparación: > (mayor), < (menor), = (igual)
         options: [
           "Doscientos treinta y cuatro",
           "Doscientos cuarenta y tres",
-          "Trescientos veinticuatro"
+          "Veinte y tres cuatro"
         ],
         correct: 0
       },
@@ -592,33 +601,33 @@ Pasos para resta: alineamos números, si no podemos restar pedimos prestado
     ],
     quiz: [
       // correcta en posición 1
-      { question: "¿Cuánto es 234 + 178?", options: ["410", "411", "412"], correct: 1 },
-    
-      // correcta en posición 0
+      { question: "¿Cuánto es 234 + 178?", options: ["410", "411", "412"], correct: 2 },
+
+      // 567 - 234 = 333
       { question: "¿Cuánto es 567 - 234?", options: ["333", "331", "332"], correct: 0 },
-    
-      // correcta en posición 2
+      
+      // 456 + 345 = 801
       { question: "¿Cuánto es 456 + 345?", options: ["799", "800", "801"], correct: 2 },
-    
-      // correcta en posición 0
+      
+      // 789 - 456 = 333
       { question: "¿Cuánto es 789 - 456?", options: ["333", "332", "331"], correct: 0 },
-    
-      // correcta en posición 2
+      
+      // 678 + 234 = 912
       { question: "¿Cuánto es 678 + 234?", options: ["910", "911", "912"], correct: 2 },
-    
-      // correcta en posición 1
+      
+      // 567 - 189 = 378
       { question: "¿Cuánto es 567 - 189?", options: ["376", "378", "377"], correct: 1 },
-    
-      // correcta en posición 0
+      
+      // 345 + 267 = 612
       { question: "¿Cuánto es 345 + 267?", options: ["612", "611", "610"], correct: 0 },
-    
-      // correcta en posición 2
+      
+      // 800 - 345 = 455
       { question: "¿Cuánto es 800 - 345?", options: ["454", "453", "455"], correct: 2 },
-    
-      // correcta en posición 1
+      
+      // 234 + 456 + 123 = 813
       { question: "¿Cuánto es 234 + 456 + 123?", options: ["812", "813", "811"], correct: 1 },
-    
-      // correcta en posición 0 **(como pediste)**
+      
+      // 1000 - 567 = 433
       { question: "¿Cuánto es 1000 - 567?", options: ["433", "432", "434"], correct: 0 },
     ]
     
