@@ -70,6 +70,38 @@ useEffect(() => {
   }
 }, []);
 
+// ❗ Redirigir al login si se reloguea y no hay idAlumno
+// 🚨 VERIFICAR SI EL ALUMNO EXISTE EN LA BD AL CARGAR LA PÁGINA
+useEffect(() => {
+  const verificarAlumno = async () => {
+    const id = sessionStorage.getItem("idAlumno");
+    const codigoSalon = localStorage.getItem("codigoSalon");
+
+    // Si no hay datos locales → al login
+    if (!id || !codigoSalon) {
+      router.push("/");
+      return;
+    }
+
+    // Consultar alumnos reales en el salón
+    const res = await fetch(
+      `http://localhost:3001/api/alumnos_temporales?codigo=${codigoSalon}`
+    );
+    const data = await res.json();
+
+    // Si mi ID YA NO ESTÁ en la BD → fui borrado (reload o cierre)
+    const existe = data.alumnos?.some(a => a.id.toString() === id);
+
+    if (!existe) {
+      router.push("/");
+    }
+  };
+
+  verificarAlumno();
+}, []);
+
+
+
   const salon_codigo = codigo;
   const [selectedStory, setSelectedStory] = useState<Story | null>(null);
 
