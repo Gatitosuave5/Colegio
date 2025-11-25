@@ -91,7 +91,7 @@ export default function LiteratureModule({ onBack }) {
       const codigo = localStorage.getItem("codigoSalon")
       if (!codigo) return
       
-      const res = await fetch(`https://http://localhost:3001/api/contenidos?codigo=${codigo}`)
+      const res = await fetch(`https://cubaaprende.site/api/contenidos?codigo=${codigo}`)
       const data = await res.json()
   
       // 🔥 GUARDAR SOLO STORY IDs
