@@ -238,9 +238,12 @@ useEffect(() => {
 
     ],
     4: [
-      { id_contenido: 31, categoria: "Matemática", titulo: "Mínimo común múltiplo" },
-      { id_contenido: 32, categoria: "Matemática", titulo: "Máximo común divisor" },
-      { id_contenido: 33, categoria: "Matemática", titulo: "Fracciones avanzadas" },
+      { id_contenido: 31, categoria: "Matemática", titulo: "Sumas hasta 10 000", storyId: "sumas-4to" },
+      { id_contenido: 32, categoria: "Matemática", titulo: "Restas hasta 10 000", storyId: "restas-4to" },
+      { id_contenido: 33, categoria: "Matemática", titulo: "Multiplicación hasta 2 cifras", storyId: "multiplicacion-4to" },
+      { id_contenido: 34, categoria: "Matemática", titulo: "División básica", storyId: "division-4to" },
+      { id_contenido: 35, categoria: "Matemática", titulo: "Figuras geométricas avanzadas", storyId: "figuras-4to" },
+      { id_contenido: 36, categoria: "Matemática", titulo: "Clasificación avanzada", storyId: "clasificacion-4to" },
 
       { id_contenido: 201, categoria: "Lectura", titulo: "El Guardián del Bosque Brumoso" },
       { id_contenido: 202, categoria: "Lectura", titulo: "El Reloj del Tiempo Perdido" },
@@ -250,16 +253,30 @@ useEffect(() => {
        { id_contenido: 206, categoria: "Lectura", titulo: "El Viaje del Barco de Papel" },
 
     ],
-    5: [
-      { id_contenido: 41, categoria: "Matemática", titulo: "Operaciones con decimales" },
-      { id_contenido: 42, categoria: "Matemática", titulo: "Fracciones avanzadas" },
-      { id_contenido: 43, categoria: "Matemática", titulo: "Razones y proporciones" },
+      5: [
+        { id_contenido: 37, categoria: "Matemática", titulo: "Sumas y restas hasta 100 000", storyId: "sumas-restas-5to" },
+        { id_contenido: 38, categoria: "Matemática", titulo: "Multiplicación hasta 3 cifras", storyId: "multiplicacion-5to" },
+        { id_contenido: 39, categoria: "Matemática", titulo: "División por 1 y 2 cifras", storyId: "division-5to" },
+        { id_contenido: 40, categoria: "Matemática", titulo: "Fracciones equivalentes", storyId: "fracciones-5to" },
+        { id_contenido: 41, categoria: "Matemática", titulo: "Decimales básicos", storyId: "decimales-5to" },
+        { id_contenido: 42, categoria: "Matemática", titulo: "Área y perímetro", storyId: "area-5to" },
+        { id_contenido: 43, categoria: "Matemática", titulo: "Gráficos y datos", storyId: "graficos-5to" },
+        { id_contenido: 44, categoria: "Matemática", titulo: "Patrones numéricos", storyId: "patrones-5to" },
+        { id_contenido: 45, categoria: "Matemática", titulo: "Problemas de dos operaciones", storyId: "problemas-5to" },
+        { id_contenido: 46, categoria: "Matemática", titulo: "Ordenar números grandes", storyId: "ordenar-5to" }
 
     ],
     6: [
-      { id_contenido: 51, categoria: "Matemática", titulo: "Coordenadas" },
-      { id_contenido: 52, categoria: "Matemática", titulo: "Ecuaciones con incógnita" },
-      { id_contenido: 53, categoria: "Matemática", titulo: "Polígonos y ángulos" },
+      { id_contenido: 47, categoria: "Matemática", titulo: "Operaciones con números grandes" },
+      { id_contenido: 48, categoria: "Matemática", titulo: "Múltiplos y divisores" },
+      { id_contenido: 49, categoria: "Matemática", titulo: "Fracciones y operaciones" },
+      { id_contenido: 50, categoria: "Matemática", titulo: "Decimales y porcentajes" },
+      { id_contenido: 51, categoria: "Matemática", titulo: "Área y perímetro" },
+      { id_contenido: 52, categoria: "Matemática", titulo: "Volumen y cuerpos geométricos" },
+      { id_contenido: 53, categoria: "Matemática", titulo: "Coordenadas en el plano" },
+      { id_contenido: 54, categoria: "Matemática", titulo: "Gráficos estadísticos" },
+      { id_contenido: 55, categoria: "Matemática", titulo: "Patrones numéricos avanzados" },
+      { id_contenido: 56, categoria: "Matemática", titulo: "Problemas de lógica y razonamiento" }
  
     ],
   }
