@@ -36,8 +36,8 @@ export const topicsData6: Record<string, MathTopic> = {
   title: "Operaciones con números hasta 1 000 000",
   icon: "🧮",
   gameId: "memory",
-  background: "https://i.imgur.com/1eE9EM5.jpeg",
-  image: "https://i.imgur.com/8lLVQ0b.png",
+  background: "https://i.ytimg.com/vi/-12_pB7TaWs/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDbwivweR6Qyr7qeRLeN3HIvQeE-g",
+  image: "https://i.ytimg.com/vi/vP7hxxBkUBs/maxresdefault.jpg",
 
   explanation: `
 En sexto grado resolvemos sumas, restas, multiplicaciones y divisiones 
@@ -64,8 +64,8 @@ con números muy grandes, hasta un millón.
   title: "Múltiplos y divisores",
   icon: "➗",
   gameId: "order",
-  background: "https://i.imgur.com/x05FYDn.jpeg",
-  image: "https://i.imgur.com/duCX5Fz.png",
+  background: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqhCpTkQ2pBf8RJvW9Xo2oHyLOG4YsFVp5qw&s",
+  image: "https://i.ytimg.com/vi/uTa4IiVNUoA/maxresdefault.jpg",
 
   explanation: `
 Aprendemos a identificar múltiplos, divisores y números compuestos y primos.
@@ -91,8 +91,8 @@ Aprendemos a identificar múltiplos, divisores y números compuestos y primos.
   title: "Fracciones y operaciones",
   icon: "🧩",
   gameId: "memory",
-  background: "https://i.imgur.com/VTOyXvG.jpeg",
-  image: "https://i.imgur.com/hucL8Lm.png",
+  background: "https://i.ytimg.com/vi/qJb7zc8NX-s/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAXsIPvS-O-SBgvIXyzSyluAHz4ow",
+  image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKNRbwD6cm_W6ULXVUREC48-WSiGZ_7qa2CA&s",
 
   explanation: `
 Operamos fracciones: suma, resta, multiplicación y división.
@@ -119,8 +119,8 @@ Operamos fracciones: suma, resta, multiplicación y división.
   title: "Decimales y porcentajes",
   icon: "💯",
   gameId: "fast",
-  background: "https://i.imgur.com/W8cqZ3L.jpeg",
-  image: "https://i.imgur.com/6Fo6qM7.png",
+  background: "https://i.ytimg.com/vi/kn5-Yux5cTs/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBnClbKBUi5gKnkYZDO-NYGTRIqTg",
+  image: "https://image.slidesharecdn.com/porcentajestercerciclo-160116153240/75/Matematicas-5-y-6-Porcentajes-3-2048.jpg",
 
   explanation: `
 Transformamos decimales a porcentajes y resolvemos ejercicios.
@@ -146,8 +146,8 @@ Transformamos decimales a porcentajes y resolvemos ejercicios.
   title: "Área y perímetro de figuras complejas",
   icon: "📐",
   gameId: "order",
-  background: "https://i.imgur.com/cmdSxqX.jpeg",
-  image: "https://i.imgur.com/U5RzcuX.png",
+  background: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQd87jPNu_Zj837SjGt5TThGfpfF4OAg-dvM79G1eeA-qLPAqH0APttd5cdT9stF2AT6c&usqp=CAU",
+  image: "https://i.ytimg.com/vi/Pa7GPWCcLiY/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDKAd-2K7or70DoH5_5wude5ux0FA",
 
   explanation: `
 Calculamos áreas y perímetros de figuras formadas por varias partes.
@@ -174,8 +174,8 @@ Calculamos áreas y perímetros de figuras formadas por varias partes.
   title: "Volumen y cuerpos geométricos",
   icon: "📦",
   gameId: "memory",
-  background: "https://i.imgur.com/FehXbi4.jpeg",
-  image: "https://i.imgur.com/4dY8oYw.png",
+  background: "https://i.ytimg.com/vi/rjU4Q73PfMc/maxresdefault.jpg",
+  image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoXv_N6D4I4ZFf5JCW-1F-b4tYHvSUQ7EduA&s",
 
   explanation: `
 Aprendemos volumen de prismas, cubos y cuerpos simples.
@@ -201,8 +201,8 @@ Aprendemos volumen de prismas, cubos y cuerpos simples.
   title: "Coordenadas en el plano cartesiano",
   icon: "📍",
   gameId: "fast",
-  background: "https://i.imgur.com/aGck5Zg.jpeg",
-  image: "https://i.imgur.com/y7o2s6F.png",
+  background: "https://i.ytimg.com/vi/U0lErxJJL88/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDziEGmmFRInreVEFaFpn4PyqpN1g",
+  image: "https://to2alcole.wordpress.com/wp-content/uploads/2020/10/557e7-a2139-35.jpg",
 
   explanation: `
 Leemos puntos en el plano usando (x, y).
@@ -227,8 +227,8 @@ Leemos puntos en el plano usando (x, y).
   title: "Gráficos estadísticos",
   icon: "📊",
   gameId: "memory",
-  background: "https://i.imgur.com/7VwMaFQ.jpeg",
-  image: "https://i.imgur.com/lnfLzgj.png",
+  background: "https://www.mundoprimaria.com/wp-content/uploads/2021/10/graficos-y-tablas-elementales-en-primaria-para-ninos.jpg",
+  image: "https://i.ytimg.com/vi/v1gjpY59UBE/maxresdefault.jpg",
 
   explanation: `
 Interpretamos gráficos de barras, líneas y circulares.
@@ -254,8 +254,8 @@ Interpretamos gráficos de barras, líneas y circulares.
   title: "Patrones numéricos avanzados",
   icon: "♻️",
   gameId: "fast",
-  background: "https://i.imgur.com/ZPRQB2l.jpeg",
-  image: "https://i.imgur.com/Fe6HT50.png",
+  background: "https://i.ytimg.com/vi/Sp_JE7nFNVc/sddefault.jpg",
+  image: "https://i.ytimg.com/vi/vYYcAxjkVnI/maxresdefault.jpg",
 
   explanation: `
 Patrones crecientes, decrecientes y multiplicativos avanzados.
@@ -280,8 +280,8 @@ Patrones crecientes, decrecientes y multiplicativos avanzados.
   title: "Problemas de lógica y razonamiento",
   icon: "🧠",
   gameId: "order",
-  background: "https://i.imgur.com/1QCzOwH.jpeg",
-  image: "https://i.imgur.com/lPFiLSK.png",
+  background: "https://i.ytimg.com/vi/e9_2JwggZ7I/maxresdefault.jpg",
+  image: "https://i.ytimg.com/vi/kkPJjRgWQbU/maxresdefault.jpg",
 
   explanation: `
 Problemas que requieren análisis, estrategias y varios pasos.

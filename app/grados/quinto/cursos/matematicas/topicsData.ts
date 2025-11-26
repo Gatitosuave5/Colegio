@@ -36,8 +36,8 @@ export const topicsData5: Record<string, MathTopic> = {
   title: "Sumas y restas hasta 100 000",
   icon: "➕➖",
   gameId: "memory",
-  background: "https://img.freepik.com/vector-premium/fondo-matematicas-numeros_23-2148148628.jpg",
-  image: "https://static.wixstatic.com/media/3e1d47_7cd5f719059b4fdcb71cbb18ce87140e~mv2.png",
+  background: "https://i.ytimg.com/vi/8X1cnXu4IK4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA3z-0GMVSHABu3p6kA3hc1hFGVYA",
+  image: "https://llanosprimaria.weebly.com/uploads/4/2/9/2/4292371/captura-de-pantalla-2021-07-07-a-las-8-37-55_orig.png",
 
   explanation: `
 En quinto grado trabajamos sumas y restas con números grandes
@@ -63,8 +63,8 @@ hasta 100 mil.
   title: "Multiplicación hasta 3 cifras",
   icon: "✖️",
   gameId: "fast",
-  background: "https://img.freepik.com/vector-premium/fondo-educativo_23-2149071360.jpg",
-  image: "https://static.wixstatic.com/media/5f14ab_69e6f27bb1b44c15bc7bf0c8d10c9730~mv2.png",
+  background: "https://www.bartolomecossio.com/MATEMATICAS/operaciones_04.png",
+  image: "https://matemovil.com/wp-content/uploads/2021/03/Multiplicacion-por-3-cifras-6.png",
 
   explanation: `
 Multiplicamos números de 2 y 3 cifras.
@@ -89,8 +89,8 @@ Multiplicamos números de 2 y 3 cifras.
   title: "División por 1 y 2 cifras",
   icon: "➗",
   gameId: "order",
-  background: "https://i.imgur.com/0hpQeIq.jpeg",
-  image: "https://www.smartick.es/imagenes/blog/mi-division.png",
+  background: "https://www.smartick.es/blog/wp-content/uploads/divisiones-por-dos-cifras-5.png",
+  image: "https://image.slidesharecdn.com/divisionpordoscifraspasoapaso-130125044110-phpapp01/75/Division-por-dos-cifras-paso-a-paso-1-2048.jpg",
 
   explanation: `
 Divisiones largas con números grandes.
@@ -117,8 +117,8 @@ Divisiones largas con números grandes.
   title: "Fracciones y equivalencias",
   icon: "🧮",
   gameId: "memory",
-  background: "https://i.imgur.com/8Y6zGXi.jpeg",
-  image: "https://i.imgur.com/2XWflhn.png",
+  background: "https://matematicas.uno/wp-content/uploads/2021/10/Numeros-decimales.jpg",
+  image: "https://www.blinklearning.com/useruploads/ctx/a/48088669/r/s/12797569/Imagen-5.3.png?idcurso=880569",
 
   explanation: `
 Aprendemos fracciones equivalentes, simplificación y suma/resta básica.
@@ -144,8 +144,8 @@ Aprendemos fracciones equivalentes, simplificación y suma/resta básica.
   title: "Decimales básicos",
   icon: "🔢",
   gameId: "fast",
-  background: "https://i.imgur.com/w6jgJq4.jpeg",
-  image: "https://i.imgur.com/1Uy8aK3.png",
+  background: "https://i.ytimg.com/vi/n1zzIFroYHc/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AHGCYAC0AWKAgwIABABGFwgZSgPMA8=&rs=AOn4CLDvDIQkSs7g4M81MKQz9Ixn1WvPZg",
+  image: "https://i.ytimg.com/vi/3m21-4C8t2U/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGGQgNCh_MA8=&rs=AOn4CLAmOxFr-Iusr8UEtwWVzOeS3RnDfA",
 
   explanation: `
 Leemos, comparamos y ordenamos décimas y centésimas.
@@ -172,8 +172,8 @@ Leemos, comparamos y ordenamos décimas y centésimas.
   title: "Área y perímetro avanzado",
   icon: "📐",
   gameId: "order",
-  background: "https://i.imgur.com/FP7tLUF.jpeg",
-  image: "https://i.imgur.com/np8F94O.png",
+  background: "https://quizizz.com/media/resource/gs/quizizz-media/quizzes/8eed2d94-644d-484a-8cfb-52ad994bb361",
+  image: "https://i.ytimg.com/vi/ErPvoxbY5e4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA7Ay0vLBKCt7HIVBAB5pTOmjLqMg",
 
   explanation: `
 Calculamos áreas y perímetros de figuras compuestas.
@@ -200,8 +200,8 @@ Calculamos áreas y perímetros de figuras compuestas.
   title: "Gráficos y datos",
   icon: "📊",
   gameId: "memory",
-  background: "https://i.imgur.com/vClSZ8d.jpeg",
-  image: "https://i.imgur.com/VFnIPLa.png",
+  background: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOJ6xfId3L_hFYtgvFJD42C95TdGhY3X9nfNjrb0_nXv_Ha57ohN7zQWuF-IOynR_0QZM&usqp=CAU",
+  image: "https://i.ytimg.com/vi/sWxubk4MERM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDFOhwsdFkmB5iymA5E8sw8MWrNfw",
 
   explanation: `
 Interpretamos gráficos de barras y pictogramas.
@@ -226,8 +226,8 @@ Interpretamos gráficos de barras y pictogramas.
   title: "Patrones numéricos",
   icon: "🔢",
   gameId: "fast",
-  background: "https://i.imgur.com/9oJtVhN.jpeg",
-  image: "https://i.imgur.com/C7e0GfM.png",
+  background: "https://i.ytimg.com/vi/h4SWeqwurw8/sddefault.jpg",
+  image: "https://i.ytimg.com/vi/qSShfZcA08g/maxresdefault.jpg",
 
   explanation: `
 Series avanzadas: de 3 en 3, 5 en 5, multiplicativas…
@@ -253,8 +253,8 @@ Series avanzadas: de 3 en 3, 5 en 5, multiplicativas…
   title: "Problemas de dos operaciones",
   icon: "📝",
   gameId: "order",
-  background: "https://i.imgur.com/PrJUKSU.jpeg",
-  image: "https://i.imgur.com/Lz9ikPY.png",
+  background: "https://i.ytimg.com/vi/O-Xo8IuwCvc/sddefault.jpg",
+  image: "https://i.ytimg.com/vi/B2FgQNl_E-Y/maxresdefault.jpg",
 
   explanation: `
 Resolución de problemas con 2 pasos: suma + multiplicación, resta + división, etc.
@@ -279,8 +279,8 @@ Resolución de problemas con 2 pasos: suma + multiplicación, resta + división,
   title: "Ordenar números hasta 100 000",
   icon: "📈",
   gameId: "order",
-  background: "https://i.imgur.com/oAPdyQI.jpeg",
-  image: "https://cdn0.unprofesor.com/es/posts/5/2/0/ordenar_numeros_25_orig.jpg",
+  background: "https://i.ytimg.com/vi/a4dEFoRH4ms/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCBtAM-9ZQHWtqQT-WJHbs6vpPMvA",
+  image: "https://image.slidesharecdn.com/clase03compararyordenarnmerosnaturales-160331234522/75/Quinto-basico-Clase-03-comparar-y-ordenar-numeros-naturales-2-2048.jpg",
 
   explanation: `
 Ordenamos números grandes de menor a mayor y viceversa.

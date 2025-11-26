@@ -36,8 +36,8 @@ export const topicsData4: Record<string, MathTopic> = {
   title: "Sumas con números hasta 10 000",
   icon: "➕",
   gameId: "memory",
-  background: "https://img.freepik.com/vector-premium/fondo-matematicas-numeros_23-2148148628.jpg",
-  image: "https://static.wixstatic.com/media/3e1d47_7cd5f719059b4fdcb71cbb18ce87140e~mv2.png",
+  background: "https://profemonica.com/wp-content/uploads/2024/05/Sistema-de-numeracion-decimal-hasta-10.000-7.jpg",
+  image: "https://llanosprimaria.weebly.com/uploads/4/2/9/2/4292371/captura-de-pantalla-2021-07-07-a-las-8-38-44_orig.png",
 
   explanation: `
 En cuarto grado aprendemos a sumar números grandes usando orden de unidades, decenas, centenas y unidades de millar.
@@ -78,8 +78,8 @@ Pasos:
   title: "Restas con números hasta 10 000",
   icon: "➖",
   gameId: "order",
-  background: "https://st4.depositphotos.com/1156795/39428/i/450/depositphotos_394284600-stock-photo-math-line-icons-seamless-pattern.jpg",
-  image: "https://www.smartick.es/imagenes/blog/resta-llevadas.png",
+  background: "https://i.ytimg.com/vi/0tSnwVlDIBo/maxresdefault.jpg",
+  image: "https://mati.naukas.com/files/2012/07/llevada81.jpg",
 
   explanation: `
 Para restar números grandes debemos colocar las cifras alineadas y, si falta, pedir prestado.
@@ -115,8 +115,8 @@ Para restar números grandes debemos colocar las cifras alineadas y, si falta, p
   title: "Multiplicación hasta 2 cifras",
   icon: "✖️",
   gameId: "fast",
-  background: "https://img.freepik.com/vector-premium/fondo-dibujos-animados-estilo-escuela_23-2149329639.jpg",
-  image: "https://static.wixstatic.com/media/5f14ab_69e6f27bb1b44c15bc7bf0c8d10c9730~mv2.png",
+  background: "https://i.ytimg.com/vi/mLMl9k-hdB0/sddefault.jpg",
+  image: "https://matemovil.com/wp-content/uploads/2021/03/Multiplicacion-por-2-cifras-ejercicio-resuelto-4.png",
 
   explanation: `
 Aprendemos a multiplicar números de 1 o 2 cifras.
@@ -146,7 +146,7 @@ La multiplicación es una suma repetida.
   title: "División básica",
   icon: "➗",
   gameId: "fast",
-  background: "https://img.freepik.com/vector-gratis/fondo-educativo-dibujado-mano_23-2148814674.jpg",
+  background: "https://i.ytimg.com/vi/OU6N3qyrX8Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLC0nW6enB-3FDHOhkt071eYioMKZA",
   image:
     "https://www.smartick.es/imagenes/blog/mi-division.png",
 
@@ -178,7 +178,7 @@ Dividir es repartir en partes iguales.
   icon: "🔷",
   gameId: "memory",
   background: "https://i.imgur.com/3Rdv1SP.png",
-  image: "https://i.pinimg.com/originals/07/f1/68/07f168481617f9d0611a0d468efa1e32.jpg",
+  image: "https://i.ytimg.com/vi/4HbVQzMLqoI/hqdefault.jpg",
 
   explanation: `
 Aprendemos polígonos: triángulos, cuadriláteros, pentágonos y hexágonos.
@@ -215,8 +215,8 @@ Aprendemos polígonos: triángulos, cuadriláteros, pentágonos y hexágonos.
   title: "Clasificación avanzada",
   icon: "🎨",
   gameId: "order",
-  background: "https://i.imgur.com/83TyjPF.jpeg",
-  image: "https://i.imgur.com/6E98BoJ.png",
+  background: "https://es.scribd.com/document/473349970/001-Clasificacion-de-los-objetos-pdf",
+  image: "https://www.liveworksheets.com/sites/default/files/styles/worksheet/public/def_files/2021/5/26/105261334341756911/105261334341756911002.jpg?itok=6FlccFFo",
 
   explanation: `
 Clasificamos objetos según varias características: uso, origen, material y tamaño.
@@ -247,9 +247,9 @@ Clasificamos objetos según varias características: uso, origen, material y tam
     gameId: "order",
 
     background:
-      "https://i0.wp.com/www.actividadesdeinfantilyprimaria.com/wp-content/uploads/2020/06/Actividad-interactiva-concepto-mayor-menor-en-nu%CC%81meros-.png",
+      "https://i.ytimg.com/vi/ehp7UL_YHzQ/maxresdefault.jpg",
 
-    image: "https://i.ytimg.com/vi/v67X2aonkU4/maxresdefault.jpg",
+    image: "https://imgv2-1-f.scribdassets.com/img/document/463576927/original/59bc9da7c1/1?v=1",
 
     explanation: `
 Comparar números nos permite saber cuál es mayor y cuál es menor.
@@ -286,10 +286,10 @@ Comparar números nos permite saber cuál es mayor y cuál es menor.
     gameId: "memory",
 
     background:
-      "https://st.depositphotos.com/28960142/51466/v/450/depositphotos_514660806-stock-illustration-how-many-objects-preschool-counting.jpg",
+      "https://img.freepik.com/vector-premium/juego-conteo-ninos-edad-preescolar-educativo-juego-matematico-cuenta-cuantos-objetos-transporte-escribe-resultado_255358-2023.jpg",
 
     image:
-      "https://content.tinytap.it/10E66D1D-2B60-4E6E-AEC7-033928D3EAE5/coverImage.png?ver=0",
+      "https://content.tinytap.it/A9AA8623-C78A-4D1E-991C-F355B0B5C63B/coverImage813x610.png",
 
     explanation: `
 Contar es decir números en orden mientras observamos objetos.
@@ -325,7 +325,7 @@ Contar es decir números en orden mientras observamos objetos.
 
     background: "https://i.ytimg.com/vi/YkzRtsIjqWI/maxresdefault.jpg",
 
-    image: "https://matemathweb.com/wp-content/uploads/2020/08/image-100.png",
+    image: "https://image.slidesharecdn.com/serienumrica-131215141529-phpapp02/75/Serie-numerica-2-2048.jpg",
 
     explanation: `
 Las series siguen un patrón.
@@ -360,9 +360,9 @@ Las series siguen un patrón.
     gameId: "order",
 
     background:
-      "https://i0.wp.com/www.recursosep.com/wp-content/uploads/2022/07/portada-ordenar-numeros-verano.jpg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHf2aWq5KqN3iEayXNWhhSv5DC5AphBuLKhR2X8l8zulnv1mEeKemKm8aL5mjN2PkG2uI&usqp=CAU",
 
-    image: "https://cdn0.unprofesor.com/es/posts/5/2/0/ordenar_numeros_25_orig.jpg",
+    image: "https://cdn0.unprofesor.com/es/posts/5/2/0/ordenar_numeros_25_600.jpg",
 
     explanation: `
 Ordenar números es colocarlos de menor a mayor o de mayor a menor.
