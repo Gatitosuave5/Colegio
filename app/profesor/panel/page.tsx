@@ -127,16 +127,12 @@ useEffect(() => {
 
   const contenidosPorGrado: Record<number, any[]> = {
     1: [
-      { id_contenido: 1, categoria: "Matemática", titulo: "Sumas del 1 al 10" },
-      { id_contenido: 2, categoria: "Matemática", titulo: "Restas del 1 al 10" },
-      { id_contenido: 3, categoria: "Matemática", titulo: "Números del 1 al 100" },
-      { id_contenido: 4, categoria: "Matemática", titulo: "Figuras geométricas básicas" },
-      { id_contenido: 5, categoria: "Matemática", titulo: "Clasificación de objetos" },
-      { id_contenido: 6, categoria: "Matemática", titulo: "Problemas simples de suma" },
-      { id_contenido: 7, categoria: "Matemática", titulo: "Mayor / Menor" },
-      { id_contenido: 8, categoria: "Matemática", titulo: "Conteo de objetos" },
-      { id_contenido: 9, categoria: "Matemática", titulo: "Series numéricas simples" },
-      { id_contenido: 10, categoria: "Matemática", titulo: "Ordenar números" },
+      
+      { id_contenido: 1, categoria: "Matemática", titulo: "Sumas del 1 al 10", storyId: "sumas-1-al-10", activo: false },
+
+      { id_contenido: 2, categoria: "Matemática", titulo: "Restas del 1 al 10", storyId: "restas-1-al-10", activo: false },
+
+      
 
       { id_contenido: 61, categoria: "Lectura", titulo: "Caperucita Roja", storyId: "caperucita-roja", activo: false },
       { id_contenido: 62, categoria: "Lectura", titulo: "El Patito Feo", storyId: "el-patito-feo", activo: false },
