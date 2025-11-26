@@ -228,6 +228,26 @@ useEffect(() => {
     return () => s.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!socket) return;
+  
+    const idSalon = localStorage.getItem("codigoSalon");
+    if (!idSalon) return;
+  
+    const canal = `salon-eliminado-${idSalon}`;
+  
+    socket.on(canal, () => {
+      console.log("Salón eliminado, recargando alumno...");
+      router.push("/");
+    });
+  
+    return () => socket.off(canal);
+  }, [socket]);
+  
+
+  
+  
+
   //  Obtener salón
   useEffect(() => {
     const obtenerSalon = async () => {
