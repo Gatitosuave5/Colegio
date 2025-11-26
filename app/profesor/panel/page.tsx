@@ -641,7 +641,7 @@ useEffect(() => {
                       return (
                         <div
                           key={estudiante.id}
-                          className={`border-2 rounded-xl p-4 transition hover:shadow-lg ${getRankingColor()}`}
+                          className={`border-2 rounded-xl p-4 transition hover:shadow-lg text-black ${getRankingColor()}`}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-4 flex-1">
@@ -680,7 +680,7 @@ useEffect(() => {
                           </div>
 
                           {editandoEstudiante === estudiante.id ? (
-                            <div className="flex gap-2 justify-end mt-3 pt-3 border-t">
+                            <div className="flex gap-2 justify-end mt-3 pt-3 border-t ">
                               <button
                                 onClick={() => guardarNombreEstudiante(estudiante.id, salonSeleccionado.codigo)}
                                 className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm font-semibold transition hover:scale-105"

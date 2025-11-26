@@ -262,16 +262,41 @@ app.post("/api/alumnos_temporales/puntaje", async (req, res) => {
 
 
 /* DELETE - ELIMINAR SALÓN */
-app.delete("/api/salones", async (req, res) => {
+
+app.delete("/api/salones/:codigo", async (req, res) => {
+  const codigoSalon = req.params.codigo;
+
   try {
-    const { id } = req.body;
-    if (!id) return res.status(400).json({ error: "ID requerido" });
+    console.log("🧹 Eliminando salón:", codigoSalon);
 
-    await db.execute("DELETE FROM salones WHERE id = ?", [id]);
+    // 1. Ver alumnos antes de borrar (debug)
+    const [alumnos] = await db.execute(
+      "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
+      [codigoSalon]
+    );
+    console.log("👀 Alumnos encontrados:", alumnos);
 
-    res.json({ success: true, mensaje: "Salón eliminado correctamente" });
+    // 2. Borrar todos los alumnos del salón
+    await db.execute(
+      "DELETE FROM alumnos_temporales WHERE salon_codigo = ?",
+      [codigoSalon]
+    );
+    console.log("🟢 Alumnos eliminados del salón:", codigoSalon);
+
+    // 3. Borrar el salón
+    await db.execute(
+      "DELETE FROM salones WHERE codigo = ?",
+      [codigoSalon]
+    );
+    console.log("🟢 Salón eliminado:", codigoSalon);
+
+    // 4. Notificar vía socket a todos los alumnos conectados
+    io.emit(`salon-eliminado-${codigoSalon}`);
+    console.log("📢 Socket emitido:", `salon-eliminado-${codigoSalon}`);
+
+    res.json({ success: true });
   } catch (error) {
-    console.error(error);
+    console.log("❌ Error al eliminar salón:", error);
     res.status(500).json({ error: "Error al eliminar salón" });
   }
 });
@@ -372,26 +397,45 @@ app.put("/api/alumnos_temporales", async (req, res) => {
 });
 
 /* ELIMINAR ALUMNO POR ID */
+/* DELETE - ELIMINAR UN ALUMNO ESPECÍFICO */
+/* DELETE - ELIMINAR ALUMNO INDIVIDUAL DESDE EL PROFESOR */
 app.delete("/api/alumnos_temporales", async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id, codigo } = req.body;
 
-    if (!id) {
-      return res.status(400).json({ error: "ID requerido" });
+    if (!id || !codigo) {
+      return res.status(400).json({ error: "ID y código requeridos" });
     }
 
+    // 1️⃣ Eliminar alumno
     await db.execute(
-      "DELETE FROM alumnos_temporales WHERE id = ?",
-      [id]
+      "DELETE FROM alumnos_temporales WHERE id = ? AND salon_codigo = ?",
+      [id, codigo]
     );
 
-    res.json({ success: true, mensaje: "Alumno eliminado correctamente" });
+    console.log("🟢 Alumno eliminado:", id, codigo);
+
+    // 2️⃣ Obtener lista actualizada
+    const [lista] = await db.execute(
+      "SELECT * FROM alumnos_temporales WHERE salon_codigo = ?",
+      [codigo]
+    );
+
+    console.log("📤 Enviando lista actualizada:", lista);
+
+    // 3️⃣ Emitir la lista actualizada
+    io.emit(`alumnos-${codigo}`, lista);
+
+    res.json({ success: true, alumnos: lista });
 
   } catch (error) {
-    console.error("Error al eliminar alumno:", error);
+    console.error(error);
     res.status(500).json({ error: "Error al eliminar alumno" });
   }
 });
+
+
+
 
 app.post("/api/salones", async (req, res) => {
   try {

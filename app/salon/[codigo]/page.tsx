@@ -74,6 +74,53 @@ useEffect(() => {
   }
 }, []);
 
+useEffect(() => {
+  if (!socket) return;
+
+  // ⚠️ Recuperar el código de la URL o del localStorage
+  const codigoReal = codigo || localStorage.getItem("codigoSalon");
+  if (!codigoReal) return;
+
+  const canal = `salon-eliminado-${codigoReal}`;
+
+  console.log("👂 Escuchando canal:", canal);
+
+  const handler = () => {
+    console.log("🔥 Evento recibido: salón eliminado, redirigiendo al login...");
+    router.push("/");
+  };
+
+  socket.on(canal, handler);
+
+  return () => {
+    socket.off(canal, handler);
+  };
+}, [socket, codigo, router]);
+
+useEffect(() => {
+  if (!socket) return;
+
+  const id = sessionStorage.getItem("idAlumno");
+  if (!id) return;
+
+  const canal = `alumno-expulsado-${id}`;
+  console.log(" Escuchando expulsión personal en:", canal);
+
+  const handler = () => {
+    console.log(" Fuiste expulsado del salón");
+    
+    // Limpiar datos locales
+    sessionStorage.removeItem("idAlumno");
+    localStorage.removeItem("nombreAlumno");
+    localStorage.removeItem("codigoSalon");
+
+    router.push("/");
+  };
+
+  socket.on(canal, handler);
+  return () => socket.off(canal, handler);
+}, [socket]);
+
 
 useEffect(() => {
   const verificarAlumno = async () => {
@@ -138,19 +185,12 @@ const stories: Story[] = [
 
 
 useEffect(() => {
-  const cargarAlumno = async () => {
-    const res = await fetch(`http://localhost:3001/api/alumno?nombre=${nombreAlumno}&salon=${codigo}`);
-    const data = await res.json();
+  if (!socket) return;
+  socket.on(`alumnos-${codigo}`, (data) => {
+    console.log("📩 LLEGO DESDE BACKEND:", data);
+  });
+}, [socket, codigo]);
 
-    if (data.alumno) {
-      setMiPuntaje(data.alumno.puntaje)
-    }
-
-    setAlumnoCargado(true);   
-  };
-
-  cargarAlumno();
-}, [nombreAlumno, codigo]);
 
 // ✅ Cargar contenidos guardados en el salón
 useEffect(() => {
@@ -262,6 +302,43 @@ useEffect(() => {
   
     return () => socket.off(canal);
   }, [socket, codigo]);
+
+  // 👇 NUEVO: si mi ID ya no aparece en la lista => me expulsaron
+useEffect(() => {
+  const id = sessionStorage.getItem("idAlumno");
+  if (!id) return;
+
+  // Si todavía no hay alumnos cargados, no hacemos nada
+  if (!alumnos || alumnos.length === 0) return;
+
+  const sigoEnLista = alumnos.some(a => a.id.toString() === id);
+
+  if (!sigoEnLista) {
+    console.log("🚪 Me eliminaron del salón, saliendo...");
+
+    // Limpiar datos locales
+    sessionStorage.removeItem("idAlumno");
+    localStorage.removeItem("nombreAlumno");
+    // OJO: NO borro codigoSalon por si lo usas para otra cosa,
+    // pero si quieres, también puedes limpiarlo:
+    // localStorage.removeItem("codigoSalon");
+
+    router.push("/"); // 👈 lo mandas al login
+  }
+}, [alumnos, router]);
+
+useEffect(() => {
+  if (!Array.isArray(alumnos)) {
+    console.warn("⚠ alumnos venía corrupto, arreglando...", alumnos);
+
+    
+    queueMicrotask(() => {
+      setAlumnos([]);
+    });
+  }
+}, [alumnos]);
+
+
 
   useEffect(() => {
     if (!socket) return;
