@@ -96,9 +96,10 @@ const STORIES_BY_THEME: Record<number, { eventos: Evento[] }> = {
 
 interface OrdenimientoProps {
   themeId?: number;
+  onBack: () => void;
 }
 
-export default function JuegoOrdenamiento({ themeId = 1 }: OrdenimientoProps) {
+export default function JuegoOrdenamiento({ themeId = 1, onBack }: OrdenimientoProps) {
   const theme = THEMES[themeId - 1];
   const historiaActual = STORIES_BY_THEME[themeId];
   const [eventosRevueltos, setEventosRevueltos] = useState<Evento[]>(
@@ -139,87 +140,94 @@ export default function JuegoOrdenamiento({ themeId = 1 }: OrdenimientoProps) {
     setGanado(false);
   };
 
+  
+
   return (
-    <Card className="w-full border-4 border-green-400">
-      <CardHeader className={`bg-gradient-to-r ${theme.color} text-white rounded-t-lg`}>
-        <CardTitle className="text-2xl">Ordena la Historia - {theme.title}</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-8">
-        <p className="text-lg mb-6 text-center text-green-700 font-semibold">
-          Ordena los eventos de la historia de forma correcta
-        </p>
-
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          {/* Eventos disponibles */}
-          <div className="p-4 bg-green-50 rounded-lg border-2 border-green-200">
-            <p className="text-sm font-bold text-green-700 mb-3">Eventos:</p>
-            <div className="space-y-2">
-              {eventosRevueltos
-                .filter(e => !orden.includes(e.id))
-                .map(evento => (
-                  <Button
-                    key={evento.id}
-                    onClick={() => agregarEvento(evento)}
-                    className="w-full bg-green-300 hover:bg-green-400 text-black font-bold text-left justify-start"
-                  >
-                    {evento.texto}
-                  </Button>
-                ))}
+    <main className="min-h-screen w-full bg-[#f0f9ff] flex justify-center items-start p-6">
+      <Card className="w-full border-4 border-green-400 max-w-4xl">
+        <CardHeader className={`bg-gradient-to-r ${theme.color} text-white rounded-t-lg`}>
+          <CardTitle className="text-2xl">Ordena la Historia - {theme.title}</CardTitle>
+        </CardHeader>
+  
+        <CardContent className="pt-8">
+          <p className="text-lg mb-6 text-center text-green-700 font-semibold">
+            Ordena los eventos de la historia de forma correcta
+          </p>
+  
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            {/* Eventos disponibles */}
+            <div className="p-4 bg-green-50 rounded-lg border-2 border-green-200">
+              <p className="text-sm font-bold text-green-700 mb-3">Eventos:</p>
+              <div className="space-y-2">
+                {eventosRevueltos
+                  .filter(e => !orden.includes(e.id))
+                  .map(evento => (
+                    <Button
+                      key={evento.id}
+                      onClick={() => agregarEvento(evento)}
+                      className="w-full bg-green-300 hover:bg-green-400 text-black font-bold text-left justify-start"
+                    >
+                      {evento.texto}
+                    </Button>
+                  ))}
+              </div>
+            </div>
+  
+            {/* Tu orden */}
+            <div className="p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200">
+              <p className="text-sm font-bold text-yellow-700 mb-3">Tu orden:</p>
+              <div className="space-y-2">
+                {orden.length === 0 ? (
+                  <p className="text-gray-400 italic">Haz clic en los eventos para ordenarlos...</p>
+                ) : (
+                  orden.map((id, idx) => {
+                    const evento = eventosRevueltos.find(e => e.id === id);
+                    return (
+                      <div key={idx} className="flex justify-between items-center p-3 bg-white rounded border-2 border-yellow-300">
+                        <div className="text-yellow-900 font-semibold !opacity-100">
+                          <span className="font-bold text-yellow-700">{idx + 1}.</span> {evento?.texto}
+                        </div>
+  
+                        <Button
+                          onClick={() => removerEvento(idx)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          ✕
+                        </Button>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             </div>
           </div>
-
-          {/* Orden actual */}
-          <div className="p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200">
-            <p className="text-sm font-bold text-yellow-700 mb-3">Tu orden:</p>
-            <div className="space-y-2">
-              {orden.length === 0 ? (
-                <p className="text-gray-400 italic">Haz clic en los eventos para ordenarlos...</p>
-              ) : (
-                orden.map((id, idx) => {
-                  const evento = eventosRevueltos.find(e => e.id === id);
-                  return (
-                    <div key={idx} className="flex justify-between items-center p-3 bg-white rounded border-2 border-yellow-300">
-                     <div className="text-yellow-900 font-semibold !opacity-100">
-  <span className="font-bold text-yellow-700">{idx + 1}.</span> {evento?.texto}
-</div>
-
-                      <Button
-                        onClick={() => removerEvento(idx)}
-                        variant="ghost"
-                        size="sm"
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        ✕
-                      </Button>
-                    </div>
-                  );
-                })
-              )}
+  
+          {/* Mensaje */}
+          {mensaje && (
+            <div className={`p-4 rounded-lg text-center text-lg font-bold mb-6 ${
+              ganado
+                ? 'bg-green-100 text-green-700 border-2 border-green-400'
+                : 'bg-red-100 text-red-700 border-2 border-red-400'
+            }`}>
+              {mensaje}
             </div>
+          )}
+  
+          {/* Botones */}
+          <div className="flex gap-3 justify-center">
+            <Button
+              onClick={reiniciar}
+              className="bg-orange-400 hover:bg-orange-500 text-white font-bold text-lg px-6"
+            >
+              Reintentar
+            </Button>
           </div>
-        </div>
-
-        {/* Mensaje */}
-        {mensaje && (
-          <div className={`p-4 rounded-lg text-center text-lg font-bold mb-6 ${
-            ganado
-              ? 'bg-green-100 text-green-700 border-2 border-green-400'
-              : 'bg-red-100 text-red-700 border-2 border-red-400'
-          }`}>
-            {mensaje}
-          </div>
-        )}
-
-        {/* Botones */}
-        <div className="flex gap-3 justify-center">
-          <Button
-            onClick={reiniciar}
-            className="bg-orange-400 hover:bg-orange-500 text-white font-bold text-lg px-6"
-          >
-            Reintentar
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </main>
   );
+  
+
 }

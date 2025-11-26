@@ -24,6 +24,7 @@ const CONTAINER_HEIGHT = 400;
 
 interface JigsawPuzzleMultiProps {
   themeId?: number;
+  onBack: () => void;
 }
 
 function PuzzleGame({ themeId }: { themeId: number }) {
@@ -270,6 +271,10 @@ function PuzzleGame({ themeId }: { themeId: number }) {
   );
 }
 
-export default function JigsawPuzzleMulti({ themeId = 1 }: JigsawPuzzleMultiProps) {
-  return <PuzzleGame themeId={themeId} />;
+export default function JigsawPuzzleMulti({ themeId = 1, onBack }: JigsawPuzzleMultiProps) {
+  return (
+    <main className="min-h-screen w-full bg-[#f0f9ff] flex justify-center items-start p-6">
+      <PuzzleGame themeId={themeId} />
+    </main>
+  );
 }

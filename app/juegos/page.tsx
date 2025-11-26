@@ -26,19 +26,16 @@ export default function Page({
   const [selectedMode, setSelectedMode] = useState<string>('');
   const [selectedTheme, setSelectedTheme] = useState<number>(0);
 
-  // 🔙 Intercepta el botón atrás del navegador
   useEffect(() => {
-    // Inserta un estado inicial para bloquear el primer "back"
     history.pushState({ page: "game-root" }, "", window.location.href);
   
     const handlePop = () => {
       if (screen === "home") {
-        onBack(); // salir al salón
+        onBack();
       } else {
-        setScreen("home"); // volver dentro del juego sin recargar
+        setScreen("home");
       }
   
-      // Reinsertar el estado para bloquear siguientes atrás
       history.pushState({ page: "game-root" }, "", window.location.href);
     };
   
@@ -46,7 +43,6 @@ export default function Page({
   
     return () => window.removeEventListener("popstate", handlePop);
   }, [screen]);
-  
 
   const handlePlayClick = () => setScreen('modeSelect');
 
@@ -71,10 +67,10 @@ export default function Page({
     setSelectedTheme(0);
   };
 
-  // UI rendering 👇
+  // 🏠 Home
   if (screen === 'home') {
     return (
-      <main className="min-h-screen bg-white relative">
+      <main className="min-h-screen bg-[#f0f9ff] relative">
         <button
           onClick={onBack}
           className="absolute top-6 left-6 p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -87,6 +83,7 @@ export default function Page({
     );
   }
 
+  // 🎮 Modo de juego
   if (screen === 'modeSelect') {
     return (
       <GameModeSelector 
@@ -96,6 +93,7 @@ export default function Page({
     );
   }
 
+  // 🎨 Temas
   if (screen === 'themeSelect') {
     return (
       <ThemeSelector
@@ -103,6 +101,29 @@ export default function Page({
         onSelectTheme={handleThemeSelect}
         onBack={handleBackToModes}
       />
+    );
+  }
+
+  // 🧩 ⬅ ESTA PARTE FALTABA (era la causa del pantallazo negro)
+  if (screen === 'game') {
+    return (
+      <>
+        {selectedMode === 'puzzle' && (
+          <JigsawPuzzleMulti themeId={selectedTheme} onBack={handleBackToModes} />
+        )}
+
+        {selectedMode === 'adivinanzas' && (
+          <JuegoAdivinanzas themeId={selectedTheme} onBack={handleBackToModes} />
+        )}
+
+        {selectedMode === 'memoria' && (
+          <JuegoMemoria themeId={selectedTheme} onBack={handleBackToModes} />
+        )}
+
+        {selectedMode === 'ordenamiento' && (
+          <JuegoOrdenamiento themeId={selectedTheme} onBack={handleBackToModes} />
+        )}
+      </>
     );
   }
 }

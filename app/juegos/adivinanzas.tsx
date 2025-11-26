@@ -15,6 +15,7 @@ interface Adivinanza {
 
 interface AdivinanzasProps {
   themeId?: number;
+  onBack: () => void;
 }
 
 const RIDDLES_BY_THEME: Record<number, Adivinanza[]> = {
@@ -320,7 +321,7 @@ const RIDDLES_BY_THEME: Record<number, Adivinanza[]> = {
   ],
 };
 
-export default function JuegoAdivinanzas({ themeId = 1 }: AdivinanzasProps) {
+export default function JuegoAdivinanzas({ themeId = 1 , onBack}: AdivinanzasProps) {
   const theme = THEMES[themeId - 1];
   const adivinanzas = RIDDLES_BY_THEME[themeId];
 
@@ -392,56 +393,61 @@ export default function JuegoAdivinanzas({ themeId = 1 }: AdivinanzasProps) {
   }
 
   return (
-    <Card className="w-full border-4 border-purple-400">
-      <CardHeader className={`bg-gradient-to-r ${theme.color} text-white rounded-t-lg`}>
-        <CardTitle className="text-2xl">Adivinanzas Mágicas - {theme.title}</CardTitle>
-        <p className="text-sm mt-2">Pregunta {indiceActual + 1} de {adivinanzas.length}</p>
-      </CardHeader>
-      <CardContent className="pt-8">
-        <p className="text-2xl font-bold text-center mb-6 text-purple-700">
-          {adivinanzaActual.pregunta}
-        </p>
-
-        <div className="grid grid-cols-1 gap-3 mb-6">
-          {adivinanzaActual.opciones.map((opcion, idx) => (
-            <Button
-              key={idx}
-              onClick={() => !mostrarResultado && manejarRespuesta(idx)}
-              disabled={mostrarResultado}
-              className={`p-4 text-lg h-auto py-3 font-bold ${
-                respuestaSeleccionada === idx
-                  ? idx === adivinanzaActual.respuestaCorrecta
-                    ? 'bg-green-400 hover:bg-green-400 text-white'
-                    : 'bg-red-400 hover:bg-red-400 text-white'
-                  : 'bg-purple-200 hover:bg-purple-300 text-purple-900'
-              }`}
-            >
-              {opcion}
-            </Button>
-          ))}
-        </div>
-
-        {mostrarResultado && (
-          <div className={`p-4 rounded-lg text-center font-bold mb-6 ${
-            respuestaSeleccionada === adivinanzaActual.respuestaCorrecta
-              ? 'bg-green-100 text-green-700 border-2 border-green-400'
-              : 'bg-red-100 text-red-700 border-2 border-red-400'
-          }`}>
-            {respuestaSeleccionada === adivinanzaActual.respuestaCorrecta ? '✅' : '❌'} {adivinanzaActual.explicacion}
+    <main className="min-h-screen w-full bg-[#f0f9ff] flex justify-center items-start p-6">
+      <Card className="w-full border-4 border-purple-400 max-w-4xl">
+        <CardHeader className={`bg-gradient-to-r ${theme.color} text-white rounded-t-lg`}>
+          <CardTitle className="text-2xl">Adivinanzas Mágicas - {theme.title}</CardTitle>
+          <p className="text-sm mt-2">Pregunta {indiceActual + 1} de {adivinanzas.length}</p>
+        </CardHeader>
+  
+        <CardContent className="pt-8">
+          <p className="text-2xl font-bold text-center mb-6 text-purple-700">
+            {adivinanzaActual.pregunta}
+          </p>
+  
+          <div className="grid grid-cols-1 gap-3 mb-6">
+            {adivinanzaActual.opciones.map((opcion, idx) => (
+              <Button
+                key={idx}
+                onClick={() => !mostrarResultado && manejarRespuesta(idx)}
+                disabled={mostrarResultado}
+                className={`p-4 text-lg h-auto py-3 font-bold ${
+                  respuestaSeleccionada === idx
+                    ? idx === adivinanzaActual.respuestaCorrecta
+                      ? 'bg-green-400 hover:bg-green-400 text-white'
+                      : 'bg-red-400 hover:bg-red-400 text-white'
+                    : 'bg-purple-200 hover:bg-purple-300 text-purple-900'
+                }`}
+              >
+                {opcion}
+              </Button>
+            ))}
           </div>
-        )}
-
-        {mostrarResultado && (
-          <div className="flex justify-center">
-            <Button
-              onClick={siguiente}
-              className="bg-purple-400 hover:bg-purple-500 text-white font-bold text-lg px-6"
-            >
-              Siguiente →
-            </Button>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+  
+          {mostrarResultado && (
+            <>
+              <div className={`p-4 rounded-lg text-center font-bold mb-6 ${
+                respuestaSeleccionada === adivinanzaActual.respuestaCorrecta
+                  ? 'bg-green-100 text-green-700 border-2 border-green-400'
+                  : 'bg-red-100 text-red-700 border-2 border-red-400'
+              }`}>
+                {respuestaSeleccionada === adivinanzaActual.respuestaCorrecta ? '✅' : '❌'} {adivinanzaActual.explicacion}
+              </div>
+  
+              <div className="flex justify-center">
+                <Button
+                  onClick={siguiente}
+                  className="bg-purple-400 hover:bg-purple-500 text-white font-bold text-lg px-6"
+                >
+                  Siguiente →
+                </Button>
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </main>
   );
+  
+  
 }

@@ -97,9 +97,11 @@ const MEMORY_PAIRS_BY_THEME: Record<number, { emoji: string; nombre: string }[]>
 
 interface MemoriaProps {
   themeId?: number;
+  onBack: () => void;
 }
 
-export default function JuegoMemoria({ themeId = 1 }: MemoriaProps) {
+
+export default function JuegoMemoria({ themeId = 1, onBack }: MemoriaProps) {
   const theme = THEMES[themeId - 1];
   const pares = MEMORY_PAIRS_BY_THEME[themeId];
 
@@ -159,49 +161,54 @@ export default function JuegoMemoria({ themeId = 1 }: MemoriaProps) {
   };
 
   return (
-    <Card className="w-full border-4 border-blue-400">
-      <CardHeader className={`bg-gradient-to-r ${theme.color} text-white rounded-t-lg`}>
-        <CardTitle className="text-2xl">Juego de Memoria - {theme.title}</CardTitle>
-        <p className="text-sm mt-2">Movimientos: {movimientos}</p>
-      </CardHeader>
-      <CardContent className="pt-8">
-        <p className="text-lg text-center mb-6 text-blue-700 font-semibold">
-          Encuentra todos los pares de emojis
-        </p>
-
-        <div className="grid grid-cols-4 gap-3 mb-8 md:grid-cols-6">
-          {cartas.map((carta, idx) => (
-            <button
-              key={idx}
-              onClick={() => manejarClick(idx)}
-              disabled={carta.revelada || carta.encontrada || ganado}
-              className={`h-20 rounded-lg font-bold text-2xl transition-all transform ${
-                carta.revelada || carta.encontrada
-                  ? 'bg-blue-200 text-2xl'
-                  : 'bg-blue-400 hover:bg-blue-500 hover:scale-105 active:scale-95'
-              } ${carta.encontrada ? 'opacity-50' : ''}`}
-            >
-              {carta.revelada || carta.encontrada ? carta.valor : '?'}
-            </button>
-          ))}
-        </div>
-
-        {ganado && (
-          <div className="p-4 bg-green-100 rounded-lg text-center mb-6 border-2 border-green-400">
-            <p className="text-2xl font-bold text-green-700">¡Lo lograste!</p>
-            <p className="text-lg text-green-600">En {movimientos} movimientos</p>
+    <main className="min-h-screen w-full bg-[#f0f9ff] flex justify-center items-start p-6">
+      <Card className="w-full border-4 border-blue-400 max-w-4xl">
+        <CardHeader className={`bg-gradient-to-r ${theme.color} text-white rounded-t-lg`}>
+          <CardTitle className="text-2xl">Juego de Memoria - {theme.title}</CardTitle>
+          <p className="text-sm mt-2">Movimientos: {movimientos}</p>
+        </CardHeader>
+  
+        <CardContent className="pt-8">
+          <p className="text-lg text-center mb-6 text-blue-700 font-semibold">
+            Encuentra todos los pares de emojis
+          </p>
+  
+          <div className="grid grid-cols-4 gap-3 mb-8 md:grid-cols-6">
+            {cartas.map((carta, idx) => (
+              <button
+                key={idx}
+                onClick={() => manejarClick(idx)}
+                disabled={carta.revelada || carta.encontrada || ganado}
+                className={`h-20 rounded-lg font-bold text-2xl transition-all transform ${
+                  carta.revelada || carta.encontrada
+                    ? 'bg-blue-200 text-2xl'
+                    : 'bg-blue-400 hover:bg-blue-500 hover:scale-105 active:scale-95'
+                } ${carta.encontrada ? 'opacity-50' : ''}`}
+              >
+                {carta.revelada || carta.encontrada ? carta.valor : '?'}
+              </button>
+            ))}
           </div>
-        )}
-
-        <div className="flex justify-center">
-          <Button
-            onClick={reiniciar}
-            className="bg-blue-400 hover:bg-blue-500 text-white font-bold text-lg px-6"
-          >
-            {ganado ? 'Jugar de Nuevo' : 'Reintentar'}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+  
+          {ganado && (
+            <div className="p-4 bg-green-100 rounded-lg text-center mb-6 border-2 border-green-400">
+              <p className="text-2xl font-bold text-green-700">¡Lo lograste!</p>
+              <p className="text-lg text-green-600">En {movimientos} movimientos</p>
+            </div>
+          )}
+  
+          <div className="flex justify-center">
+            <Button
+              onClick={reiniciar}
+              className="bg-blue-400 hover:bg-blue-500 text-white font-bold text-lg px-6"
+            >
+              {ganado ? 'Jugar de Nuevo' : 'Reintentar'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </main>
   );
+  
+
 }
