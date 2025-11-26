@@ -54,60 +54,58 @@ async function agregarPuntos(puntos: number, lessonId: string | number) {
 
 
 const quizQuestions: Record<string, Question[]> = {
- "story-4to-1": [
-  { question: "¿Cómo se llamaba el zorro del cuento?", options: ["Rilan", "Dario", "Tomas"], correctAnswerIndex: 0 },
-  { question: "¿Dónde vivía Rilan?", options: ["Cerca del Bosque Brumoso", "En una ciudad grande", "En una isla"], correctAnswerIndex: 0 },
-  { question: "¿Qué criatura encontró herida?", options: ["Una sombra del bosque", "Un lobo gigante", "Un ave dorada"], correctAnswerIndex: 0 },
-  { question: "¿Qué sonido extraño escuchaban por las noches?", options: ["Susurros del bosque", "Truenos", "Risas"], correctAnswerIndex: 0 },
-  { question: "¿Qué hacía Rilan para proteger al bosque?", options: ["Vigilaba desde el árbol viejo", "Encendía una fogata", "Recogía flores"], correctAnswerIndex: 0 },
-  { question: "¿Qué decidió finalmente Rilan?", options: ["Convertirse en guardián del Bosque Brumoso", "Irse del pueblo", "No volver al bosque"], correctAnswerIndex: 0 }
+ "story-2do-1": [
+  { question: "¿Cómo se llamaba la mariposa?", options: ["Lila", "Mia", "Ana"], correctAnswerIndex: 0 },
+  { question: "¿Por qué volaba siempre bajito?", options: ["Tenía miedo", "Estaba cansada", "Era pequeña"], correctAnswerIndex: 0 },
+  { question: "¿Qué apareció en lo alto del árbol?", options: ["Una flor brillante", "Un pájaro", "Una nube"], correctAnswerIndex: 0 },
+  { question: "¿Qué decidió hacer Lila?", options: ["Intentar subir", "Dormir", "Irse"], correctAnswerIndex: 0 },
+  { question: "¿Qué vio cuando llegó arriba?", options: ["El jardín completo", "Un río", "Una montaña"], correctAnswerIndex: 0 },
+  { question: "¿Qué enseñanza deja el cuento?", options: ["Que atreverse da grandes recompensas", "Que es mejor no intentar", "Que no debes subir alto"], correctAnswerIndex: 0 }
+],
+  "story-2do-2": [
+  { question: "¿Qué practicaba Leo todos los días?", options: ["Su rugido", "Correr", "Cazar"], correctAnswerIndex: 0 },
+  { question: "¿Qué le pasó después del viento frío?", options: ["Perdió la voz", "Se enfermó", "Se durmió"], correctAnswerIndex: 0 },
+  { question: "¿A quién fue a buscar?", options: ["Al viento", "A otro león", "A su mamá"], correctAnswerIndex: 0 },
+  { question: "¿Qué consejo le dio el viento?", options: ["Descansar", "Correr más", "Gritar"], correctAnswerIndex: 0 },
+  { question: "¿Cómo recuperó su rugido?", options: ["Durmiendo", "Corriendo", "Comiendo"], correctAnswerIndex: 0 },
+  { question: "¿Qué aprendió Leo?", options: ["Que cuidarse también es ser fuerte", "Que rugir no importa", "Que el viento manda"], correctAnswerIndex: 0 }
 ],
 
-"story-4to-2": [
-  { question: "¿Cómo se llamaba la protagonista?", options: ["Maya", "Tara", "Sofia"], correctAnswerIndex: 0 },
-  { question: "¿Qué objeto encontró Maya en el ático?", options: ["Un reloj antiguo", "Un mapa", "Una brújula"], correctAnswerIndex: 0 },
-  { question: "¿Qué le pasaba al reloj?", options: ["No marcaba ninguna hora", "Giraba muy rápido", "Estaba roto en pedazos"], correctAnswerIndex: 0 },
-  { question: "¿Quién le contó a Maya la historia del reloj?", options: ["Su abuela", "Su tío", "El bibliotecario"], correctAnswerIndex: 0 },
-  { question: "¿Qué debía hacer Maya para restaurar el tiempo perdido?", options: ["Recordar un momento especial de su familia", "Buscar una llave oculta", "Romper el reloj"], correctAnswerIndex: 0 },
-  { question: "¿Qué aprendió Maya?", options: ["Que los recuerdos mantienen unida a la familia", "Que los relojes son mágicos", "Que el tiempo se puede detener"], correctAnswerIndex: 0 }
+  "story-2do-3": [
+  { question: "¿Cómo se llamaba la ciudad?", options: ["Gotitas", "Colores", "Lluvia"], correctAnswerIndex: 0 },
+  { question: "¿Qué usaban todos?", options: ["Paraguas", "Sombreros", "Botas"], correctAnswerIndex: 0 },
+  { question: "¿Qué pasó cuando llovió demasiado?", options: ["Los paraguas salieron volando", "Se inundó", "Se rompieron"], correctAnswerIndex: 0 },
+  { question: "¿Qué hizo Mia?", options: ["Reparó los paraguas", "Se escondió", "Los vendió"], correctAnswerIndex: 0 },
+  { question: "¿Cómo se sintieron los vecinos?", options: ["Felices", "Tristes", "Enojados"], correctAnswerIndex: 0 },
+  { question: "¿Qué enseñanza deja el cuento?", options: ["Ayudar hace mejor a la comunidad", "Es mejor guardar tus cosas", "La lluvia es mala"], correctAnswerIndex: 0 }
 ],
 
-"story-4to-3": [
-  { question: "¿Cómo se llamaba la ciudad subterránea?", options: ["Lumen", "Aurora", "Brillán"], correctAnswerIndex: 0 },
-  { question: "¿Qué hacía especial a esa ciudad?", options: ["Era iluminada por cristales brillantes", "Vivía bajo el mar", "Las casas eran de metal"], correctAnswerIndex: 0 },
-  { question: "¿Qué problema apareció en la ciudad?", options: ["Los cristales empezaron a apagarse", "Hubo un terremoto", "Los túneles se inundaron"], correctAnswerIndex: 0 },
-  { question: "¿Quién era la protagonista?", options: ["Tara", "Maya", "Lía"], correctAnswerIndex: 0 },
-  { question: "¿Qué hizo Tara para ayudar?", options: ["Siguió las pistas de los cristales apagados", "Se escondió", "Abandonó la ciudad"], correctAnswerIndex: 0 },
-  { question: "¿Qué enseñanza deja el cuento?", options: ["La valentía puede salvar incluso a una ciudad entera", "Los túneles son peligrosos", "La oscuridad es imposible de vencer"], correctAnswerIndex: 0 }
+ "story-2do-4": [
+  { question: "¿Cómo se llamaba el tren?", options: ["Tito", "Trueno", "Rayo"], correctAnswerIndex: 0 },
+  { question: "¿Qué problema tenía?", options: ["Siempre tenía sueño", "Iba muy rápido", "Se perdía"], correctAnswerIndex: 0 },
+  { question: "¿Quién habló con él?", options: ["Ana", "Lila", "Tomás"], correctAnswerIndex: 0 },
+  { question: "¿Qué consejo le dio Ana?", options: ["Dormir bien", "Comer más", "Correr rápido"], correctAnswerIndex: 0 },
+  { question: "¿Cómo cambió Tito?", options: ["Se despertó temprano", "Corrió más", "Dejó de trabajar"], correctAnswerIndex: 0 },
+  { question: "¿Qué enseñanza deja la historia?", options: ["Dormir bien es importante", "No hay que trabajar", "La velocidad es todo"], correctAnswerIndex: 0 }
 ],
 
-"story-4to-4": [
-  { question: "¿Cómo se llamaba el protagonista?", options: ["Sergio", "Rilan", "Tomas"], correctAnswerIndex: 0 },
-  { question: "¿Qué lugar misterioso decidió visitar?", options: ["El Puente de los Ecos", "La Cueva Brillante", "El Valle Silencioso"], correctAnswerIndex: 0 },
-  { question: "¿Qué se decía del puente?", options: ["Repetía lo que sentías, no lo que decías", "Estaba embrujado", "Cambiaba de color"], correctAnswerIndex: 0 },
-  { question: "¿Qué emoción escuchó Sergio repetir el puente?", options: ["Su tristeza", "Su felicidad", "Su enojo"], correctAnswerIndex: 0 },
-  { question: "¿Qué entendió al final Sergio?", options: ["Que sus emociones también necesitan ser escuchadas", "Que nunca debía volver", "Que el puente hablaba con magia"], correctAnswerIndex: 0 },
-  { question: "¿Qué enseñanza deja la historia?", options: ["Es importante reconocer lo que sentimos", "Los puentes son peligrosos", "Los ecos son engañosos"], correctAnswerIndex: 0 }
+"story-2do-5": [
+  { question: "¿Dónde estaba el faro?", options: ["Playa Rocas Claras", "Isla Azul", "Costa Brillante"], correctAnswerIndex: 0 },
+  { question: "¿Por qué encendía su luz tarde?", options: ["Creía que nadie lo necesitaba", "Estaba roto", "Tenía miedo"], correctAnswerIndex: 0 },
+  { question: "¿Qué pasó una noche?", options: ["Un barco no veía nada", "Llegó una tormenta", "Se apagó el sol"], correctAnswerIndex: 0 },
+  { question: "¿Cómo ayudó al barco?", options: ["Encendió su luz a tiempo", "Gritó", "Llamó a otros faros"], correctAnswerIndex: 0 },
+  { question: "¿Qué decidió hacer después?", options: ["Encender siempre a tiempo", "Apagarse", "Mudarse"], correctAnswerIndex: 0 },
+  { question: "¿Qué enseñanza deja el cuento?", options: ["Aunque seas pequeño, puedes hacer cosas grandes", "Ser pequeño es malo", "Los faros no sirven"], correctAnswerIndex: 0 }
 ],
 
-"story-4to-5": [
-  { question: "¿Cómo se llamaba el protagonista?", options: ["Lorenzo", "Marco", "Gabriel"], correctAnswerIndex: 0 },
-  { question: "¿Qué encontró en la biblioteca?", options: ["Un libro que escribía las historias por sí mismo", "Un cofre cerrado", "Una lámpara antigua"], correctAnswerIndex: 0 },
-  { question: "¿Cuál era su problema principal?", options: ["No terminaba lo que comenzaba", "Se quedaba dormido", "Perdía sus libros"], correctAnswerIndex: 0 },
-  { question: "¿Qué hacía el libro cuando Lorenzo dejaba algo sin terminar?", options: ["Lo mostraba incompleto y apagado", "Lo borraba", "Lo rompía"], correctAnswerIndex: 0 },
-  { question: "¿Qué sucedió cuando terminó una historia por primera vez?", options: ["El libro brilló y cobró vida", "Se cerró para siempre", "Desapareció"], correctAnswerIndex: 0 },
-  { question: "¿Qué aprendió Lorenzo?", options: ["Que terminar algo trae satisfacción y aprendizaje", "Que los libros son mágicos", "Que hacer tareas es aburrido"], correctAnswerIndex: 0 }
-],
-
-"story-4to-6": [
-  { question: "¿Cómo se llamaba el protagonista?", options: ["Gabriel", "Tomas", "Rilan"], correctAnswerIndex: 0 },
-  { question: "¿Qué le gustaba construir?", options: ["Barcos de papel", "Cohetes", "Cometas"], correctAnswerIndex: 0 },
-  { question: "¿Qué sucedió una tarde?", options: ["Un remolino se llevó su barco", "Perdió todos sus papeles", "Se cayó al agua"], correctAnswerIndex: 0 },
-  { question: "¿A dónde viajó el barco?", options: ["Por ríos, charcos y corrientes", "A una laguna gigante", "Al mar abierto"], correctAnswerIndex: 0 },
-  { question: "¿Qué encontró el barco en su aventura?", options: ["Animales, barcos y un pequeño molino", "Un pez gigante", "Una isla"], correctAnswerIndex: 0 },
-  { question: "¿Qué ocurrió al final?", options: ["El barco regresó a Gabriel lleno de recuerdos", "El barco se perdió para siempre", "Se rompió al volver"], correctAnswerIndex: 0 }
+ "story-2do-6": [
+  { question: "¿Cómo se llamaba el niño?", options: ["Tomás", "Leo", "Tito"], correctAnswerIndex: 0 },
+  { question: "¿Qué encontró bajo la hoja gigante?", options: ["Una llave dorada", "Un mapa", "Una flor"], correctAnswerIndex: 0 },
+  { question: "¿A dónde lo llevó la llave?", options: ["A una puerta escondida", "A un castillo", "A un lago"], correctAnswerIndex: 0 },
+  { question: "¿Qué había detrás de la puerta?", options: ["Un jardín mágico", "Un bosque oscuro", "Una casa"], correctAnswerIndex: 0 },
+  { question: "¿Qué decidió hacer Tomás?", options: ["Ser el cuidador del reino", "Cerrar la puerta", "Perder la llave"], correctAnswerIndex: 0 },
+  { question: "¿Qué enseñanza tiene el cuento?", options: ["Cuidar la naturaleza es una responsabilidad", "Las llaves son mágicas", "Los jardines se cuidan solos"], correctAnswerIndex: 0 }
 ]
-
 
 }
 

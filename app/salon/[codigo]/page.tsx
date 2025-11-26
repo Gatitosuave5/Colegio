@@ -21,6 +21,7 @@ import MatematicasModule from "@/app/grados/primero/cursos/matematicas/matematic
 import MatematicasModule2 from "@/app/grados/segundo/Cursos/matematica/matematicas-module";
 import ReadingModules2 from "@/app/grados/segundo/Cursos/Lectura/reading-modules";
 import ReadingModules4 from "@/app/grados/cuarto/cursos/Lectura/reading-modules";
+import MatematicasModule4 from "@/app/grados/cuarto/cursos/matematicas/matematicas-module";
 
 
 interface Salon {
@@ -182,6 +183,45 @@ const actualizarRanking = async () => {
 };
 
 
+useEffect(() => {
+  if (!socket) return;
+
+  const id = sessionStorage.getItem("idAlumno");
+  if (!id) return;
+
+  const canal = `alumno-eliminado-${id}`;
+
+  socket.on(canal, () => {
+    console.log(" Has sido eliminado del salón");
+
+    // limpiar datos
+    sessionStorage.removeItem("idAlumno");
+    localStorage.removeItem("nombreAlumno");
+    localStorage.removeItem("codigoSalon");
+
+    router.push("/");
+  });
+
+  return () => socket.off(canal);
+}, [socket]);
+
+useEffect(() => {
+  if (!socket) return;
+
+  const idSalon = localStorage.getItem("codigoSalon");
+  if (!idSalon) return;
+
+  const canal = `salon-eliminado-${idSalon}`;
+
+  socket.on(canal, () => {
+    console.log("🔥 Salón eliminado, recargando alumno...");
+
+    router.push("/"); // SOLO REDIRIGES, tu lógica ya borra los datos al reload
+  });
+
+  return () => socket.off(canal);
+}, [socket]);
+
 // 🔥 NUEVO — DETECTOR DE RELOAD vs CIERRE REAL
 useEffect(() => {
   let ultimoTiempo = Date.now();
@@ -227,26 +267,6 @@ useEffect(() => {
     setSocket(s);
     return () => s.disconnect();
   }, []);
-
-  useEffect(() => {
-    if (!socket) return;
-  
-    const idSalon = localStorage.getItem("codigoSalon");
-    if (!idSalon) return;
-  
-    const canal = `salon-eliminado-${idSalon}`;
-  
-    socket.on(canal, () => {
-      console.log("Salón eliminado, recargando alumno...");
-      router.push("/");
-    });
-  
-    return () => socket.off(canal);
-  }, [socket]);
-  
-
-  
-  
 
   //  Obtener salón
   useEffect(() => {
@@ -432,6 +452,16 @@ useEffect(() => {
       "numeros-200-2do",
       "patrones-2do"
     ];
+
+    const math4do = [
+      "sumas-4to",
+      "restas-4to",
+      "multiplicacion-4to",
+      "division-4to",
+      "figuras-4to",
+      "clasificacion-4to"
+      
+    ];
   
     const usaMath1er = contenidosActivos.some(c =>
       math1er.includes(c.storyId)
@@ -439,6 +469,10 @@ useEffect(() => {
   
     const usaMath2do = contenidosActivos.some(c =>
       math2do.includes(c.storyId)
+    );
+
+    const usaMath4do = contenidosActivos.some(c =>
+      math4do.includes(c.storyId)
     );
   
     // 📘 Módulo de 1° grado
@@ -450,8 +484,17 @@ useEffect(() => {
         />
       );
     }
+
+    if (usaMath4do) {
+      return (
+        <MatematicasModule4
+          onBack={() => setSelectedSubject(null)}
+          contenidosActivos={contenidosActivos}
+        />
+      );
+    }
   
-    // 📙 Módulo de 2° grado
+    //  Módulo de 2° grado
     if (usaMath2do) {
       return (
         <MatematicasModule2

@@ -238,9 +238,12 @@ useEffect(() => {
 
     ],
     4: [
-      { id_contenido: 31, categoria: "Matemática", titulo: "Mínimo común múltiplo" },
-      { id_contenido: 32, categoria: "Matemática", titulo: "Máximo común divisor" },
-      { id_contenido: 33, categoria: "Matemática", titulo: "Fracciones avanzadas" },
+      { id_contenido: 31, categoria: "Matemática", titulo: "Sumas hasta 10 000", storyId: "sumas-4to" },
+      { id_contenido: 32, categoria: "Matemática", titulo: "Restas hasta 10 000", storyId: "restas-4to" },
+      { id_contenido: 33, categoria: "Matemática", titulo: "Multiplicación hasta 2 cifras", storyId: "multiplicacion-4to" },
+      { id_contenido: 34, categoria: "Matemática", titulo: "División básica", storyId: "division-4to" },
+      { id_contenido: 35, categoria: "Matemática", titulo: "Figuras geométricas avanzadas", storyId: "figuras-4to" },
+      { id_contenido: 36, categoria: "Matemática", titulo: "Clasificación avanzada", storyId: "clasificacion-4to" },
 
       { id_contenido: 201, categoria: "Lectura", titulo: "El Guardián del Bosque Brumoso" },
       { id_contenido: 202, categoria: "Lectura", titulo: "El Reloj del Tiempo Perdido" },

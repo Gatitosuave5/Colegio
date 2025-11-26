@@ -267,7 +267,7 @@ app.delete("/api/salones", async (req, res) => {
   try {
     const { id } = req.body;
 
-   
+    console.log("🟡 1: DELETE recibido con ID:", id);
 
     const [rows] = await db.execute(
       "SELECT codigo FROM salones WHERE id = ? LIMIT 1",
@@ -280,8 +280,9 @@ app.delete("/api/salones", async (req, res) => {
 
     const codigoSalon = rows[0].codigo;
 
+   
 
-
+   
     io.emit(`salon-eliminado-${codigoSalon}`, { eliminado: true });
 
     await db.execute("DELETE FROM salones WHERE id = ?", [id]);
@@ -406,7 +407,7 @@ app.delete("/api/alumnos_temporales", async (req, res) => {
       [id]
     );
 
-    //  Emitir evento SOLO para ese alumno
+    // 🔥 Emitir evento SOLO para ese alumno
     io.emit(`alumno-eliminado-${id}`, { eliminado: true });
 
     res.json({ success: true, mensaje: "Alumno eliminado correctamente" });
