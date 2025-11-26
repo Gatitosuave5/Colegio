@@ -252,6 +252,17 @@ useEffect(() => {
        { id_contenido: 205, categoria: "Lectura", titulo: "La Biblioteca de los Animales Sabios" },
        { id_contenido: 206, categoria: "Lectura", titulo: "El Viaje del Barco de Papel" },
 
+
+       { id_contenido: 403, categoria: "Área de computo", titulo: "PUNTO Y COMA", storyId: "mecanografia", activo: false },
+       { id_contenido: 404, categoria: "Área de computo", titulo: "APRENDIENDO EL TECLADO", storyId: "Uso-de-mayusculas", activo: false },
+       { id_contenido: 405, categoria: "Ciencias", titulo: "CONTAMINACION Y IMPORTANCIA",
+         storyId: "tierra-clima-recursos", activo: false },
+       
+     { id_contenido: 306, categoria: "Ciencias", titulo: "MI HOGAR",
+         storyId: "fuerza-movimiento-energia", activo: false },
+   
+  
+
     ],
       5: [
         { id_contenido: 37, categoria: "Matemática", titulo: "Sumas y restas hasta 100 000", storyId: "sumas-restas-5to" },
@@ -263,7 +274,20 @@ useEffect(() => {
         { id_contenido: 43, categoria: "Matemática", titulo: "Gráficos y datos", storyId: "graficos-5to" },
         { id_contenido: 44, categoria: "Matemática", titulo: "Patrones numéricos", storyId: "patrones-5to" },
         { id_contenido: 45, categoria: "Matemática", titulo: "Problemas de dos operaciones", storyId: "problemas-5to" },
-        { id_contenido: 46, categoria: "Matemática", titulo: "Ordenar números grandes", storyId: "ordenar-5to" }
+        { id_contenido: 46, categoria: "Matemática", titulo: "Ordenar números grandes", storyId: "ordenar-5to" },
+
+        { id_contenido: 407, categoria: "Lectura", titulo: "LA RANA Y EL PERICOTE" },
+        { id_contenido: 408, categoria: "Lectura", titulo: "LA CIUDAD DE LOS VAGOS" },
+        { id_contenido: 409, categoria: "Lectura", titulo: "EL CABALLO Y LA TORTUGA" },
+        { id_contenido: 410, categoria: "Área de computo", titulo: "WORD Y EXCEL", storyId: "mecanografia", activo: false },
+        { id_contenido: 411, categoria: "Área de computo", titulo: "PAINT Y ESCRITURA CON PUNTOS", storyId: "Uso-de-mayusculas", activo: false },
+        { id_contenido: 412, categoria: "Ciencias", titulo: "MEDIO AMBIENTE",
+          storyId: "tierra-clima-recursos", activo: false },
+        
+      { id_contenido: 460, categoria: "Ciencias", titulo: "LA TIERRA",
+          storyId: "fuerza-movimiento-energia", activo: false },
+    
+   
 
     ],
     6: [
@@ -276,7 +300,21 @@ useEffect(() => {
       { id_contenido: 53, categoria: "Matemática", titulo: "Coordenadas en el plano" },
       { id_contenido: 54, categoria: "Matemática", titulo: "Gráficos estadísticos" },
       { id_contenido: 55, categoria: "Matemática", titulo: "Patrones numéricos avanzados" },
-      { id_contenido: 56, categoria: "Matemática", titulo: "Problemas de lógica y razonamiento" }
+      { id_contenido: 56, categoria: "Matemática", titulo: "Problemas de lógica y razonamiento" },
+
+
+
+      { id_contenido: 300, categoria: "Lectura", titulo: "COQUITO Y SUS AVENTURAS" },
+      { id_contenido: 301, categoria: "Lectura", titulo: "EL LOBO Y LA HORMIGA" },
+      { id_contenido: 302, categoria: "Lectura", titulo: "LA CIUDAD DEL LOS PERROS" },
+      { id_contenido: 303, categoria: "Área de computo", titulo: "VELOCIDAD A LAS MANOS", storyId: "mecanografia", activo: false },
+      { id_contenido: 304, categoria: "Área de computo", titulo: "LECTURA RAPIDA", storyId: "Uso-de-mayusculas", activo: false },
+      { id_contenido: 305, categoria: "Ciencias", titulo: "PARTES DE LA TIERRA",
+        storyId: "tierra-clima-recursos", activo: false },
+      
+    { id_contenido: 306, categoria: "Ciencias", titulo: "CINEMATICA",
+        storyId: "fuerza-movimiento-energia", activo: false },
+  
  
     ],
   }
