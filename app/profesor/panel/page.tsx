@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"
 import io from "socket.io-client";
 import type { Socket } from "socket.io-client";
+import { useRouter } from "next/navigation";
+
 
 
 interface Salon {
@@ -23,6 +25,7 @@ interface Estudiante {
 
 
 export default function TeacherPanel() {
+  const router = useRouter();
   
   const [gradoActivo, setGradoActivo] = useState<number | null>(null)
   const [contenidos, setContenidos] = useState<any[]>([])
@@ -73,8 +76,10 @@ const [socket, setSocket] = useState<any>(null)
         return;
       }
 
-      // 🔥 TOKEN VÁLIDO → permitir renderizar el panel
+      //  TOKEN VÁLIDO → permitir renderizar el panel
       setVerificando(false);
+
+      
     })
     .catch(() => {
       localStorage.removeItem("token");
@@ -749,7 +754,7 @@ useEffect(() => {
                   .filter((c) => c.categoria === cat)
                   .map((item) => (
                     <div
-                      key={item.id}
+                    key={item.id_contenido ?? item.id}
                       className={`flex justify-between items-center p-3 mb-2 rounded border cursor-pointer transition ${
                         item.activo ? "bg-green-100 border-green-400" : "bg-gray-100"
                       }`}

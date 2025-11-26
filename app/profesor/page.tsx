@@ -10,7 +10,7 @@ export default function LoginProfesor() {
   const manejarLogin = (e: React.FormEvent) => {
     e.preventDefault();
     if (usuario === "profesor" && contraseña === "1234") {
-      router.push("/profesor/panel");
+      router.push("/panel?v=DFa8lJ92aLkj23D");
     } else {
       alert("Usuario o contraseña incorrectos");
     }

@@ -33,7 +33,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("usuario", data.usuario);
-      window.location.href = "/profesor/panel";
+      window.location.href = "/panel?v=DFa8lJ92aLkj23D";
 
     } catch (error) {
       alert("No se pudo conectar con el servidor");
