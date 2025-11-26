@@ -129,29 +129,15 @@ useEffect(() => {
     1: [
 
       { id_contenido: 1, categoria: "Matemática", titulo: "Sumas del 1 al 10", storyId: "sumas-1-al-10", activo: false },
-
       { id_contenido: 2, categoria: "Matemática", titulo: "Restas del 1 al 10", storyId: "restas-1-al-10", activo: false },
-      
-      { id_contenido: 3, categoria: "Matemática", titulo: "Multiplicación (Tablas 1-10)", storyId: "multiplicacion", activo: false },
-
-{ id_contenido: 4, categoria: "Matemática", titulo: "División Básica", storyId: "division-basica", activo: false },
-
-{ id_contenido: 5, categoria: "Matemática", titulo: "Perímetro de Figuras", storyId: "perimetro", activo: false },
-
-{ id_contenido: 6, categoria: "Matemática", titulo: "Partes de la División", storyId: "partes-division", activo: false },
-
-{ id_contenido: 7, categoria: "Matemática", titulo: "Partes de la Resta", storyId: "partes-resta", activo: false },
-
-{ id_contenido: 8, categoria: "Matemática", titulo: "Problemas Multiplicación y División", storyId: "problemas-multdiv", activo: false },
-
-{ id_contenido: 9, categoria: "Matemática", titulo: "Figuras Geométricas", storyId: "figuras-geometricas", activo: false },
-
-{ id_contenido: 10, categoria: "Matemática", titulo: "Medición de Longitudes", storyId: "medicion-longitud", activo: false },
-
-{ id_contenido: 11, categoria: "Matemática", titulo: "Lectura y Comparación de Números hasta 10,000", storyId: "lectura-numeros", activo: false },
-
-{ id_contenido: 12, categoria: "Matemática", titulo: "Suma y Resta con Llevadas", storyId: "suma-resta-llevadas", activo: false },
-
+      { id_contenido: 3, categoria: "Matemática", titulo: "Números hasta 100", storyId: "numeros-100", activo: false },
+      { id_contenido: 4, categoria: "Matemática", titulo: "Figuras geométricas básicas", storyId: "figuras", activo: false },
+      { id_contenido: 5, categoria: "Matemática", titulo: "Clasificación de objetos", storyId: "clasificacion", activo: false },
+      { id_contenido: 6, categoria: "Matemática", titulo: "Problemas simples de suma", storyId: "problemas-suma", activo: false },
+      { id_contenido: 7, categoria: "Matemática", titulo: "Mayor / Menor", storyId: "mayor-menor", activo: false },
+      { id_contenido: 8, categoria: "Matemática", titulo: "Conteo de objetos", storyId: "conteo", activo: false },
+      { id_contenido: 9, categoria: "Matemática", titulo: "Series numéricas simples", storyId: "series", activo: false },
+      { id_contenido: 10, categoria: "Matemática", titulo: "Ordenar números", storyId: "ordenar", activo: false },
       
 
       { id_contenido: 61, categoria: "Lectura", titulo: "Caperucita Roja", storyId: "caperucita-roja", activo: false },

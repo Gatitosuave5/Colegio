@@ -17,6 +17,7 @@ import Home from "@/app/sumatorios/page";
 import ClientHomePage from "@/app/palabras-y-tildes/client-home";
 import ClientPageCuentos from "@/app/videos-cuentos/page";
 import RetroGames from "@/app/juegos2/page";
+import MatematicasModule from "@/app/grados/primero/cursos/matematicas/matematicas-module";
 
 
 interface Salon {
@@ -380,13 +381,45 @@ useEffect(() => {
 
   //  Pantalla de cada módulo
   if (selectedSubject === "math") {
+
+    //  Contenidos de 1er grado
+    const math1er = [
+      "sumas-1-al-10",
+      "restas-1-al-10",
+      "numeros-100",
+      "figuras",
+      "clasificacion",
+      "problemas-suma",
+      "mayor-menor",
+      "conteo",
+      "series",
+      "ordenar"
+    ];
+  
+    // verifica si hay contenido que pertenece a 1er grado
+    const usaMath1er = contenidosActivos.some(c =>
+      math1er.includes(c.storyId)
+    );
+  
+    // 📘 Módulo de 1° grado
+    if (usaMath1er) {
+      return (
+        <MatematicasModule
+          onBack={() => setSelectedSubject(null)}
+          contenidosActivos={contenidosActivos}
+        />
+      );
+    }
+  
+    // 📗 Módulo de 3° grado
     return (
       <Grade3MathPage
-        contenidosActivos={contenidosActivos}
         onBack={() => setSelectedSubject(null)}
+        contenidosActivos={contenidosActivos}
       />
     );
   }
+
   if (selectedSubject === "cuentos") {
     return (
       <ClientPageCuentos

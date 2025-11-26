@@ -226,9 +226,7 @@ function PuzzleGame({ themeId }: { themeId: number }) {
                 ref={canvasRef}
                 className="border-4 border-blue-400 rounded-lg"
               />
-              <p className="text-sm text-center text-gray-600 mt-2">
-                Guíate de la imagen
-              </p>
+              <p className="text-sm text-center text-gray-600 mt-2">Aquí va la imagen completa</p>
             </div>
           </div>
 

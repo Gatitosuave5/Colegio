@@ -7,14 +7,36 @@ import TopicReader from "./topic-reader";
 import TopicQuiz from "./topic-quiz";
 import TopicGames from ".";
 
+export const mathStoryMapGrade1: Record<string, string> = {
+  "sumas-1-al-10": "sumas-1-10",
+  "restas-1-al-10": "restas-1-10",
+  "numeros-100": "numeros-100",
+  "figuras": "figuras",
+  "clasificacion": "clasificacion",
+  "problemas-suma": "problemas-suma",
+  "mayor-menor": "mayor-menor",
+  "conteo": "conteo",
+  "series": "series",
+  "ordenar": "ordenar",
+};
+
+
 type View = "list" | "reading" | "quiz" | "games";
 
-export default function MatematicasModule() {
+interface MatematicasModuleProps {
+  onBack: () => void;
+  contenidosActivos: any[];
+}
+
+export default function MatematicasModule({ onBack, contenidosActivos }: MatematicasModuleProps) {
   const [currentView, setCurrentView] = useState<View>("list");
   const [selectedTopic, setSelectedTopic] = useState<any | null>(null);
 
-  const topics = Object.values(topicsData);
-
+  const topics = contenidosActivos
+  .map(c => mathStoryMapGrade1[c.storyId])   // convierte storyId a topicId
+  .filter(Boolean)                           // elimina null / undefined
+  .map(topicId => topicsData[topicId]); 
+       // obtiene el contenido real
   const handleSelectTopic = (topic: any) => {
     setSelectedTopic(topic);
     setCurrentView("reading");
@@ -37,19 +59,32 @@ export default function MatematicasModule() {
           "url('https://wallpapers.com/images/high/school-picture-background-1080-x-1920-lzswkjagfr2cf5ei.webp')",
       }}
     >
-      <header className="bg-white/80 border-b border-gray-200 sticky top-0 z-50 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
-          {currentView !== "list" && (
-            <button
-              onClick={handleBack}
-              className="p-2 hover:bg-gray-100 rounded-lg transition"
-            >
-              <ArrowLeft className="w-6 h-6 text-gray-600" />
-            </button>
-          )}
-          <h1 className="text-2xl font-bold text-gray-900">Matemática</h1>
-        </div>
-      </header>
+    <header className="bg-white/80 border-b border-gray-200 sticky top-0 z-50 backdrop-blur-sm">
+  <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-4">
+
+    {/* 🔙 Botón para volver al menú del salón SOLO cuando estás en la LISTA */}
+    {currentView === "list" && (
+      <button
+        onClick={onBack}
+        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+      >
+        <ArrowLeft className="w-6 h-6 text-gray-600" />
+      </button>
+    )}
+
+    {/* 🔙 Botón interno para navegación del módulo */}
+    {currentView !== "list" && (
+      <button
+        onClick={handleBack}
+        className="p-2 hover:bg-gray-100 rounded-lg transition"
+      >
+        <ArrowLeft className="w-6 h-6 text-gray-600" />
+      </button>
+    )}
+
+    <h1 className="text-2xl font-bold text-gray-900">Matemática</h1>
+  </div>
+</header>
 
       <section className="max-w-5xl mx-auto px-6 py-8 bg-white/70 backdrop-blur-md rounded-xl mt-6">
         {/* LISTA DE TEMAS */}
