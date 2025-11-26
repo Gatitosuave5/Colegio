@@ -18,6 +18,8 @@ import ClientHomePage from "@/app/palabras-y-tildes/client-home";
 import ClientPageCuentos from "@/app/videos-cuentos/page";
 import RetroGames from "@/app/juegos2/page";
 import MatematicasModule from "@/app/grados/primero/cursos/matematicas/matematicas-module";
+import MatematicasModule2 from "@/app/grados/segundo/Cursos/matematica/matematicas-module";
+import ReadingModules2 from "@/app/grados/segundo/Cursos/Lectura/reading-modules";
 
 
 interface Salon {
@@ -382,7 +384,7 @@ useEffect(() => {
   //  Pantalla de cada módulo
   if (selectedSubject === "math") {
 
-    //  Contenidos de 1er grado
+    // 📘 1er grado
     const math1er = [
       "sumas-1-al-10",
       "restas-1-al-10",
@@ -396,9 +398,26 @@ useEffect(() => {
       "ordenar"
     ];
   
-    // verifica si hay contenido que pertenece a 1er grado
+    // 📙 2do grado
+    const math2do = [
+      "sumas-1-20-2do",
+      "restas-1-20-2do",
+      "sumas-llevada-2do",
+      "restas-llevada-2do",
+      "tablas-2-3-2do",
+      "figuras-2d-2do",
+      "simetria-2do",
+      "problemas-sr-2do",
+      "numeros-200-2do",
+      "patrones-2do"
+    ];
+  
     const usaMath1er = contenidosActivos.some(c =>
       math1er.includes(c.storyId)
+    );
+  
+    const usaMath2do = contenidosActivos.some(c =>
+      math2do.includes(c.storyId)
     );
   
     // 📘 Módulo de 1° grado
@@ -411,7 +430,17 @@ useEffect(() => {
       );
     }
   
-    // 📗 Módulo de 3° grado
+    // 📙 Módulo de 2° grado
+    if (usaMath2do) {
+      return (
+        <MatematicasModule2
+          onBack={() => setSelectedSubject(null)}
+          contenidosActivos={contenidosActivos}
+        />
+      );
+    }
+  
+    // 📗 Módulo de 3° grado (el que ya existía)
     return (
       <Grade3MathPage
         onBack={() => setSelectedSubject(null)}
@@ -433,25 +462,49 @@ useEffect(() => {
   
   
   if (selectedSubject === "reading") {
-  
-    // Detecta si los cuentos activos pertenecen al módulo EXPLICACIONES (1er grado)
+
+    // Cuentos de 1er grado
     const cuentos1er = ["caperucita-roja", "el-patito-feo", "cenicienta"];
   
-    const usaLiterature = contenidosActivos.some(c =>
+    // Cuentos de 2do grado
+    const cuentos2do = [
+      "story-2do-1",
+      "story-2do-2",
+      "story-2do-3",
+      "story-2do-4",
+      "story-2do-5",
+      "story-2do-6"
+    ];
+  
+    // Detectar si son cuentos de 1er grado → LiteratureModule
+    const es1er = contenidosActivos.some(c =>
       cuentos1er.includes(c.storyId)
     );
   
-    // Si son cuentos de 1er grado → LiteratureModule
-    if (usaLiterature) {
+    if (es1er) {
       return (
-        <LiteratureModule 
+        <LiteratureModule
           onBack={() => setSelectedSubject(null)}
           contenidosActivos={contenidosActivos}
         />
       );
     }
   
-    // Si son cuentos de 3er grado → ReadingModules
+    // Detectar si son cuentos de 2do grado → ReadingModules2do
+    const es2do = contenidosActivos.some(c =>
+      cuentos2do.includes(c.storyId)
+    );
+  
+    if (es2do) {
+      return (
+        <ReadingModules2
+          onBack={() => setSelectedSubject(null)}
+          contenidosActivos={contenidosActivos}
+        />
+      );
+    }
+  
+    // Si NO es 1er ni 2do → entonces es 3er grado
     return (
       <ReadingModules
         onBack={() => setSelectedSubject(null)}
@@ -459,6 +512,7 @@ useEffect(() => {
       />
     );
   }
+  
 
   if (selectedSubject === "computo") {
     return (

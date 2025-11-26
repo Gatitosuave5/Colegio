@@ -145,9 +145,25 @@ useEffect(() => {
       { id_contenido: 63, categoria: "Lectura", titulo: "Cenicienta", storyId: "cenicienta", activo: false },
     ],
     2: [
-      { id_contenido: 11, categoria: "Matemática", titulo: "Sumas con llevadas" },
-      { id_contenido: 12, categoria: "Matemática", titulo: "Restas con llevadas" },
-      { id_contenido: 13, categoria: "Matemática", titulo: "Figuras y lados" },
+      { id_contenido: 11, categoria: "Matemática", titulo: "Sumas del 1 al 20" },
+      { id_contenido: 12, categoria: "Matemática", titulo: "Restas del 1 al 20" },
+      { id_contenido: 13, categoria: "Matemática", titulo: "Sumas con llevada" },
+      { id_contenido: 14, categoria: "Matemática", titulo: "Restas con llevada" },
+      { id_contenido: 15, categoria: "Matemática", titulo: "Tablas del 2 y 3" },
+      { id_contenido: 16, categoria: "Matemática", titulo: "Figuras geométricas 2D" },
+      { id_contenido: 17, categoria: "Matemática", titulo: "Simetría básica" },
+      { id_contenido: 18, categoria: "Matemática", titulo: "Problemas de suma y resta" },
+      { id_contenido: 19, categoria: "Matemática", titulo: "Números hasta 200" },
+      { id_contenido: 20, categoria: "Matemática", titulo: "Patrones y secuencias" },
+
+
+      { id_contenido: 101, categoria: "Lectura", titulo: "La Mariposa Valiente", storyId: "story-2do-1", activo: 0 },
+      { id_contenido: 102, categoria: "Lectura", titulo: "El León y el Viento", storyId: "story-2do-2", activo: 0 },
+      { id_contenido: 103, categoria: "Lectura", titulo: "La Ciudad de los Paraguas", storyId: "story-2do-3", activo: 0 },
+      { id_contenido: 104, categoria: "Lectura", titulo: "El Tren Dormilón", storyId: "story-2do-4", activo: 0 },
+      { id_contenido: 105, categoria: "Lectura", titulo: "La Luz del Faro Pequeño", storyId: "story-2do-5", activo: 0 },
+      { id_contenido: 106, categoria: "Lectura", titulo: "La Llave del Reino Verde", storyId: "story-2do-6", activo: 0 },
+      
    
     ],
     3: [
