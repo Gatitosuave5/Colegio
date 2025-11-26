@@ -20,6 +20,7 @@ import RetroGames from "@/app/juegos2/page";
 import MatematicasModule from "@/app/grados/primero/cursos/matematicas/matematicas-module";
 import MatematicasModule2 from "@/app/grados/segundo/Cursos/matematica/matematicas-module";
 import ReadingModules2 from "@/app/grados/segundo/Cursos/Lectura/reading-modules";
+import ReadingModules4 from "@/app/grados/cuarto/cursos/Lectura/reading-modules";
 
 
 interface Salon {
@@ -475,6 +476,15 @@ useEffect(() => {
       "story-2do-5",
       "story-2do-6"
     ];
+
+    const cuentos4to = [
+      "story-4to-1",
+      "story-4to-2",
+      "story-4to-3",
+      "story-4to-4",
+      "story-4to-5",
+      "story-4to-6"
+    ];
   
     // Detectar si son cuentos de 1er grado → LiteratureModule
     const es1er = contenidosActivos.some(c =>
@@ -498,6 +508,19 @@ useEffect(() => {
     if (es2do) {
       return (
         <ReadingModules2
+          onBack={() => setSelectedSubject(null)}
+          contenidosActivos={contenidosActivos}
+        />
+      );
+    }
+
+    const es4to = contenidosActivos.some(c =>
+      cuentos4to.includes(c.storyId)
+    );
+  
+    if (es4to) {
+      return (
+        <ReadingModules4
           onBack={() => setSelectedSubject(null)}
           contenidosActivos={contenidosActivos}
         />

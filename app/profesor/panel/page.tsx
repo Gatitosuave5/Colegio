@@ -242,6 +242,13 @@ useEffect(() => {
       { id_contenido: 32, categoria: "Matemática", titulo: "Máximo común divisor" },
       { id_contenido: 33, categoria: "Matemática", titulo: "Fracciones avanzadas" },
 
+      { id_contenido: 201, categoria: "Lectura", titulo: "El Guardián del Bosque Brumoso" },
+      { id_contenido: 202, categoria: "Lectura", titulo: "El Reloj del Tiempo Perdido" },
+      { id_contenido: 203, categoria: "Lectura", titulo: "La Ciudad Subterránea de Lumen" },
+       { id_contenido: 204, categoria: "Lectura", titulo: "El Puente de los Ecos" },
+       { id_contenido: 205, categoria: "Lectura", titulo: "La Biblioteca de los Animales Sabios" },
+       { id_contenido: 206, categoria: "Lectura", titulo: "El Viaje del Barco de Papel" },
+
     ],
     5: [
       { id_contenido: 41, categoria: "Matemática", titulo: "Operaciones con decimales" },
