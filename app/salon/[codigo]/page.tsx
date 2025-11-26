@@ -22,6 +22,8 @@ import MatematicasModule2 from "@/app/grados/segundo/Cursos/matematica/matematic
 import ReadingModules2 from "@/app/grados/segundo/Cursos/Lectura/reading-modules";
 import ReadingModules4 from "@/app/grados/cuarto/cursos/Lectura/reading-modules";
 import MatematicasModule4 from "@/app/grados/cuarto/cursos/matematicas/matematicas-module";
+import MatematicasModule5 from "@/app/grados/quinto/cursos/matematicas/matematicas-module";
+import MatematicasModule6 from "@/app/grados/sexto/cursos/matematicas/matematicas-module";
 
 
 interface Salon {
@@ -462,6 +464,34 @@ useEffect(() => {
       "clasificacion-4to"
       
     ];
+
+
+    const math5to = [
+      "sumas-restas-5to",
+  "multiplicacion-5to",
+  "division-5to",
+  "fracciones-5to",
+  "decimales-5to",
+  "area-5to",
+  "graficos-5to",
+  "patrones-5to",
+  "problemas-5to",
+  "ordenar-5to"
+      
+    ];
+
+    const math6to = [
+      "operaciones-6to",
+      "multiplos-6to",
+      "fracciones-6to",
+      "porcentajes-6to",
+      "area-6to",
+      "volumen-6to",
+      "coordenadas-6to",
+      "estadistica-6to",
+      "patrones-6to",
+      "razonamiento-6to"
+    ];
   
     const usaMath1er = contenidosActivos.some(c =>
       math1er.includes(c.storyId)
@@ -473,6 +503,14 @@ useEffect(() => {
 
     const usaMath4do = contenidosActivos.some(c =>
       math4do.includes(c.storyId)
+    );
+
+    const usaMath5to = contenidosActivos.some(c =>
+      math5to.includes(c.storyId)
+    );
+
+    const usaMath6to = contenidosActivos.some(c =>
+      math6to.includes(c.storyId)
     );
   
     // 📘 Módulo de 1° grado
@@ -493,7 +531,25 @@ useEffect(() => {
         />
       );
     }
+
+    if (usaMath5to) {
+      return (
+        <MatematicasModule5
+          onBack={() => setSelectedSubject(null)}
+          contenidosActivos={contenidosActivos}
+        />
+      );
+    }
   
+
+    if (usaMath6to) {
+      return (
+        <MatematicasModule6
+          onBack={() => setSelectedSubject(null)}
+          contenidosActivos={contenidosActivos}
+        />
+      );
+    }
     //  Módulo de 2° grado
     if (usaMath2do) {
       return (
