@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './card';
 import { Button } from './button';
 import { THEMES } from './games-data';
@@ -38,6 +38,7 @@ function PuzzleGame({ themeId }: { themeId: number }) {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const offsetRef = useRef({ x: 0, y: 0 });
 
+  // Cargar imagen del tema
   useEffect(() => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
@@ -66,8 +67,10 @@ function PuzzleGame({ themeId }: { themeId: number }) {
       }
     }
     setPieces(newPieces.sort(() => Math.random() - 0.5));
+    setWon(false);
   };
 
+  // Dibujar imagen completa + cuadrícula en el canvas
   useEffect(() => {
     if (!imageLoaded || !canvasRef.current || !imageRef.current) return;
 
@@ -78,12 +81,25 @@ function PuzzleGame({ themeId }: { themeId: number }) {
     canvas.width = GRID_COLS * PIECE_SIZE;
     canvas.height = GRID_ROWS * PIECE_SIZE;
 
+    // Fondo
     ctx.fillStyle = '#E0F2FE';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Imagen completa del puzzle
+    ctx.drawImage(
+      imageRef.current,
+      0,
+      0,
+      GRID_COLS * PIECE_SIZE,
+      GRID_ROWS * PIECE_SIZE
+    );
+
+    // Borde
     ctx.strokeStyle = '#0EA5E9';
     ctx.lineWidth = 3;
     ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
+    // Cuadrícula punteada
     ctx.strokeStyle = '#CBD5E1';
     ctx.lineWidth = 1;
     ctx.setLineDash([5, 5]);
@@ -121,11 +137,14 @@ function PuzzleGame({ themeId }: { themeId: number }) {
     x = Math.max(0, Math.min(x, CONTAINER_WIDTH - PIECE_SIZE));
     y = Math.max(0, Math.min(y, CONTAINER_HEIGHT - PIECE_SIZE));
 
-    setPieces(pieces.map(piece =>
-      piece.id === draggingId
-        ? { ...piece, x, y }
-        : piece
-    ));
+    // Usar función para evitar problemas de cierre sobre `pieces`
+    setPieces(prevPieces =>
+      prevPieces.map(piece =>
+        piece.id === draggingId
+          ? { ...piece, x, y }
+          : piece
+      )
+    );
   };
 
   const handleMouseUp = () => {
@@ -165,17 +184,22 @@ function PuzzleGame({ themeId }: { themeId: number }) {
     }, 50);
   };
 
+  // 👇 Aquí estaba tu problema potencial de deps dinámicas.
+  // Lo dejamos solo con [draggingId] para que el array sea SIEMPRE del mismo tamaño.
   useEffect(() => {
     if (draggingId === null) return;
 
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    const moveListener = (e: MouseEvent) => handleMouseMove(e);
+    const upListener = () => handleMouseUp();
+
+    document.addEventListener('mousemove', moveListener);
+    document.addEventListener('mouseup', upListener);
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mousemove', moveListener);
+      document.removeEventListener('mouseup', upListener);
     };
-  }, [draggingId, pieces]);
+  }, [draggingId]);
 
   const handleReset = () => {
     setWon(false);
@@ -185,7 +209,9 @@ function PuzzleGame({ themeId }: { themeId: number }) {
   return (
     <Card className="w-full border-4 border-cyan-300 shadow-lg">
       <CardHeader className={`bg-gradient-to-r ${theme.color} text-white rounded-t-lg`}>
-        <CardTitle className="text-2xl text-center">{theme.title} - Jigsaw Puzzle</CardTitle>
+        <CardTitle className="text-2xl text-center">
+          {theme.title} - Jigsaw Puzzle
+        </CardTitle>
       </CardHeader>
       <CardContent className="pt-8">
         <p className="text-lg mb-6 text-center text-blue-700 font-semibold">
@@ -193,16 +219,20 @@ function PuzzleGame({ themeId }: { themeId: number }) {
         </p>
 
         <div className="flex flex-col lg:flex-row gap-8">
+          {/* Vista previa completa */}
           <div className="flex-1 flex justify-center">
             <div className="bg-gradient-to-b from-sky-100 to-sky-50 p-4 rounded-lg border-4 border-sky-300">
               <canvas
                 ref={canvasRef}
                 className="border-4 border-blue-400 rounded-lg"
               />
-              <p className="text-sm text-center text-gray-600 mt-2">Aquí va la imagen completa</p>
+              <p className="text-sm text-center text-gray-600 mt-2">
+                Guíate de la imagen
+              </p>
             </div>
           </div>
 
+          {/* Zona de piezas */}
           <div className="flex-1">
             <div
               ref={containerRef}
@@ -213,7 +243,7 @@ function PuzzleGame({ themeId }: { themeId: number }) {
                 <div
                   key={piece.id}
                   onMouseDown={(e) => handleMouseDown(piece.id, e)}
-                  className={`absolute transition-shadow cursor-grab active:cursor-grabbing border-2 flex items-center justify-center font-bold select-none ${
+                  className={`absolute transition-shadow cursor-grab active:cursor-grabbing border-2 flex items-center justify-center select-none ${
                     draggingId === piece.id
                       ? 'border-yellow-500 shadow-2xl z-50 ring-4 ring-yellow-300'
                       : 'border-gray-300 shadow-md hover:shadow-lg'
@@ -228,18 +258,17 @@ function PuzzleGame({ themeId }: { themeId: number }) {
                       Math.abs(piece.y - piece.correctRow * PIECE_SIZE) < SNAP_DISTANCE
                         ? '#C7F0D8'
                         : '#FED7AA',
-                    backgroundImage: imageLoaded && imageRef.current
-                      ? `url('${imageRef.current.src}')`
-                      : 'none',
+                    backgroundImage:
+                      imageLoaded && imageRef.current
+                        ? `url('${imageRef.current.src}')`
+                        : 'none',
                     backgroundPosition: `${-piece.correctCol * PIECE_SIZE}px ${-piece.correctRow * PIECE_SIZE}px`,
                     backgroundSize: `${GRID_COLS * PIECE_SIZE}px ${GRID_ROWS * PIECE_SIZE}px`,
                     backgroundRepeat: 'no-repeat',
                     opacity: draggingId === piece.id ? 0.9 : 0.85,
                   }}
                 >
-                  <span className="text-lg font-bold text-white drop-shadow-lg">
-                    {piece.id + 1}
-                  </span>
+                  {/* Sin números: solo la parte de la imagen */}
                 </div>
               ))}
 
