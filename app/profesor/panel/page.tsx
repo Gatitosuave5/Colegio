@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import io from "socket.io-client";
 import type { Socket } from "socket.io-client";
 
+
 interface Salon {
   id: string
   codigo: string
@@ -19,9 +20,105 @@ interface Estudiante {
   salon_codigo: string
 }
 
+
+
 export default function TeacherPanel() {
+  
+  const [gradoActivo, setGradoActivo] = useState<number | null>(null)
+  const [contenidos, setContenidos] = useState<any[]>([])
+  const [categoriaAbierta, setCategoriaAbierta] = useState<string | null>(null)
+  const [mostrarModal, setMostrarModal] = useState(false)
+  const [codigoSalon, setCodigoSalon] = useState<string | null>(null)
+  const [cargando, setCargando] = useState(false)
+
+  const [salones, setSalones] = useState<Salon[]>([])
+  const [mostrarModalEditar, setMostrarModalEditar] = useState(false)
+  const [salonEditando, setSalonEditando] = useState<Salon | null>(null)
+  const [aulaInput, setAulaInput] = useState("")
+  const [cargandoSalones, setCargandoSalones] = useState(false)
+
+  //  PARTICIPANTES
+  const [mostrarModalIntegrantes, setMostrarModalIntegrantes] = useState(false)
+const [salonSeleccionado, setSalonSeleccionado] = useState<Salon | null>(null)
+const [integrantes, setIntegrantes] = useState<Estudiante[]>([])
+const [editandoEstudiante, setEditandoEstudiante] = useState<number | null>(null)
+const [nuevoNombre, setNuevoNombre] = useState("")
+
+//  FALTABA ESTO
+const [socket, setSocket] = useState<any>(null)
+
+
+  const [verificando, setVerificando] = useState(true);
 
  const API = "http://localhost:3001"
+
+ useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    window.location.href = "/";
+    return;
+  }
+
+  // Validar token con backend
+  fetch("http://localhost:3001/api/validar-token", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  })
+    .then(res => {
+      if (!res.ok) {
+        localStorage.removeItem("token");
+        window.location.href = "/";
+        return;
+      }
+
+      // 🔥 TOKEN VÁLIDO → permitir renderizar el panel
+      setVerificando(false);
+    })
+    .catch(() => {
+      localStorage.removeItem("token");
+      window.location.href = "/";
+    });
+}, []);
+
+
+useEffect(() => {
+  const handler = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+  };
+
+  window.addEventListener("beforeunload", handler);
+  return () => window.removeEventListener("beforeunload", handler);
+}, []);
+
+
+useEffect(() => {
+  obtenerSalones()
+}, [])
+
+
+//  SOCKET EFECTO REAL
+useEffect(() => {
+  const s = io("http://localhost:3001");
+  setSocket(s);
+
+  if (salonSeleccionado?.codigo) {
+    s.on(`alumnos-${salonSeleccionado.codigo}`, (lista) => {
+      console.log("ACTUALIZACIÓN EN VIVO:", lista);
+      setIntegrantes(lista);
+    });
+  }
+
+  return () => {
+    s.disconnect(); 
+  };
+}, [salonSeleccionado]);
+
+
+
+
 
   const contenidosPorGrado: Record<number, any[]> = {
     1: [
@@ -137,47 +234,8 @@ export default function TeacherPanel() {
     ],
   }
 
-  const [gradoActivo, setGradoActivo] = useState<number | null>(null)
-  const [contenidos, setContenidos] = useState<any[]>([])
-  const [categoriaAbierta, setCategoriaAbierta] = useState<string | null>(null)
-  const [mostrarModal, setMostrarModal] = useState(false)
-  const [codigoSalon, setCodigoSalon] = useState<string | null>(null)
-  const [cargando, setCargando] = useState(false)
 
-  const [salones, setSalones] = useState<Salon[]>([])
-  const [mostrarModalEditar, setMostrarModalEditar] = useState(false)
-  const [salonEditando, setSalonEditando] = useState<Salon | null>(null)
-  const [aulaInput, setAulaInput] = useState("")
-  const [cargandoSalones, setCargandoSalones] = useState(false)
 
-  //  PARTICIPANTES
-  const [mostrarModalIntegrantes, setMostrarModalIntegrantes] = useState(false)
-const [salonSeleccionado, setSalonSeleccionado] = useState<Salon | null>(null)
-const [integrantes, setIntegrantes] = useState<Estudiante[]>([])
-const [editandoEstudiante, setEditandoEstudiante] = useState<number | null>(null)
-const [nuevoNombre, setNuevoNombre] = useState("")
-
-//  FALTABA ESTO
-const [socket, setSocket] = useState<any>(null)
-
-//  SOCKET EFECTO REAL
-useEffect(() => {
-  const s = io("http://localhost:3001")
-  setSocket(s)
-
-  if (salonSeleccionado?.codigo) {
-    s.on(`alumnos-${salonSeleccionado.codigo}`, (lista) => {
-      console.log(" ACTUALIZACIÓN EN VIVO:", lista)
-      setIntegrantes(lista)
-    })
-  }
-
-  return () => s.disconnect()
-}, [salonSeleccionado])
-
-  useEffect(() => {
-    obtenerSalones()
-  }, [])
 
   const obtenerSalones = async () => {
     setCargandoSalones(true)
@@ -373,19 +431,25 @@ useEffect(() => {
 
   const categorias = Array.from(new Set(contenidos.map((c) => c.categoria)))
 
+  if (verificando) return null;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 p-10">
-      {/* 🔴 BOTÓN DE SALIDA ARRIBA A LA DERECHA */}
+      {/* BOTÓN DE SALIDA ARRIBA A LA DERECHA */}
 <div className="w-full flex justify-end mb-4">
-  <button
-    onClick={() => {
-      // Solo regresar al login
-      window.location.href = "/";
-    }}
-    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold shadow-lg transition"
-  >
-    Salir
-  </button>
+<button
+  onClick={() => {
+    // 🧹 borrar token
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+
+    // redirigir al login
+    window.location.href = "/";
+  }}
+  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold shadow-lg transition"
+>
+  Salir
+</button>
 </div>
 
       <h1 className="text-4xl font-bold text-blue-700 mb-8">Panel del Profesor</h1>
