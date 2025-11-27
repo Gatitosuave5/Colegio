@@ -53,7 +53,7 @@ const [socket, setSocket] = useState<any>(null)
 
   const [verificando, setVerificando] = useState(true);
 
- const API = "https://cubaaprende.site"
+ const API = "http://localhost:3001"
 
  useEffect(() => {
   const token = localStorage.getItem("token");
@@ -64,7 +64,7 @@ const [socket, setSocket] = useState<any>(null)
   }
 
   // Validar token con backend
-  fetch("https://cubaaprende.site/api/validar-token", {
+  fetch("http://localhost:3001/api/validar-token", {
     headers: {
       Authorization: "Bearer " + token
     }
@@ -106,7 +106,7 @@ useEffect(() => {
 
 //  SOCKET EFECTO REAL
 useEffect(() => {
-  const s = io("https://cubaaprende.site");
+  const s = io("http://localhost:3001");
   setSocket(s);
 
   if (salonSeleccionado?.codigo) {
@@ -342,7 +342,7 @@ useEffect(() => {
     setMostrarModalIntegrantes(true)
   
     try {
-      const res = await fetch(`https://cubaaprende.site/api/alumnos_temporales?codigo=${encodeURIComponent(salon.codigo.trim())}`)
+      const res = await fetch(`http://localhost:3001/api/alumnos_temporales?codigo=${encodeURIComponent(salon.codigo.trim())}`)
   
       const texto = await res.text()
       console.log("Respuesta del backend:", texto)
